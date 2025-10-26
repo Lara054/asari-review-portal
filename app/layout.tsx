@@ -28,9 +28,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 Asari Review Portal
               </span>
             </Link>
-            <nav className="nav">
-              <Link href="/reviews">レビュー一覧</Link>
-            </nav>
           </div>
         </header>
 
