@@ -1,109 +1,103 @@
-﻿import { readdir, readFile, writeFile, mkdir } from "fs/promises";
-import path from "path";
+﻿// scripts/generate-index.mjs
+import fs from "node:fs/promises";
+import path from "node:path";
 
 const ROOT = process.cwd();
 const REVIEWS_DIR = path.join(ROOT, "public", "reviews");
-const INDEX_PATH  = path.join(REVIEWS_DIR, "index.json");
+const OUT_PATH = path.join(REVIEWS_DIR, "index.json");
 
-// 小さなユーティリティ：タグ間文字列をケース無視で安全抽出
-function extractBetween(html, startTag, endTag) {
-  const lower = html.toLowerCase();
-  const s = lower.indexOf(startTag.toLowerCase());
-  if (s === -1) return null;
-  const e = lower.indexOf(endTag.toLowerCase(), s + startTag.length);
-  if (e === -1) return null;
-  const start = s + startTag.length;
-  return html.slice(start, e).trim();
+// 対象: public/reviews/*.html （index.htmlと先頭._は除外）
+const isTargetHtml = (name) =>
+  name.endsWith(".html") &&
+  name !== "index.html" &&
+  !name.startsWith(".") &&
+  !name.startsWith("_");
+
+function extractTitle(html) {
+  const m = html.match(/<title>([^<]+)<\/title>/i);
+  return m ? m[1].trim() : null;
 }
 
-function parseMeta(html) {
-  try {
-    const title = extractBetween(html, "<title>", "</title>");
-
-    // <meta name="asari:tags" content="A,B,C">
-    // 正規表現を避け、素朴に走査
-    const lower = html.toLowerCase();
-    const needle = '<meta';
-    let cursor = 0;
-    const tags = [];
-    while (true) {
-      const i = lower.indexOf(needle, cursor);
-      if (i === -1) break;
-      const j = lower.indexOf('>', i + 5);
-      if (j === -1) break;
-      const chunk = html.slice(i, j + 1);
-      const chk = chunk.toLowerCase();
-      if (chk.includes('name="asari:tags"') || chk.includes("name='asari:tags'")) {
-        // content="..."/'...'
-        const c1 = chk.indexOf('content="');
-        const c2 = chk.indexOf("content='");
-        let val = null;
-        if (c1 !== -1) {
-          const s = c1 + 'content="'.length;
-          const e = chk.indexOf('"', s);
-          if (e !== -1) val = chunk.slice(s, e);
-        } else if (c2 !== -1) {
-          const s = c2 + "content='".length;
-          const e = chk.indexOf("'", s);
-          if (e !== -1) val = chunk.slice(s, e);
-        }
-        if (val) {
-          val.split(',').map(s => s.trim()).filter(Boolean).forEach(v => tags.push(v));
-        }
-      }
-      cursor = j + 1;
-    }
-    return { title, tags };
-  } catch {
-    return { title: null, tags: [] };
-  }
+// 例: <meta name="tags" content="恋愛, コメディ">
+function extractTags(html) {
+  const m = html.match(/<meta\s+name=["']tags["']\s+content=["']([^"']+)["']/i);
+  if (!m) return [];
+  return m[1]
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
 }
 
-// 例: 20251026-0730_sova-review.html
-function parseFilename(file) {
-  const m = file.match(/^(\d{8})-(\d{4})_(.+)\.html$/i);
+// 例: <meta name="date" content="2025-10-26">
+function extractDate(html) {
+  const m = html.match(/<meta\s+name=["']date["']\s+content=["']([^"']+)["']/i);
   if (!m) return null;
-  const [, ymd, hm, slug] = m;
-  const yyyy = ymd.slice(0, 4), mm = ymd.slice(4, 6), dd = ymd.slice(6, 8);
-  const HH = hm.slice(0, 2),   MM = hm.slice(2, 4);
-  const iso = `${yyyy}-${mm}-${dd}T${HH}:${MM}:00+09:00`; // JST
-  return { date: iso, slug, file };
+  const d = new Date(m[1]);
+  return isNaN(+d) ? null : d.toISOString();
 }
 
-(async () => {
-  try {
-    await mkdir(REVIEWS_DIR, { recursive: true });
+function toSlug(filename) {
+  // 先頭の拡張子を除いたものをそのまま
+  return filename.replace(/\.html$/i, "");
+}
 
-    const all = await readdir(REVIEWS_DIR);
-    const htmlFiles = all.filter(f => f.toLowerCase().endsWith(".html"));
+async function main() {
+  // 1) ディレクトリ存在チェック
+  await fs.mkdir(REVIEWS_DIR, { recursive: true });
 
-    const items = [];
-    for (const file of htmlFiles) {
-      const meta = parseFilename(file);
-      if (!meta) continue;
+  // 2) ファイル一覧
+  const entries = await fs.readdir(REVIEWS_DIR, { withFileTypes: true });
+  const htmlFiles = entries
+    .filter((e) => e.isFile() && isTargetHtml(e.name))
+    .map((e) => e.name);
 
-      const html = await readFile(path.join(REVIEWS_DIR, file), "utf-8");
-      const { title, tags } = parseMeta(html);
+  // 3) HTMLごとにメタ抽出
+  const items = [];
+  for (const file of htmlFiles) {
+    const full = path.join(REVIEWS_DIR, file);
+    const html = await fs.readFile(full, "utf8");
 
-      items.push({
-        title: (title && title.length ? title : meta.slug),
-        tags,
-        date: meta.date,
-        href: `/reviews/${file}`,
-        slug: meta.slug,
-        file
-      });
+    const title = extractTitle(html);
+    if (!title) {
+      // タイトルがない場合はスキップ（ログだけ出す）
+      console.warn(`[warn] Skip (no <title>): ${file}`);
+      continue;
     }
 
-    items.sort((a, b) => (a.date < b.date ? 1 : -1));
+    const tags = extractTags(html);
+    const dateFromMeta = extractDate(html);
 
-    const payload = { generatedAt: new Date().toISOString(), items };
-    await writeFile(INDEX_PATH, JSON.stringify(payload, null, 2), "utf-8");
-    console.log(`Wrote ${INDEX_PATH} with ${items.length} items`);
-    process.exit(0);
-  } catch (err) {
-    console.error("Failed to generate index.json:", err);
-    // 失敗でCIが止まると不便なので 0 で終了（必要なら 1 に戻してください）
-    process.exit(0);
+    // ファイルの更新日時（メタが無ければこれを使う）
+    const stat = await fs.stat(full);
+    const isoMtime = new Date(stat.mtimeMs).toISOString();
+
+    const date = dateFromMeta ?? isoMtime;
+
+    items.push({
+      title,
+      tags,
+      date,
+      href: `/reviews/${file}`,
+      slug: toSlug(file),
+      file,
+    });
   }
-})();
+
+  // 4) 日付降順へ
+  items.sort((a, b) => (a.date < b.date ? 1 : -1));
+
+  // 5) 出力
+  const out = {
+    generatedAt: new Date().toISOString(),
+    count: items.length,
+    items,
+  };
+
+  await fs.writeFile(OUT_PATH, JSON.stringify(out, null, 2), "utf8");
+  console.log(`Wrote ${OUT_PATH} with ${items.length} items`);
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});

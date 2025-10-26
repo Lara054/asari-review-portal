@@ -1,38 +1,46 @@
 {
-  "generatedAt": "2025-10-26T14:30:55.620Z",
+  "generatedAt": "2025-10-26T14:39:49.497Z",
+  "count": 5,
   "items": [
     {
       "title": "サンプル2：台本レビュー",
-      "tags": [
-        "Sample",
-        "Check"
-      ],
-      "date": "2025-10-26T10:10:00+09:00",
+      "tags": [],
+      "date": "2025-10-26T01:02:52.092Z",
       "href": "/reviews/20251026-1010_sample2.html",
-      "slug": "sample2",
+      "slug": "20251026-1010_sample2",
       "file": "20251026-1010_sample2.html"
     },
     {
       "title": "サンプル2：台本レビュー",
-      "tags": [
-        "Sample",
-        "Check"
-      ],
-      "date": "2025-10-26T10:10:00+09:00",
+      "tags": [],
+      "date": "2025-10-26T00:58:23.057Z",
       "href": "/reviews/20251026-1010_sample.html",
-      "slug": "sample",
+      "slug": "20251026-1010_sample",
       "file": "20251026-1010_sample.html"
     },
     {
       "title": "初回テスト：台本レビュー",
-      "tags": [
-        "Test",
-        "Smoke"
-      ],
-      "date": "2025-10-26T09:00:00+09:00",
+      "tags": [],
+      "date": "2025-10-26T00:43:11.221Z",
       "href": "/reviews/20251026-0900_test.html",
-      "slug": "test",
+      "slug": "20251026-0900_test",
       "file": "20251026-0900_test.html"
+    },
+    {
+      "title": "Asari Review – ブリムストーン解説レビュー",
+      "tags": [],
+      "date": "2025-10-25T16:34:26.202Z",
+      "href": "/reviews/2025-10-26_brimstone_review.html",
+      "slug": "2025-10-26_brimstone_review",
+      "file": "2025-10-26_brimstone_review.html"
+    },
+    {
+      "title": "Asari Review – ソーヴァ解説レビュー",
+      "tags": [],
+      "date": "2025-10-25T16:30:17.808Z",
+      "href": "/reviews/2025-10-25_sova-review.html",
+      "slug": "2025-10-25_sova-review",
+      "file": "2025-10-25_sova-review.html"
     }
   ]
 }
