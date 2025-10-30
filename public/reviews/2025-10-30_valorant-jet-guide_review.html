@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Asari Review – 0から学ぶVALORANT – ジェット編レビュー</title>
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    :root{
+      --bg:#0b0d10;--panel:#11151a;--panel-2:#151a21;--text:#e8ecf1;--muted:#9aa6b2;
+      --brand:#5b9cff;--ok:#23c55e;--warn:#f59e0b;--bad:#ef4444;--chip:#1b2330;
+      --border:#212a36;--accent:#2b3545;--mark:#2a3d27;--mark-text:#b7f7c2
+    }
+    @media (prefers-color-scheme: light){
+      :root{
+        --bg:#f7f8fa;--panel:#fff;--panel-2:#fbfcfe;--text:#0f1720;--muted:#6b7280;
+        --brand:#2563eb;--ok:#16a34a;--warn:#d97706;--bad:#dc2626;--chip:#eef2f7;
+        --border:#e5e7eb;--accent:#e9eef7;--mark:#e8f8ec;--mark-text:#065f46
+      }
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;background:var(--bg);color:var(--text);
+      font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,
+      "Hiragino Kaku Gothic ProN",Meiryo,"Noto Sans JP",Arial,sans-serif}
+    a{color:var(--brand);text-decoration:none}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px}
+    header{
+      display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;
+      padding:20px;border:1px solid var(--border);border-radius:16px;
+      background:linear-gradient(180deg,var(--panel),var(--panel-2));
+      position:sticky;top:12px;backdrop-filter:saturate(140%) blur(6px);z-index:5
+    }
+    .ttl{display:flex;gap:12px;align-items:center}
+    .ttl .dot{width:12px;height:12px;border-radius:50%;background:var(--brand);
+      box-shadow:0 0 0 6px color-mix(in oklab,var(--brand) 25%,transparent)}
+    h1{margin:0;font-size:20px;font-weight:700}
+    .meta{font-size:12px;color:var(--muted)}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{font-size:12px;padding:6px 10px;border-radius:999px;background:var(--chip);
+      border:1px solid var(--border)}
+    main{margin-top:20px;display:grid;grid-template-columns:1.2fr 1fr;gap:20px}
+    @media (max-width:980px){main{grid-template-columns:1fr}}
+    .card{background:var(--panel);border:1px solid var(--border);border-radius:16px;
+      padding:18px;box-shadow:0 1px 0 0 var(--border),0 12px 24px -24px #000}
+    .card h2{margin:0 0 10px;font-size:16px}
+    .muted{color:var(--muted);font-size:13px}
+    /* Scores */
+    .scores{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+    @media (max-width:640px){.scores{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    .score{background:var(--panel-2);border:1px solid var(--border);border-radius:12px;
+      padding:12px;display:flex;flex-direction:column;gap:6px}
+    .score .label{font-size:12px;color:var(--muted)}
+    .bar{height:8px;background:var(--accent);border-radius:8px;overflow:hidden}
+    .bar>span{display:block;height:100%;
+      background:linear-gradient(90deg,var(--brand),color-mix(in oklab,var(--brand) 80%,#8be));
+      width:0%}
+    .val{font-weight:700;font-size:14px}
+    .score.overall{grid-column:span 2;position:relative;padding-left:16px}
+    .score.overall .ring{--sz:64px;width:var(--sz);height:var(--sz);border-radius:50%;
+      background:conic-gradient(var(--brand) calc(var(--p)*1%),#2d3644 0);
+      display:grid;place-items:center;margin-left:auto}
+    .score.overall .ring span{font-weight:800}
+    /* Details */
+    details{border:1px solid var(--border);border-radius:12px;background:var(--panel-2);padding:12px}
+    details+details{margin-top:10px}
+    summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px}
+    summary::-webkit-details-marker{display:none}
+    .badge{font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid var(--border);background:var(--chip)}
+    .badge.ok{background:color-mix(in oklab,var(--ok) 20%,transparent);color:var(--ok);
+      border-color:color-mix(in oklab,var(--ok) 35%,var(--border))}
+    .badge.warn{background:color-mix(in oklab,var(--warn) 20%,transparent);color:var(--warn);
+      border-color:color-mix(in oklab,var(--warn) 35%,var(--border))}
+    .badge.bad{background:color-mix(in oklab,var(--bad) 20%,transparent);color:var(--bad);
+      border-color:color-mix(in oklab,var(--bad) 35%,var(--border))}
+    ul.clean{margin:10px 0 0 20px}
+    li{margin:6px 0}
+    code.inline{background:var(--chip);border:1px solid var(--border);padding:2px 6px;border-radius:6px}
+    .script{background:var(--panel-2);border:1px dashed var(--border);border-radius:12px;
+      padding:14px;white-space:pre-wrap}
+    mark{background:var(--mark);color:var(--mark-text);padding:0 3px;border-radius:4px}
+    .footer{margin-top:20px;font-size:12px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
+    .pill{padding:4px 10px;border-radius:999px;background:var(--chip);border:1px solid var(--border)}
+    .tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .btn{font-size:12px;padding:6px 10px;border-radius:8px;border:1px solid var(--border);
+      background:var(--panel-2);color:var(--text);cursor:pointer}
+    .btn:hover{filter:brightness(1.05)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="ttl">
+        <div class="dot"></div>
+        <div>
+          <h1>Asari Review – 0から学ぶVALORANT – ジェット編レビュー</h1>
+          <div class="meta">Date: 2025-10-30｜Sentences: 5｜Dict used: asari-style-dict.yaml</div>
+        </div>
+      </div>
+      <div class="chips">
+        <span class="chip">slug: valorant-jet-guide</span>
+        <span class="chip">v2.1</span>
+        <span class="chip">source: user-script</span>
+      </div>
+    </header>
+
+    <main>
+      <!-- LEFT -->
+      <section class="card">
+        <h2>Summary</h2>
+        <p class="muted">ジェットの魅力を熱量高く伝える導入と技術解説が秀逸。軽微な誤字と表現調整を除けば完成度は高い。</p>
+
+        <h2 style="margin-top:14px;">Findings</h2>
+
+        <details open>
+          <summary><strong>誤字・表記揺れ</strong> <span class="badge warn">改善余地</span></summary>
+          <ul class="clean"><li>『っとなる』→『となる』など軽微な誤用あり。</li><li>『だたし』→『ただし』の誤記を修正。</li><li>句読点が少ない箇所（特に冒頭）にリズム補助の読点追加を推奨。</li></ul>
+        </details>
+
+        <details>
+          <summary><strong>文の流れ・可読性</strong> <span class="badge ok">OK</span></summary>
+          <ul class="clean"><li>導入の勢いと中盤の分析のバランスが良好。</li><li>ただし後半（アビリティ解説部）は説明密度が高く、視聴テンポの調整を検討。</li><li>『ん゛ん゛』などの演出挿入位置をもう少し自然に置くとリズム向上。</li></ul>
+        </details>
+
+        <details>
+          <summary><strong>初心者に優しい用語解説（初出～25文字以内）</strong> <span class="badge ok">OK</span></summary>
+          <ul class="clean"><li>『射線』：敵の攻撃範囲を指すFPS用語。</li><li>『ワンウェイスモーク』：一方的に視認できるスモーク配置技。</li><li>『アップドラフト』：ジェットの上昇スキル。初出時に軽い補足を。</li></ul>
+        </details>
+
+        <details>
+          <summary><strong>炎上／誤解／過度誇張リスク</strong> <span class="badge warn">改善余地</span></summary>
+          <ul class="clean"><li>『銃を突きつけながら』は暴力的印象があるため、ナレーション的比喩に修正推奨。</li><li>過度な断定・誇張表現は見られず安全圏。</li></ul>
+        </details>
+
+        <details>
+          <summary><strong>YouTube運用（CTA / retention）</strong> <span class="badge ok">OK</span></summary>
+          <ul class="clean">
+            <li><strong>Hook:</strong> 『俺とあいつとでは何が違うんだ！』の導入で強い引き。</li>
+            <li><strong>Retention:</strong> スキル分解パートで具体映像提示が有効。</li>
+            <li><strong>CTA:</strong> 『チャンネル登録して次のスキル編も！』など次回誘導を明示。</li>
+          </ul>
+        </details>
+
+        <details>
+          <summary><strong>“アサリらしさ”（辞書トーン／構成／表現）</strong></summary>
+          <ul class="clean"><li>口語的熱量を保ちつつ、技術解説部は一文を短く。</li><li>セリフパートとナレーションの区別を明確にすることで“アサリらしさ”を維持。</li></ul>
+        </details>
+
+        <h2 style="margin-top:16px;">Quick Fixes</h2>
+        <ul class="clean"><li>『だたし』→『ただし』に修正。</li><li>冒頭に読点を2～3箇所追加。</li><li>『銃を突きつけながら』を『銃を構えながら（演出）』などに変更。</li></ul>
+
+        <h2 style="margin-top:16px;">Rewrite Examples</h2>
+        <ul class="clean"><li>『っとなるキャラクター』→『となってしまうキャラクター』。</li><li>『ん゛ん゛』→（効果音的にテキストでは1回で可読性向上）。</li><li>『銃を突きつけながら』→『カメラに銃を構えながら』。</li></ul>
+      </section>
+
+      <!-- RIGHT -->
+      <aside class="card">
+        <h2>Scores</h2>
+        <div class="scores">
+      <div class='score overall'><div class='label'>Overall</div><div class='ring' style='--p:87'><span>8.7</span></div></div>
+      <div class='score'><div class='label'>Typos</div><div class='val'>7.5</div><div class='bar' data-score='7.5'><span></span></div></div>
+      <div class='score'><div class='label'>Structure</div><div class='val'>8.5</div><div class='bar' data-score='8.5'><span></span></div></div>
+      <div class='score'><div class='label'>Terms</div><div class='val'>8.5</div><div class='bar' data-score='8.5'><span></span></div></div>
+      <div class='score'><div class='label'>Risk</div><div class='val'>8.0</div><div class='bar' data-score='8.0'><span></span></div></div>
+      <div class='score'><div class='label'>YouTube</div><div class='val'>8.5</div><div class='bar' data-score='8.5'><span></span></div></div>
+    </div>
+
+        <div class="tools">
+          <button class="btn" id="expand-all">Open all</button>
+          <button class="btn" id="collapse-all">Close all</button>
+        </div>
+
+        <h2 style="margin-top:16px;">Script (Highlights)</h2>
+        <div class="script">俺とあいつとでは何が違うんだ！っとなるキャラクター、第１位、は言い過ぎか…。第２位くらい、<mark>ジェット</mark>！
+
+同じ銃を持っているのに、なぜかあいつだけが空を舞い、射線を切り、華麗にキルを重ねていく！
+ずるいよねェ！！
+
+じゃあここでひとつ問おう
+根本的な勘違いをしていないか？な、そこの君
+まさか<mark>ジェット</mark>をただのキルマシーンだと思ってはいないだろうか。な、そこの君
+
+本当の強さは、彼女だけが持つ特殊なスキルと、仲間とかみ合った立ち回りにこそ宿るんだ。
+
+その本当の姿を知ったとき、君の<mark>ジェット</mark>は一段と強くなる。
+
+さあ、最強の<mark>ジェット</mark>になりたいかー！！
+ん゛ん゛
+最強の<mark>ジェット</mark>になりたいかー！！（銃を突きつけながら）
+
+それじゃあ行ってみよう。
+“0から学ぶ<mark>VALORANT</mark>”――<mark>ジェット</mark>編、開幕だ！
+
+...（省略：アビリティ解説部）</div>
+      </aside>
+    </main>
+
+    <div class="footer">
+      <span class="pill">chars: 367</span>
+      <span class="pill">dict used: asari-style-dict.yaml</span>
+      <span class="pill">template: Asari Review (modern)</span>
+    </div>
+  </div>
+
+  <script>
+    // Score bar animation
+    document.querySelectorAll('.bar').forEach(b=>{
+      const s = Math.max(0, Math.min(10, Number(b.dataset.score)||0));
+      requestAnimationFrame(()=>{ b.firstElementChild.style.width = (s*10) + '%' });
+    });
+    // Toggle all details
+    const all = () => Array.from(document.querySelectorAll('details'));
+    document.getElementById('expand-all')?.addEventListener('click', ()=> all().forEach(d=> d.open = true));
+    document.getElementById('collapse-all')?.addEventListener('click', ()=> all().forEach(d=> d.open = false));
+  </script>
+</body>
+</html>
