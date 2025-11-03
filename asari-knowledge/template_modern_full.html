@@ -1,462 +1,842 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Asari Review Report</title>
+<head>
+  <meta charset="UTF-8" />
+  <title>Asari Script Review Report</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <!-- ================================================================================================= -->
-    <!--  Style（スタイル定義） -->
-    <!--  - カラートークン、レイアウト、共通UI。                                                            -->
-    <!--  - ダミー時にだけ表示する警告バナー／マスク用のクラスも含む。                                        -->
-    <!-- ================================================================================================= -->
-    <style>
-      /* --- カラー & デザイン変数 (デフォルト) --- */
-      :root{
-        --bg:#f7f7f8; --card:#fff; --ink:#0f172a; --muted:#64748b; --bd:#e5e7eb; --accent:#2563eb;
-        --bad:#b91c1c; --warn:#d97706; --ok:#16a34a;
-        --blue:#3b82f6; --violet:#7e22ce; --red:#b91c1c; --yellow:#facc15; --green:#16a34a; --sky:#0ea5e9; --pink:#ec4899;
+  <!-- ========================================================= -->
+  <!--  ここからstyle定義                                         -->
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-elevated: #0b1020;
+      --bg-chip: #111827;
+      --border-subtle: #1f2937;
+      --accent: #3b82f6;
+      --accent-soft: rgba(59, 130, 246, 0.15);
+      --accent-strong: #2563eb;
+      --danger: #ef4444;
+      --warn: #f97316;
+      --ok: #22c55e;
+      --text-main: #f9fafb;
+      --text-sub: #9ca3af;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.65);
+      --shadow-chip: 0 10px 25px rgba(15, 23, 42, 0.7);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 32px 16px 48px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Hiragino Sans", "Noto Sans JP", sans-serif;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 52%, #000 100%);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .app-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .app-title-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #e5e7eb, #1d4ed8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #e5e7eb;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.7);
+    }
+
+    .app-title-text {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .app-title-text h1 {
+      margin: 0;
+      font-size: 18px;
+      letter-spacing: 0.03em;
+    }
+
+    .app-title-text span {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.2fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
       }
-      @media (prefers-color-scheme: dark) {
-        :root{
-          --bg:#0b0f15; --card:#0f1520; --ink:#e5e7eb; --muted:#94a3b8; --bd:#1f2937; --accent:#60a5fa;
-          --bad:#ef4444; --warn:#f59e0b; --ok:#22c55e;
-          --blue:#60a5fa; --violet:#a78bfa; --red:#ef4444; --yellow:#fde047; --green:#22c55e; --sky:#38bdf8; --pink:#f472b6;
-        }
+    }
+
+    .panel {
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.98), #020617);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 18px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: -60%;
+      background: conic-gradient(
+        from 220deg,
+        rgba(59, 130, 246, 0.08),
+        transparent,
+        transparent,
+        rgba(16, 185, 129, 0.05),
+        transparent,
+        rgba(59, 130, 246, 0.08)
+      );
+      opacity: 0.5;
+      filter: blur(40px);
+      z-index: -1;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .panel-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-sub);
+    }
+
+    .panel-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .summary-main {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .summary-topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .summary-summary {
+      font-size: 13px;
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    .summary-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+      min-width: 170px;
+    }
+
+    .summary-meta-label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .summary-meta-value {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 540px) {
+      .score-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
+    }
 
-      /* --- リセット / 基本ユーティリティ --- */
-      * { box-sizing: border-box; }
-      html, body { height: 100%; margin:0; font-family: system-ui, -apple-system, 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--ink); }
+    .score-card {
+      border-radius: var(--radius-md);
+      background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.2), rgba(15, 23, 42, 0.98));
+      padding: 10px 10px 9px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      box-shadow: var(--shadow-chip);
+    }
 
-      /* --- レイアウト --- */
-      .wrap { max-width:1160px; margin:24px auto 80px; padding:0 16px; }
-      .card { background:var(--card); border:1px solid var(--bd); border-radius:16px; padding:18px; }
-      .header { display:flex; justify-content:space-between; align-items:center; gap:12px; }
-      .brand .title { font-weight:700; }
-      .meta { color:var(--muted); font-size:12px; }
-      .btn { border:1px solid var(--bd); background:transparent; border-radius:10px; padding:8px 12px; cursor:pointer; }
-      .btn.primary { background:var(--accent); color:#fff; border-color:transparent; }
-      .grid { display:grid; grid-template-columns:1.4fr .9fr; gap:16px; }
-      @media (max-width:980px){ .grid{grid-template-columns:1fr;} }
-      .sticky{position:sticky; top:16px;}
+    .score-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
 
-      /* --- 小コンポーネント --- */
-      .chips{display:flex; flex-wrap:wrap; gap:8px;}
-      .chip{display:inline-flex; gap:6px; padding:6px 10px; border-radius:999px; border:1px solid var(--bd); font-size:12px;}
-      .alert{border-left:6px solid var(--bad); background:color-mix(in oklab,var(--red) 18%,#0000); padding:12px; border-radius:12px;}
+    .score-value-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 6px;
+    }
 
-      /* --- セクション / カード --- */
-      .section{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
-      @media (max-width:980px){.section{grid-template-columns:1fr;}}
-      .review-card{border-radius:16px; padding:16px 16px 10px; border:1px solid var(--bd); background:var(--card);}
-      .review-card header{display:flex; align-items:center; gap:10px; margin-bottom:8px;}
-      .review-card header h3{margin:0; font-size:15px;}
-      .icon{font-size:18px;}
+    .score-value {
+      font-size: 18px;
+      font-weight: 600;
+      color: #e5e7eb;
+    }
 
-      /* カテゴリ色（左ボーダー＋淡背景） */
-      .typo{--bgc:color-mix(in oklab,var(--blue)10%,#0000); --bar:var(--blue);}
-      .policy{--bgc:color-mix(in oklab,var(--violet)10%,#0000); --bar:var(--violet);}
-      .risk{--bgc:color-mix(in oklab,var(--red)10%,#0000); --bar:var(--red);}
-      .youtube{--bgc:color-mix(in oklab,var(--yellow)16%,#0000); --bar:var(--yellow);}
-      .asari{--bgc:color-mix(in oklab,var(--green)12%,#0000); --bar:var(--green);}
-      .readab{--bgc:color-mix(in oklab,var(--sky)10%,#0000); --bar:var(--sky);}
-      .begin{--bgc:color-mix(in oklab,var(--pink)10%,#0000); --bar:var(--pink);}
-      .review-card{background:linear-gradient(0deg,var(--bgc),var(--bgc)),var(--card); border-left:6px solid var(--bar);}
+    .score-max {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
 
-      .issues{display:grid; gap:8px;}
-      .issue{border:1px dashed var(--bd); border-radius:12px; padding:10px;}
-      .issue .t{font-weight:600;}
-      .issue .s{color:var(--muted); margin-top:4px;}
+    .score-bar {
+      margin-top: 5px;
+      width: 100%;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(31, 41, 55, 0.9);
+      overflow: hidden;
+    }
 
-      /* --- バッジ / 重大度表示 --- */
-      .badge{font-size:11px; border-radius:6px; padding:3px 6px; border:1px solid var(--bd); color:var(--muted);}
-      .sev-high{border-color:color-mix(in oklab,var(--bad)40%,var(--bd)); color:var(--bad);}
-      .sev-med{border-color:color-mix(in oklab,var(--warn)40%,var(--bd)); color:var(--warn);}
-      .sev-low{border-color:color-mix(in oklab,var(--ok)40%,var(--bd)); color:var(--ok);}
-      .sev-info{border-color:var(--bd); color:var(--muted);}
+    .score-bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent-soft), var(--accent-strong));
+      transform-origin: left center;
+      transform: scaleX(0);
+      transition: transform 0.4s ease-out;
+    }
 
-      .side .hint{color:var(--muted); font-size:12px; margin:6px 0 10px;}
-      .sugg{border:1px dashed var(--bd); border-radius:12px; padding:10px; margin:10px 0;}
-      .sugg label{font-size:12px; color:var(--muted);}
-      .sugg details{margin-top:6px;}
+    .issues-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 6px;
+    }
 
-      /* --- ダミー検知時のUI --- */
-      .dummy-banner{
-        position: sticky; top: 0; z-index: 1000;
-        display:flex; align-items:center; gap:10px;
-        padding:10px 14px; margin:0 0 12px 0;
-        background: color-mix(in oklab, var(--red) 25%, #fff);
-        color:#fff; border-bottom:2px solid var(--bad);
-        font-weight:700;
-      }
-      .dummy-mask{
-        position: fixed; inset: 0; pointer-events:none;
-        background-image: repeating-linear-gradient(
-          -45deg,
-          rgba(185,28,28,.08) 0px, rgba(185,28,28,.08) 12px,
-          rgba(185,28,28,0) 12px, rgba(185,28,28,0) 24px
-        );
-        z-index: 500;
-      }
-      .dummy-dim{ opacity:.35; filter:grayscale(.25); }
-      .disabled { pointer-events:none; opacity:.6; }
-    </style>
-  </head>
+    .issue-card {
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), #020617);
+      padding: 10px 11px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
 
-  <body>
-    <div class="wrap" id="rootWrap">
-      <!-- Header -->
-      <div class="card header">
-        <div class="brand">
+    .issue-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .issue-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .issue-rule {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .issue-cat {
+      font-size: 10px;
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: var(--bg-chip);
+      color: var(--text-sub);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+    }
+
+    .issue-sev {
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .sev-high {
+      background: rgba(239, 68, 68, 0.14);
+      border: 1px solid rgba(248, 113, 113, 0.9);
+      color: #fecaca;
+    }
+
+    .sev-medium {
+      background: rgba(249, 115, 22, 0.14);
+      border: 1px solid rgba(251, 146, 60, 0.9);
+      color: #fed7aa;
+    }
+
+    .sev-low {
+      background: rgba(34, 197, 94, 0.14);
+      border: 1px solid rgba(74, 222, 128, 0.9);
+      color: #bbf7d0;
+    }
+
+    .sev-info {
+      background: rgba(148, 163, 184, 0.15);
+      border: 1px solid rgba(148, 163, 184, 0.9);
+      color: #e5e7eb;
+    }
+
+    .issue-body {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .issue-problem {
+      color: var(--text-main);
+    }
+
+    .issue-snippet {
+      margin: 2px 0;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, 0.95);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+        "Liberation Mono", "Courier New", monospace;
+      font-size: 11px;
+      white-space: pre-wrap;
+      color: #e5e7eb;
+    }
+
+    .issue-suggestion-label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .issue-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 4px;
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .issue-footer-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pill {
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: var(--bg-chip);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+    }
+
+    .suggested-rules {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .suggested-card {
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), #020617);
+      padding: 10px 11px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .suggested-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .suggested-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .suggested-body {
+      font-size: 12px;
+      color: var(--text-sub);
+      line-height: 1.6;
+    }
+
+    .suggested-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .suggested-examples {
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .empty-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+  </style>
+  <!-- ========================================================= -->
+
+  <!-- ============================================ -->
+  <!-- ChatGPTにより自動的に差し替えられる3オブジェクト -->
+  <script>
+    // 👇 レビューの要約スコア・日時・総評など
+    window.REVIEW_SUMMARY = __REVIEW_SUMMARY__;
+    
+    // 👇 規約違反の詳細一覧（ルール・該当箇所・提案）
+    window.REVIEW_ISSUES = __REVIEW_ISSUES__;
+    
+    // 👇 AIが提案する新しいルール候補
+    window.REVIEW_SUGGESTED_RULES = __REVIEW_SUGGESTED_RULES__;
+  </script>
+  <!-- ============================================ -->
+</head>
+
+<!-- ========================================================= -->
+<!--  ここからbody定義                                          -->
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="app-title">
+        <div class="app-title-icon">A</div>
+        <div class="app-title-text">
+          <h1>Asari Script Review</h1>
+          <span>VALORANT 解説台本レビュー レポート</span>
+        </div>
+      </div>
+      <div class="badge">
+        <span class="badge-dot"></span>
+        <span>自動レビュー結果</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- 左：サマリー ＆ 規約違反一覧 -->
+      <section class="panel">
+        <div class="panel-header">
           <div>
-            <div class="title">Asari Review Report</div>
-            <div class="meta">レビュー日時：<span id="revAt">-</span></div>
+            <div class="panel-title">Summary</div>
+            <div class="panel-sub">全体の印象とスコア</div>
           </div>
         </div>
-        <div>
-          <button class="btn" id="expandAll">すべて展開</button>
-          <button class="btn" id="collapseAll">すべて折りたたみ</button>
-          <button class="btn primary" id="downloadPatch">パッチJSONをDL</button>
-        </div>
-      </div>
+        <div id="summary-root" class="summary-main"></div>
 
-      <!-- Summary -->
-      <div class="card" id="summaryCard" style="margin:16px 0">
-        <div style="font-weight:700; margin-bottom:6px">概要</div>
-        <div id="summaryText" class="meta" style="line-height:1.7"></div>
-
-        <div class="chips" style="margin-top:10px">
-          <span class="chip">正確性 <b id="sc-acc">-</b>/10</span>
-          <span class="chip">初心者 <b id="sc-beg">-</b>/10</span>
-          <span class="chip">トーン <b id="sc-ton">-</b>/10</span>
-          <span class="chip">構成 <b id="sc-str">-</b>/10</span>
-          <span class="chip">CTA <b id="sc-cta">-</b>/10</span>
-          <span class="chip">リスク <b id="sc-rsk">-</b>/10</span>
-          <span class="chip">総合 <b id="sc-all">-</b>/10</span>
-        </div>
-
-        <div id="riskAlert" class="alert" style="display:none; margin-top:12px">
-          ⚠️ 高重大度（HIGH）の炎上リスクが検出されています。先に本カードの対応を検討してください。
-        </div>
-      </div>
-
-      <div class="grid">
-        <!-- Main: Category Cards -->
-        <main class="section" id="cards"></main>
-
-        <!-- Side: Asari style suggestions -->
-        <aside class="side">
-          <div class="card sticky">
-            <div style="font-weight:700">Asariらしさ：追加提案</div>
-            <div class="hint">採用にチェック → 右上ボタンでDL</div>
-            <div id="suggestList"></div>
+        <div class="panel-header" style="margin-top: 18px;">
+          <div>
+            <div class="panel-title">Issues</div>
+            <div class="panel-sub">規約違反・改善ポイント一覧</div>
           </div>
-        </aside>
-      </div>
+        </div>
+        <div id="issues-root" class="issues-list"></div>
+      </section>
+
+      <!-- 右：新しい規約候補 -->
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">Suggested Rules</div>
+            <div class="panel-sub">AI が提案する新しい規約候補（最大 5 件）</div>
+          </div>
+        </div>
+        <div id="suggested-root" class="suggested-rules"></div>
+      </section>
     </div>
+  </div>
+  <!-- ========================================================= -->
 
-    <!-- =================================================================== -->
-    <!--  実データ注入ブロック（テンプレ内の最上流に置く）                   -->
-    <!--  ※ このブロックが Dummy 初期値 <script> より前に来ることが必須     -->
-    <!--  ※ ChatGPTが一発出力する際は、この中身をモデルが実データで上書き   -->
-    <!-- =================================================================== -->
-    <script id="__ASARI_DATA__">
-      // 1) ダミー無効化（重要：guardDummyによるダミーUI抑止）
-      window.__ASARI_DUMMY = false;
+  <!-- ========================================================= -->
+  <!--  ここからscript定義                                         -->
+  <script>
+    (function () {
+      const summary = window.REVIEW_SUMMARY || null;
+      const issues = Array.isArray(window.REVIEW_ISSUES)
+        ? window.REVIEW_ISSUES
+        : [];
+      const suggested = Array.isArray(window.REVIEW_SUGGESTED_RULES)
+        ? window.REVIEW_SUGGESTED_RULES
+        : [];
 
-      // 2) REVIEW_SUMMARY（例：実運用ではモデルが生成）
-      window.REVIEW_SUMMARY = {
-        reviewedAt: "2025-11-02T14:05:00+09:00",
-        summary: "導入の自然さとCTAが強み。感嘆符の頻度を抑えるとトーンが安定します。",
-        scores: { accuracy: 9, accessibility: 8, tone: 8, structure: 9, cta: 10, risk: 10, overall: 9 }
-      };
+      const summaryRoot = document.getElementById("summary-root");
+      const issuesRoot = document.getElementById("issues-root");
+      const suggestedRoot = document.getElementById("suggested-root");
 
-      // 3) REVIEW_ISSUES（例）
-      window.REVIEW_ISSUES = [
-        {
-          category: "readability",
-          severity: "low",
-          text: "一部の文が長い（読点3つ以上）。聞き取りを想定し区切るとテンポが改善。",
-          suggestion: "2文に分割し、主語→結論→補足の順に整列。",
-          details: { line: 12, sentence_length: 55, comma_count: 4, rule: "平均文長>42" }
-        }
-      ];
-
-      // 4) STYLE_SUGGESTIONS（例：チェック→右上ボタンでpatch出力）
-      window.STYLE_SUGGESTIONS = [
-        {
-          id: "a1",
-          type: "phrasing",
-          purpose: "感嘆符の頻度最適化",
-          recommendation: "強調は1文あたり最大1回に制限。",
-          impact_scope: "stylebook.json",
-          evidence: [{ snippet: "やりてぇ！！", line: 1 }],
-          patches: [
-            { target: "stylebook.json", ops: [ { op: "add", path: "/rules/-", value: "感嘆符は1文1回まで" } ] }
-          ]
-        }
-      ];
-    </script>
-
-    <!-- ================================================================================================= -->
-    <!--  Dummy 初期値（上記 __ASARI_DATA__ で上書きされなければダミー判定へ）                               -->
-    <!--  - __dummy: true フラグで guardDummy が検出。                                                       -->
-    <!-- ================================================================================================= -->
-    <script>
-      // ダミーフラグ（未上書き検知用）
-      window.__ASARI_DUMMY = window.__ASARI_DUMMY ?? true;
-
-      // REVIEW_SUMMARY（ダミー）
-      window.REVIEW_SUMMARY = window.REVIEW_SUMMARY || {
-        __dummy: true,
-        reviewedAt: "DUMMY",
-        summary: "【ダミー】実データが未注入です。テンプレ上部に __ASARI_DATA__ ブロックを挿入して生成してください。",
-        scores: { accuracy: "-", accessibility: "-", tone: "-", structure: "-", cta: "-", risk: "-", overall: "-" }
-      };
-
-      // REVIEW_ISSUES（ダミー）
-      window.REVIEW_ISSUES = window.REVIEW_ISSUES || [
-        {
-          category: "system",
-          severity: "info",
-          text: "テンプレートに実データが注入されていません。",
-          suggestion: "上部に実データの <script id=\"__ASARI_DATA__\"> ブロックを追加して再出力してください。"
-        }
-      ];
-
-      // STYLE_SUGGESTIONS（ダミー）
-      window.STYLE_SUGGESTIONS = window.STYLE_SUGGESTIONS || [];
-    </script>
-
-    <!-- ================================================================================================= -->
-    <!--  Main Script（描画ロジック）                                                                       -->
-    <!--  - 先頭でダミー検知。ダミーならバナー表示＋UIを半透明＆操作不可にして早期リターンはしない（確認用）。 -->
-    <!--  - 実データに上書きされていれば通常レンダリングへ。                                                 -->
-    <!-- ================================================================================================= -->
-    <script>
-      // DOMヘルパー
-      const $  = (s, el = document) => el.querySelector(s);
-      const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
-
-      // --- 0) ダミー検知＆バナー表示（最初に実行） ---
-      (function guardDummy(){
-        const isDummy = !!(window.__ASARI_DUMMY || window.REVIEW_SUMMARY?.__dummy);
-        if(!isDummy) return; // 実データで上書き済み → 通常描画へ
-
-        // バナー（赤）＋全面のマスク
-        document.body.insertAdjacentHTML('afterbegin',
-          `<div class="dummy-banner">🚨 ダミーデータで表示中：__ASARI_DATA__ が注入されていません。</div>`
-        );
-        const mask = document.createElement('div');
-        mask.className = 'dummy-mask';
-        document.body.appendChild(mask);
-
-        // メインUIを半透明＆操作不可に
-        const root = $('#rootWrap');
-        if(root) root.classList.add('dummy-dim');
-        $$('#downloadPatch, #expandAll, #collapseAll').forEach(b => b?.classList.add('disabled'));
-
-        // ダミーでも「何が足りないか」は確認できるよう、以降のレンダリングは実行する
-      })();
-
-      // --- 1) ヘッダとスコア初期化 ---
-      (function initSummary(){
-        const s  = window.REVIEW_SUMMARY || {};
-        const sc = s.scores || {};
-        // 日時表示（ダミーはそのまま "DUMMY" を表示して気づけるように）
-        $('#revAt').textContent   = String(s.reviewedAt ?? '');
-        $('#summaryText').textContent = s.summary ?? '';
-
-        $('#sc-acc').textContent = sc.accuracy      ?? '-';
-        $('#sc-beg').textContent = sc.accessibility ?? '-';
-        $('#sc-ton').textContent = sc.tone          ?? '-';
-        $('#sc-str').textContent = sc.structure     ?? '-';
-        $('#sc-cta').textContent = sc.cta           ?? '-';
-        $('#sc-rsk').textContent = sc.risk          ?? '-';
-        $('#sc-all').textContent = sc.overall       ?? '-';
-      })();
-
-      // --- 2) 代表レベル算出 ---
-      function computeCategorySeverity(list){
-        if(!list || !list.length) return 'info';
-        const rank = { high:3, medium:2, low:1 };
-        let max = 0;
-        for(const i of list){
-          const sev = String(i.severity || '').toLowerCase();
-          max = Math.max(max, rank[sev] || 0);
-        }
-        return max===3 ? 'high' : max===2 ? 'medium' : max===1 ? 'low' : 'info';
+      function safeNum(n) {
+        return typeof n === "number" && !Number.isNaN(n) ? n : 0;
       }
 
-      // --- 3) 指摘なし時のポジティブ文言 ---
-      function getPositiveMessage(key){
-        const m = {
-          typo_card:        "表記揺れ・誤字脱字は確認されませんでした。",
-          policy_card:      "規約・ポリシー違反はありません。",
-          risk_card:        "炎上リスクは検出されませんでした。",
-          youtube_card:     "構成とCTAは自然で推奨構成に準拠しています。",
-          asari_card:       "“アサリらしさ”のトーンに合致しています。",
-          readability_card: "文の区切りと語彙選択は標準に沿っています。",
-          beginner_card:    "初心者向け補足が適切です。"
-        };
-        return m[key] || "良好です。";
-      }
+      function createScoreCard(label, value, accentKey) {
+        const outer = document.createElement("div");
+        outer.className = "score-card";
 
-      // --- 4) Issue 描画のHTML断片作成 ---
-      function renderIssueHTML(i){
-        const t=i.text||''; const s=i.suggestion||''; const d=i.details||null;
-        if(!d) return `<div class="t">${t}</div><div class="s">提案：${s||'-'}</div>`;
-        return `
-          <div class="t">${t}</div>
-          <ul class="meta" style="margin:6px 0 0 0;padding-left:18px;line-height:1.6">
-            ${d.line?`<li>位置：L${d.line}</li>`:''}
-            ${d.sentence_length?`<li>文長：${d.sentence_length}文字</li>`:''}
-            ${d.comma_count?`<li>読点：${d.comma_count}個</li>`:''}
-            ${d.rule?`<li>ルール：${d.rule}</li>`:''}
-          </ul>
-          ${d.snippet?`<div class="meta" style="margin-top:6px">該当：</div><pre>${d.snippet}</pre>`:''}
-          ${d.fix?`<div class="meta" style="margin-top:6px">修正例：</div><pre>${d.fix}</pre>`:''}
-          ${s?`<div class="s" style="margin-top:6px">提案：${s}</div>`:''}`;
-      }
+        const lab = document.createElement("div");
+        lab.className = "score-label";
+        lab.textContent = label;
+        outer.appendChild(lab);
 
-      // --- 5) カード描画 ---
-      (function renderCards(){
-        const container = $('#cards');
-        const issues = (window.REVIEW_ISSUES || []).slice();
+        const row = document.createElement("div");
+        row.className = "score-value-row";
+        const val = document.createElement("div");
+        val.className = "score-value";
+        val.textContent = safeNum(value).toFixed(1);
+        const max = document.createElement("div");
+        max.className = "score-max";
+        max.textContent = "/ 10";
+        row.appendChild(val);
+        row.appendChild(max);
+        outer.appendChild(row);
 
-        // 高重大度（HIGH）のリスクがあれば警告表示
-        const hasHighRisk = issues.some(i => i.category==='risk_tone' && (i.severity||'').toLowerCase()==='high');
-        if(hasHighRisk) $('#riskAlert').style.display = 'block';
-
-        const mapCategoryToCard = {
-          "style_consistency": "typo_card",
-          "review_policy":     "policy_card",
-          "risk_tone":         "risk_card",
-          "youtube_logic":     "youtube_card",
-          "style_guideline":   "asari_card",
-          "readability":       "readability_card",
-          "beginner_fit":      "beginner_card"
-        };
-
-        const cardDefs = {
-          typo_card:        { cls:'typo',    title:'📝 誤字脱字・表記ゆれ', icon:'✏️' },
-          policy_card:      { cls:'policy',  title:'⚖️ 規約違反',         icon:'⚖️' },
-          risk_card:        { cls:'risk',    title:'🔥 炎上リスク',       icon:'🔥' },
-          youtube_card:     { cls:'youtube', title:'🎯 YouTube運用',      icon:'🎯' },
-          asari_card:       { cls:'asari',   title:'🌿 アサリらしさ',     icon:'🌿' },
-          readability_card: { cls:'readab',  title:'📖 可読性',            icon:'📖' },
-          beginner_card:    { cls:'begin',   title:'🎓 初心者向け補足',    icon:'🎓' }
-        };
-
-        // バケット化
-        const buckets = {};
-        for(const it of issues){
-          const key = mapCategoryToCard[it.category] || 'readability_card';
-          (buckets[key] ||= []).push(it);
-        }
-
-        const order = ['risk_card','policy_card','typo_card','readability_card','beginner_card','youtube_card','asari_card'];
-
-        order.forEach(cardKey=>{
-          const list = buckets[cardKey] || [];
-          const def  = cardDefs[cardKey];
-          const topSeverity = computeCategorySeverity(list);
-
-          const card = document.createElement('section');
-          card.className = `review-card ${def.cls}`;
-
-          const sevLabel = {high:'HIGH', medium:'MEDIUM', low:'LOW', info:'INFO'}[topSeverity];
-          const sevClass = {high:'sev-high', medium:'sev-med', low:'sev-low', info:'sev-info'}[topSeverity];
-
-          card.innerHTML = `
-            <header>
-              <span class="icon">${def.icon}</span>
-              <h3>${def.title} <span class="badge ${sevClass}">${sevLabel}</span></h3>
-            </header>
-            <div class="issues"></div>
-          `;
-          const wrap = card.querySelector('.issues');
-
-          if(list.length === 0){
-            // 指摘なし → INFOとして肯定メッセージ
-            const dv = document.createElement('div');
-            dv.className = 'issue';
-            dv.innerHTML = `<div class="t">${getPositiveMessage(cardKey)}</div>`;
-            wrap.appendChild(dv);
-          } else {
-            // 指摘あり → 詳細を描画
-            const sevRank = { high:0, medium:1, low:2 };
-            list.sort((a,b)=>{
-              const sa = sevRank[(a.severity||'').toLowerCase()] ?? 9;
-              const sb = sevRank[(b.severity||'').toLowerCase()] ?? 9;
-              if(sa!==sb) return sa-sb;
-              return String(a.text||'').localeCompare(String(b.text||''),'ja');
-            });
-            list.forEach(i=>{
-              const sev = (i.severity||'info').toLowerCase();
-              const sevCls = {high:'sev-high',medium:'sev-med',low:'sev-low',info:'sev-info'}[sev];
-              const dv = document.createElement('div');
-              dv.className = 'issue';
-              dv.innerHTML = `${renderIssueHTML(i)}<div style="margin-top:6px"><span class="badge ${sevCls}">${sev.toUpperCase()}</span></div>`;
-              wrap.appendChild(dv);
-            });
-          }
-          container.appendChild(card);
+        const bar = document.createElement("div");
+        bar.className = "score-bar";
+        const fill = document.createElement("div");
+        fill.className = "score-bar-fill";
+        const ratio = Math.max(0, Math.min(1, safeNum(value) / 10));
+        requestAnimationFrame(() => {
+          fill.style.transform = `scaleX(${ratio})`;
         });
-      })();
+        bar.appendChild(fill);
+        outer.appendChild(bar);
 
-      // --- 6) Controls ---
-      $('#expandAll').onclick   = () => $$('details').forEach(d => d.open = true);
-      $('#collapseAll').onclick = () => $$('details').forEach(d => d.open = false);
+        return outer;
+      }
 
-      const approved = new Set(); // 採用サジェスト
+      function renderSummary() {
+        if (!summary || !summaryRoot) return;
 
-      // --- 7) Download Patch（採用した提案を束ねてJSON出力） ---
-      $('#downloadPatch').onclick = () => {
-        const chosen = (window.STYLE_SUGGESTIONS || []).filter(s => approved.has(s.id));
-        const bundle = {};
-        chosen.forEach(s => (s.patches || []).forEach(p => {
-          (bundle[p.target] ??= []).push(...(p.ops || []));
-        }));
-        const blob = new Blob([JSON.stringify(bundle, null, 2)], { type:'application/json' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'style-patch.json';
-        a.click();
-        URL.revokeObjectURL(a.href);
-      };
+        const top = document.createElement("div");
+        top.className = "summary-topline";
 
-      // --- 8) スタイル提案の描画 ---
-      (function renderSuggestions(){
-        const listEl = $('#suggestList');
-        const arr = (window.STYLE_SUGGESTIONS || []);
-        if(!arr.length){
-          listEl.innerHTML = '<div class="meta">今回は追加提案なし。</div>';
+        const summaryText = document.createElement("div");
+        summaryText.className = "summary-summary";
+        summaryText.textContent =
+          summary.summary || "この台本のレビューサマリーがここに表示されます。";
+
+        const meta = document.createElement("div");
+        meta.className = "summary-meta";
+        const metaLabel = document.createElement("div");
+        metaLabel.className = "summary-meta-label";
+        metaLabel.textContent = "Reviewed At";
+        const metaValue = document.createElement("div");
+        metaValue.className = "summary-meta-value";
+        metaValue.textContent = summary.reviewedAt || "-";
+        meta.appendChild(metaLabel);
+        meta.appendChild(metaValue);
+
+        top.appendChild(summaryText);
+        top.appendChild(meta);
+        summaryRoot.appendChild(top);
+
+        const scores = summary.scores || {};
+        const scoreGrid = document.createElement("div");
+        scoreGrid.className = "score-grid";
+
+        scoreGrid.appendChild(
+          createScoreCard("Structure（文体・構成）", scores.structure)
+        );
+        scoreGrid.appendChild(
+          createScoreCard("Tone（トーン・リスク）", scores.tone)
+        );
+        scoreGrid.appendChild(
+          createScoreCard("Overall（総合）", scores.overall)
+        );
+
+        summaryRoot.appendChild(scoreGrid);
+      }
+
+      function severityClass(sev) {
+        switch (sev) {
+          case "high":
+            return "sev-high";
+          case "medium":
+            return "sev-medium";
+          case "low":
+            return "sev-low";
+          default:
+            return "sev-info";
+        }
+      }
+
+      function severityLabel(sev) {
+        switch (sev) {
+          case "high":
+            return "HIGH";
+          case "medium":
+            return "MED";
+          case "low":
+            return "LOW";
+          default:
+            return "INFO";
+        }
+      }
+
+      function renderIssues() {
+        if (!issuesRoot) return;
+
+        if (!issues.length) {
+          const empty = document.createElement("div");
+          empty.className = "empty-note";
+          empty.textContent = "規約違反・改善ポイントは特に検出されませんでした。";
+          issuesRoot.appendChild(empty);
           return;
         }
-        arr.forEach(s=>{
-          const box = document.createElement('div');
-          box.className = 'sugg';
-          const ev = (s.evidence||[]).map(e=>`「${e.snippet}」(L${e.line??'-'})`).join(' / ');
-          box.innerHTML = `
-            <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
-              <div><b>[${s.type||'general'}] ${s.purpose||''}</b></div>
-              <label><input type="checkbox" data-id="${s.id}"> 採用</label>
-            </div>
-            <div class="meta" style="margin-top:6px">${s.recommendation||''}</div>
-            <details style="margin-top:6px">
-              <summary>根拠・パッチ</summary>
-              <div class="meta" style="margin:6px 0">${ev||'-'}</div>
-              <pre style="white-space:pre-wrap">${JSON.stringify(s.patches||[], null, 2)}</pre>
-            </details>
-          `;
-          listEl.appendChild(box);
-          box.querySelector('input').onchange = e => {
-            e.target.checked ? approved.add(s.id) : approved.delete(s.id);
-          };
+
+        issues.forEach((issue, idx) => {
+          const card = document.createElement("article");
+          card.className = "issue-card";
+
+          const header = document.createElement("div");
+          header.className = "issue-header";
+
+          const left = document.createElement("div");
+          left.className = "issue-title-wrap";
+
+          const rule = document.createElement("div");
+          rule.className = "issue-rule";
+          rule.textContent = issue.rule_title || "(無題のルール)";
+
+          const cat = document.createElement("div");
+          cat.className = "issue-cat";
+          cat.textContent = issue.category || "uncategorized";
+
+          left.appendChild(rule);
+          left.appendChild(cat);
+
+          const sev = document.createElement("div");
+          sev.className = "issue-sev " + severityClass(issue.severity);
+          sev.textContent = severityLabel(issue.severity);
+
+          header.appendChild(left);
+          header.appendChild(sev);
+          card.appendChild(header);
+
+          const body = document.createElement("div");
+          body.className = "issue-body";
+
+          const problem = document.createElement("div");
+          problem.className = "issue-problem";
+          problem.textContent =
+            issue.problem || issue.text || "問題内容が未定義です。";
+          body.appendChild(problem);
+
+          if (issue.snippet) {
+            const snippet = document.createElement("pre");
+            snippet.className = "issue-snippet";
+            snippet.textContent = issue.snippet;
+            body.appendChild(snippet);
+          }
+
+          if (issue.suggestion) {
+            const suggLabel = document.createElement("div");
+            suggLabel.className = "issue-suggestion-label";
+            suggLabel.textContent = "修正提案:";
+            const sugg = document.createElement("div");
+            sugg.textContent = issue.suggestion;
+            body.appendChild(suggLabel);
+            body.appendChild(sugg);
+          }
+
+          card.appendChild(body);
+
+          const footer = document.createElement("div");
+          footer.className = "issue-footer";
+
+          const leftFoot = document.createElement("div");
+          leftFoot.className = "issue-footer-left";
+
+          const linePill = document.createElement("div");
+          linePill.className = "pill";
+          linePill.textContent = `Line ${issue.line ?? "-"}`;
+
+          const idPill = document.createElement("div");
+          idPill.className = "pill";
+          idPill.textContent = issue.rule_id || "(no id)";
+
+          leftFoot.appendChild(linePill);
+          leftFoot.appendChild(idPill);
+
+          const idxLabel = document.createElement("div");
+          idxLabel.textContent = `#${idx + 1}`;
+
+          footer.appendChild(leftFoot);
+          footer.appendChild(idxLabel);
+          card.appendChild(footer);
+
+          issuesRoot.appendChild(card);
         });
-      })();
-    </script>
-  </body>
+      }
+
+      function renderSuggested() {
+        if (!suggestedRoot) return;
+
+        if (!suggested.length) {
+          const empty = document.createElement("div");
+          empty.className = "empty-note";
+          empty.textContent =
+            "今回の台本から AI が新たに追加すべきと判断した規約候補はありません。";
+          suggestedRoot.appendChild(empty);
+          return;
+        }
+
+        suggested.forEach((rule) => {
+          const card = document.createElement("article");
+          card.className = "suggested-card";
+
+          const header = document.createElement("div");
+          header.className = "suggested-header";
+
+          const title = document.createElement("div");
+          title.className = "suggested-title";
+          title.textContent = rule.title || "新しい規約候補";
+
+          const metaRight = document.createElement("div");
+          metaRight.className = "suggested-meta";
+
+          const catPill = document.createElement("div");
+          catPill.className = "pill";
+          catPill.textContent =
+            rule.suggested_category || "unassigned";
+
+          if (rule.severity) {
+            const sevPill = document.createElement("div");
+            sevPill.className = "pill";
+            sevPill.textContent = `想定重大度: ${rule.severity}`;
+            metaRight.appendChild(sevPill);
+          }
+
+          metaRight.appendChild(catPill);
+
+          header.appendChild(title);
+          header.appendChild(metaRight);
+          card.appendChild(header);
+
+          const body = document.createElement("div");
+          body.className = "suggested-body";
+
+          if (rule.description) {
+            const desc = document.createElement("div");
+            desc.textContent = rule.description;
+            body.appendChild(desc);
+          }
+
+          if (rule.reason) {
+            const reason = document.createElement("div");
+            reason.style.marginTop = "4px";
+            reason.style.color = "var(--text-muted)";
+            reason.textContent = `理由: ${rule.reason}`;
+            body.appendChild(reason);
+          }
+
+          if (rule.examples && (rule.examples.ng || rule.examples.ok)) {
+            const ex = document.createElement("div");
+            ex.className = "suggested-examples";
+            const lines = [];
+            if (Array.isArray(rule.examples.ng) && rule.examples.ng.length) {
+              lines.push("NG例: " + rule.examples.ng.join(" ／ "));
+            }
+            if (Array.isArray(rule.examples.ok) && rule.examples.ok.length) {
+              lines.push("OK例: " + rule.examples.ok.join(" ／ "));
+            }
+            ex.textContent = lines.join(" / ");
+            body.appendChild(ex);
+          }
+
+          card.appendChild(body);
+          suggestedRoot.appendChild(card);
+        });
+      }
+
+      renderSummary();
+      renderIssues();
+      renderSuggested();
+    })();
+  </script>
+  <!-- ========================================================= -->
+</body>
 </html>

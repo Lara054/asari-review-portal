@@ -1,16 +1,35 @@
 {
-  "tone": "フラットでドライ、語尾は「〜です」「〜ます」",
-  "forbidden_endings": ["だ。", "する。", "！"],
-  "preferred_endings": ["です。", "ます。"],
-  "punctuation": {
-    "comma": "、",
-    "period": "。"
+  "ruleset": "stylebook",
+  "defaults": {
+    "category": "style_consistency",
+    "severity": "low"
   },
-  "style_rules": [
-    { "rule": "句点は文末に必ず付ける" },
-    { "rule": "句読点は1文に2つまでが理想" },
-    { "rule": "口語表現を避ける（〜っす、〜じゃん等）" },
-    { "rule": "語尾が2文以上連続しないように変化をつける（例：〜です→〜ます→〜になります）" },
-    { "rule": "同じ語句の繰り返しを避ける（例：YouTube、YouTubeチャンネル等）" }
+  "rules": [
+    {
+      "id": "require_period",
+      "title": "文末に句点を付ける",
+      "description": "各文の末尾は「。」で終える。",
+      "problem_template": "文末に句点（「。」）がありません。",
+      "suggestion_template": "各文の末尾に句点を付けてください。"
+    },
+    {
+      "id": "avoid_repeated_endings",
+      "title": "同一語尾の連続を避ける",
+      "description": "同じ語尾が2文以上続かないようにする。",
+      "problem_template": "同一の語尾（「{{ending}}」）が{{run}}文連続しています。",
+      "suggestion_template": "一部の語尾を別形（です／ます／となります 等）に変えましょう。",
+      "examples": {
+        "ng": ["〜です。〜です。〜です。"],
+        "ok": ["〜です。〜ます。〜となります。"]
+      }
+    },
+    {
+      "id": "avoid_casual_slang",
+      "title": "口語スラングを避ける",
+      "description": "「〜っす」「〜じゃん」などの口語的表現を避ける。",
+      "severity": "medium",
+      "problem_template": "口語的なスラング（{{term}}）が使われています。",
+      "suggestion_template": "丁寧な文体に置き換えてください。"
+    }
   ]
 }

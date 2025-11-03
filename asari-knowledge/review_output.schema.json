@@ -1,31 +1,44 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Asari Review Output Contract",
-  "description": "AsariレビューHTMLテンプレートに埋め込まれる3変数の型定義（シンプル版）。",
+  "$id": "https://asari.review/specs/review_output.schema.json",
+  "title": "Asari Review Output Schema",
+  "description": "Output structure for Asari VALORANT script review results.",
   "type": "object",
+  "required": ["REVIEW_SUMMARY", "REVIEW_ISSUES"],
   "additionalProperties": false,
-  "required": ["REVIEW_SUMMARY", "REVIEW_ISSUES", "STYLE_SUGGESTIONS"],
-
   "properties": {
     "REVIEW_SUMMARY": {
       "type": "object",
-      "additionalProperties": false,
+      "description": "レビュー全体のサマリーとスコア。",
       "required": ["reviewedAt", "summary", "scores"],
+      "additionalProperties": false,
       "properties": {
-        "reviewedAt": { "type": "string", "format": "date-time" },
-        "summary": { "type": "string" },
+        "reviewedAt": {
+          "type": "string",
+          "description": "レビュー実行日時（ISO形式推奨）。"
+        },
+        "summary": {
+          "type": "string",
+          "description": "レビュー全体の要約テキスト。"
+        },
         "scores": {
           "type": "object",
+          "description": "各観点のスコア（0〜10）。",
+          "required": ["structure", "tone", "overall"],
           "additionalProperties": false,
-          "required": ["accuracy", "accessibility", "tone", "structure", "cta", "risk", "overall"],
           "properties": {
-            "accuracy":      { "type": "number", "minimum": 0, "maximum": 10 },
-            "accessibility": { "type": "number", "minimum": 0, "maximum": 10 },
-            "tone":          { "type": "number", "minimum": 0, "maximum": 10 },
-            "structure":     { "type": "number", "minimum": 0, "maximum": 10 },
-            "cta":           { "type": "number", "minimum": 0, "maximum": 10 },
-            "risk":          { "type": "number", "minimum": 0, "maximum": 10 },
-            "overall":       { "type": "number", "minimum": 0, "maximum": 10 }
+            "structure": {
+              "type": "number",
+              "description": "文体・構成・可読性に関するスコア。"
+            },
+            "tone": {
+              "type": "number",
+              "description": "トーン・リスク（炎上リスクなど）に関するスコア。"
+            },
+            "overall": {
+              "type": "number",
+              "description": "総合スコア。"
+            }
           }
         }
       }
@@ -33,105 +46,107 @@
 
     "REVIEW_ISSUES": {
       "type": "array",
-      "description": "各カテゴリごとの指摘詳細。",
+      "description": "規約違反や改善ポイントの一覧。",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["category", "severity", "text"],
+        "required": [
+          "category",
+          "severity",
+          "rule_id",
+          "rule_title",
+          "line",
+          "snippet",
+          "problem",
+          "suggestion"
+        ],
         "properties": {
           "category": {
             "type": "string",
-            "enum": [
-              "style_consistency",
-              "review_policy",
-              "risk_tone",
-              "youtube_logic",
-              "style_guideline",
-              "readability",
-              "beginner_fit"
-            ]
+            "description": "観点カテゴリ（例：style_consistency, wording, risk_tone など）。"
           },
           "severity": {
             "type": "string",
-            "enum": ["high", "medium", "low", "info"]
+            "enum": ["info", "low", "medium", "high"],
+            "description": "重大度レベル。"
           },
-          "text": { "type": "string" },
-          "suggestion": { "type": "string" },
-          "details": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "line":            { "type": "integer", "minimum": 1 },
-              "sentence_length": { "type": "integer", "minimum": 1 },
-              "comma_count":     { "type": "integer", "minimum": 0 },
-              "rule":            { "type": "string" },
-              "snippet":         { "type": "string" },
-              "fix":             { "type": "string" }
-            }
+          "rule_id": {
+            "type": "string",
+            "description": "違反している規約のID。"
+          },
+          "rule_title": {
+            "type": "string",
+            "description": "違反している規約のタイトル。"
+          },
+          "line": {
+            "type": "integer",
+            "description": "該当箇所のおおよその行番号（1始まり）。"
+          },
+          "snippet": {
+            "type": "string",
+            "description": "台本中の該当テキスト抜粋。"
+          },
+          "problem": {
+            "type": "string",
+            "description": "何が問題なのかの説明。"
+          },
+          "suggestion": {
+            "type": "string",
+            "description": "どう直すとよいかの具体的な提案。"
           }
         }
       }
     },
 
-    "STYLE_SUGGESTIONS": {
+    "REVIEW_SUGGESTED_RULES": {
       "type": "array",
-      "description": "“アサリらしさ”の提案。採用時はpatchとしてDLされる。",
+      "description": "AIが提案する新しい規約候補（最大5件）。",
+      "maxItems": 5,
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "type", "purpose", "recommendation"],
+        "required": ["title", "description", "reason", "suggested_category"],
         "properties": {
-          "id":             { "type": "string" },
-          "type":           { "type": "string" },
-          "purpose":        { "type": "string" },
-          "recommendation": { "type": "string" },
-          "impact_scope":   { "type": "string", "enum": ["stylebook.json", "phrasebank.json"] },
-          "evidence": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "properties": {
-                "snippet": { "type": "string" },
-                "line":    { "type": "integer", "minimum": 1 }
-              }
-            }
+          "title": {
+            "type": "string",
+            "description": "提案する新規規約のタイトル。"
           },
-          "patches": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "additionalProperties": false,
-              "required": ["target", "ops"],
-              "properties": {
-                "target": {
-                  "type": "string",
-                  "enum": ["stylebook.json", "phrasebank.json"]
-                },
-                "ops": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "additionalProperties": false,
-                    "required": ["op", "path"],
-                    "properties": {
-                      "op":   { "type": "string", "enum": ["add", "replace", "remove"] },
-                      "path": { "type": "string", "pattern": "^/.+" },
-                      "value": {}
-                    },
-                    "allOf": [
-                      { "if": { "properties": { "op": { "const": "remove" } } }, "then": { "not": { "required": ["value"] } } },
-                      { "if": { "properties": { "op": { "enum": ["add", "replace"] } } }, "then": { "required": ["value"] } }
-                    ]
-                  }
-                }
+          "description": {
+            "type": "string",
+            "description": "どのようなルールとして追加すべきかの説明。"
+          },
+          "reason": {
+            "type": "string",
+            "description": "その規約を追加した方が良いとAIが判断した理由。"
+          },
+          "suggested_category": {
+            "type": "string",
+            "description": "どの規約ファイルに入れる想定か（stylebook / phrasebank / risk_lexicon など）。"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["info", "low", "medium", "high"],
+            "description": "もし規約化した場合の推定重大度（AI推定）。"
+          },
+          "examples": {
+            "type": "object",
+            "description": "その規約が対象とするNG/OK例（任意）。",
+            "additionalProperties": false,
+            "properties": {
+              "ng": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "望ましくない例。"
+              },
+              "ok": {
+                "type": "array",
+                "items": { "type": "string" },
+                "description": "望ましい例。"
               }
             }
           }
         }
       }
     }
-  },
-
-  "x-version": "1.0.1"
+  }
 }
