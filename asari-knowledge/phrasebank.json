@@ -1,0 +1,9 @@
+{
+  "version": "1.0",
+  "phrases": [
+    { "preferred": "オペレーター", "avoid": "OWP", "notes": "表記統一" },
+    { "preferred": "ウルト", "avoid": "アルティメット", "notes": "チャンネル内統一" },
+    { "preferred": "〜を試してみよう", "avoid": "〜すべき", "notes": "断定回避" },
+    { "preferred": "〜の可能性が高い", "avoid": "絶対〜", "notes": "過度断定回避" }
+  ]
+}

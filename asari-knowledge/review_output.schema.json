@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Asari Review Output Contract",
+  "description": "AsariレビューHTMLテンプレートに埋め込まれる3変数の型定義（シンプル版）。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["REVIEW_SUMMARY", "REVIEW_ISSUES", "STYLE_SUGGESTIONS"],
+
+  "properties": {
+    "REVIEW_SUMMARY": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reviewedAt", "summary", "scores"],
+      "properties": {
+        "reviewedAt": { "type": "string", "format": "date-time" },
+        "summary": { "type": "string" },
+        "scores": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["accuracy", "accessibility", "tone", "structure", "cta", "risk", "overall"],
+          "properties": {
+            "accuracy":      { "type": "number", "minimum": 0, "maximum": 10 },
+            "accessibility": { "type": "number", "minimum": 0, "maximum": 10 },
+            "tone":          { "type": "number", "minimum": 0, "maximum": 10 },
+            "structure":     { "type": "number", "minimum": 0, "maximum": 10 },
+            "cta":           { "type": "number", "minimum": 0, "maximum": 10 },
+            "risk":          { "type": "number", "minimum": 0, "maximum": 10 },
+            "overall":       { "type": "number", "minimum": 0, "maximum": 10 }
+          }
+        }
+      }
+    },
+
+    "REVIEW_ISSUES": {
+      "type": "array",
+      "description": "各カテゴリごとの指摘詳細。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["category", "severity", "text"],
+        "properties": {
+          "category": {
+            "type": "string",
+            "enum": [
+              "style_consistency",
+              "review_policy",
+              "risk_tone",
+              "youtube_logic",
+              "style_guideline",
+              "readability",
+              "beginner_fit"
+            ]
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["high", "medium", "low", "info"]
+          },
+          "text": { "type": "string" },
+          "suggestion": { "type": "string" },
+          "details": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "line":            { "type": "integer", "minimum": 1 },
+              "sentence_length": { "type": "integer", "minimum": 1 },
+              "comma_count":     { "type": "integer", "minimum": 0 },
+              "rule":            { "type": "string" },
+              "snippet":         { "type": "string" },
+              "fix":             { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "STYLE_SUGGESTIONS": {
+      "type": "array",
+      "description": "“アサリらしさ”の提案。採用時はpatchとしてDLされる。",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "type", "purpose", "recommendation"],
+        "properties": {
+          "id":             { "type": "string" },
+          "type":           { "type": "string" },
+          "purpose":        { "type": "string" },
+          "recommendation": { "type": "string" },
+          "impact_scope":   { "type": "string", "enum": ["stylebook.json", "phrasebank.json"] },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "snippet": { "type": "string" },
+                "line":    { "type": "integer", "minimum": 1 }
+              }
+            }
+          },
+          "patches": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["target", "ops"],
+              "properties": {
+                "target": {
+                  "type": "string",
+                  "enum": ["stylebook.json", "phrasebank.json"]
+                },
+                "ops": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": ["op", "path"],
+                    "properties": {
+                      "op":   { "type": "string", "enum": ["add", "replace", "remove"] },
+                      "path": { "type": "string", "pattern": "^/.+" },
+                      "value": {}
+                    },
+                    "allOf": [
+                      { "if": { "properties": { "op": { "const": "remove" } } }, "then": { "not": { "required": ["value"] } } },
+                      { "if": { "properties": { "op": { "enum": ["add", "replace"] } } }, "then": { "required": ["value"] } }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "x-version": "1.0.1"
+}

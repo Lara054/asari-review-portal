@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Asari Review Report</title>
+
+    <!-- ================================================================================================= -->
+    <!--  Style（スタイル定義） -->
+    <!--  - カラートークン、レイアウト、共通UI。                                                            -->
+    <!--  - ダミー時にだけ表示する警告バナー／マスク用のクラスも含む。                                        -->
+    <!-- ================================================================================================= -->
+    <style>
+      /* --- カラー & デザイン変数 (デフォルト) --- */
+      :root{
+        --bg:#f7f7f8; --card:#fff; --ink:#0f172a; --muted:#64748b; --bd:#e5e7eb; --accent:#2563eb;
+        --bad:#b91c1c; --warn:#d97706; --ok:#16a34a;
+        --blue:#3b82f6; --violet:#7e22ce; --red:#b91c1c; --yellow:#facc15; --green:#16a34a; --sky:#0ea5e9; --pink:#ec4899;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root{
+          --bg:#0b0f15; --card:#0f1520; --ink:#e5e7eb; --muted:#94a3b8; --bd:#1f2937; --accent:#60a5fa;
+          --bad:#ef4444; --warn:#f59e0b; --ok:#22c55e;
+          --blue:#60a5fa; --violet:#a78bfa; --red:#ef4444; --yellow:#fde047; --green:#22c55e; --sky:#38bdf8; --pink:#f472b6;
+        }
+      }
+
+      /* --- リセット / 基本ユーティリティ --- */
+      * { box-sizing: border-box; }
+      html, body { height: 100%; margin:0; font-family: system-ui, -apple-system, 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--ink); }
+
+      /* --- レイアウト --- */
+      .wrap { max-width:1160px; margin:24px auto 80px; padding:0 16px; }
+      .card { background:var(--card); border:1px solid var(--bd); border-radius:16px; padding:18px; }
+      .header { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+      .brand .title { font-weight:700; }
+      .meta { color:var(--muted); font-size:12px; }
+      .btn { border:1px solid var(--bd); background:transparent; border-radius:10px; padding:8px 12px; cursor:pointer; }
+      .btn.primary { background:var(--accent); color:#fff; border-color:transparent; }
+      .grid { display:grid; grid-template-columns:1.4fr .9fr; gap:16px; }
+      @media (max-width:980px){ .grid{grid-template-columns:1fr;} }
+      .sticky{position:sticky; top:16px;}
+
+      /* --- 小コンポーネント --- */
+      .chips{display:flex; flex-wrap:wrap; gap:8px;}
+      .chip{display:inline-flex; gap:6px; padding:6px 10px; border-radius:999px; border:1px solid var(--bd); font-size:12px;}
+      .alert{border-left:6px solid var(--bad); background:color-mix(in oklab,var(--red) 18%,#0000); padding:12px; border-radius:12px;}
+
+      /* --- セクション / カード --- */
+      .section{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+      @media (max-width:980px){.section{grid-template-columns:1fr;}}
+      .review-card{border-radius:16px; padding:16px 16px 10px; border:1px solid var(--bd); background:var(--card);}
+      .review-card header{display:flex; align-items:center; gap:10px; margin-bottom:8px;}
+      .review-card header h3{margin:0; font-size:15px;}
+      .icon{font-size:18px;}
+
+      /* カテゴリ色（左ボーダー＋淡背景） */
+      .typo{--bgc:color-mix(in oklab,var(--blue)10%,#0000); --bar:var(--blue);}
+      .policy{--bgc:color-mix(in oklab,var(--violet)10%,#0000); --bar:var(--violet);}
+      .risk{--bgc:color-mix(in oklab,var(--red)10%,#0000); --bar:var(--red);}
+      .youtube{--bgc:color-mix(in oklab,var(--yellow)16%,#0000); --bar:var(--yellow);}
+      .asari{--bgc:color-mix(in oklab,var(--green)12%,#0000); --bar:var(--green);}
+      .readab{--bgc:color-mix(in oklab,var(--sky)10%,#0000); --bar:var(--sky);}
+      .begin{--bgc:color-mix(in oklab,var(--pink)10%,#0000); --bar:var(--pink);}
+      .review-card{background:linear-gradient(0deg,var(--bgc),var(--bgc)),var(--card); border-left:6px solid var(--bar);}
+
+      .issues{display:grid; gap:8px;}
+      .issue{border:1px dashed var(--bd); border-radius:12px; padding:10px;}
+      .issue .t{font-weight:600;}
+      .issue .s{color:var(--muted); margin-top:4px;}
+
+      /* --- バッジ / 重大度表示 --- */
+      .badge{font-size:11px; border-radius:6px; padding:3px 6px; border:1px solid var(--bd); color:var(--muted);}
+      .sev-high{border-color:color-mix(in oklab,var(--bad)40%,var(--bd)); color:var(--bad);}
+      .sev-med{border-color:color-mix(in oklab,var(--warn)40%,var(--bd)); color:var(--warn);}
+      .sev-low{border-color:color-mix(in oklab,var(--ok)40%,var(--bd)); color:var(--ok);}
+      .sev-info{border-color:var(--bd); color:var(--muted);}
+
+      .side .hint{color:var(--muted); font-size:12px; margin:6px 0 10px;}
+      .sugg{border:1px dashed var(--bd); border-radius:12px; padding:10px; margin:10px 0;}
+      .sugg label{font-size:12px; color:var(--muted);}
+      .sugg details{margin-top:6px;}
+
+      /* --- ダミー検知時のUI --- */
+      .dummy-banner{
+        position: sticky; top: 0; z-index: 1000;
+        display:flex; align-items:center; gap:10px;
+        padding:10px 14px; margin:0 0 12px 0;
+        background: color-mix(in oklab, var(--red) 25%, #fff);
+        color:#fff; border-bottom:2px solid var(--bad);
+        font-weight:700;
+      }
+      .dummy-mask{
+        position: fixed; inset: 0; pointer-events:none;
+        background-image: repeating-linear-gradient(
+          -45deg,
+          rgba(185,28,28,.08) 0px, rgba(185,28,28,.08) 12px,
+          rgba(185,28,28,0) 12px, rgba(185,28,28,0) 24px
+        );
+        z-index: 500;
+      }
+      .dummy-dim{ opacity:.35; filter:grayscale(.25); }
+      .disabled { pointer-events:none; opacity:.6; }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrap" id="rootWrap">
+      <!-- Header -->
+      <div class="card header">
+        <div class="brand">
+          <div>
+            <div class="title">Asari Review Report</div>
+            <div class="meta">レビュー日時：<span id="revAt">-</span></div>
+          </div>
+        </div>
+        <div>
+          <button class="btn" id="expandAll">すべて展開</button>
+          <button class="btn" id="collapseAll">すべて折りたたみ</button>
+          <button class="btn primary" id="downloadPatch">パッチJSONをDL</button>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="card" id="summaryCard" style="margin:16px 0">
+        <div style="font-weight:700; margin-bottom:6px">概要</div>
+        <div id="summaryText" class="meta" style="line-height:1.7"></div>
+
+        <div class="chips" style="margin-top:10px">
+          <span class="chip">正確性 <b id="sc-acc">-</b>/10</span>
+          <span class="chip">初心者 <b id="sc-beg">-</b>/10</span>
+          <span class="chip">トーン <b id="sc-ton">-</b>/10</span>
+          <span class="chip">構成 <b id="sc-str">-</b>/10</span>
+          <span class="chip">CTA <b id="sc-cta">-</b>/10</span>
+          <span class="chip">リスク <b id="sc-rsk">-</b>/10</span>
+          <span class="chip">総合 <b id="sc-all">-</b>/10</span>
+        </div>
+
+        <div id="riskAlert" class="alert" style="display:none; margin-top:12px">
+          ⚠️ 高重大度（HIGH）の炎上リスクが検出されています。先に本カードの対応を検討してください。
+        </div>
+      </div>
+
+      <div class="grid">
+        <!-- Main: Category Cards -->
+        <main class="section" id="cards"></main>
+
+        <!-- Side: Asari style suggestions -->
+        <aside class="side">
+          <div class="card sticky">
+            <div style="font-weight:700">Asariらしさ：追加提案</div>
+            <div class="hint">採用にチェック → 右上ボタンでDL</div>
+            <div id="suggestList"></div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <!-- =================================================================== -->
+    <!--  実データ注入ブロック（テンプレ内の最上流に置く）                   -->
+    <!--  ※ このブロックが Dummy 初期値 <script> より前に来ることが必須     -->
+    <!--  ※ ChatGPTが一発出力する際は、この中身をモデルが実データで上書き   -->
+    <!-- =================================================================== -->
+    <script id="__ASARI_DATA__">
+      // 1) ダミー無効化（重要：guardDummyによるダミーUI抑止）
+      window.__ASARI_DUMMY = false;
+
+      // 2) REVIEW_SUMMARY（例：実運用ではモデルが生成）
+      window.REVIEW_SUMMARY = {
+        reviewedAt: "2025-11-02T14:05:00+09:00",
+        summary: "導入の自然さとCTAが強み。感嘆符の頻度を抑えるとトーンが安定します。",
+        scores: { accuracy: 9, accessibility: 8, tone: 8, structure: 9, cta: 10, risk: 10, overall: 9 }
+      };
+
+      // 3) REVIEW_ISSUES（例）
+      window.REVIEW_ISSUES = [
+        {
+          category: "readability",
+          severity: "low",
+          text: "一部の文が長い（読点3つ以上）。聞き取りを想定し区切るとテンポが改善。",
+          suggestion: "2文に分割し、主語→結論→補足の順に整列。",
+          details: { line: 12, sentence_length: 55, comma_count: 4, rule: "平均文長>42" }
+        }
+      ];
+
+      // 4) STYLE_SUGGESTIONS（例：チェック→右上ボタンでpatch出力）
+      window.STYLE_SUGGESTIONS = [
+        {
+          id: "a1",
+          type: "phrasing",
+          purpose: "感嘆符の頻度最適化",
+          recommendation: "強調は1文あたり最大1回に制限。",
+          impact_scope: "stylebook.json",
+          evidence: [{ snippet: "やりてぇ！！", line: 1 }],
+          patches: [
+            { target: "stylebook.json", ops: [ { op: "add", path: "/rules/-", value: "感嘆符は1文1回まで" } ] }
+          ]
+        }
+      ];
+    </script>
+
+    <!-- ================================================================================================= -->
+    <!--  Dummy 初期値（上記 __ASARI_DATA__ で上書きされなければダミー判定へ）                               -->
+    <!--  - __dummy: true フラグで guardDummy が検出。                                                       -->
+    <!-- ================================================================================================= -->
+    <script>
+      // ダミーフラグ（未上書き検知用）
+      window.__ASARI_DUMMY = window.__ASARI_DUMMY ?? true;
+
+      // REVIEW_SUMMARY（ダミー）
+      window.REVIEW_SUMMARY = window.REVIEW_SUMMARY || {
+        __dummy: true,
+        reviewedAt: "DUMMY",
+        summary: "【ダミー】実データが未注入です。テンプレ上部に __ASARI_DATA__ ブロックを挿入して生成してください。",
+        scores: { accuracy: "-", accessibility: "-", tone: "-", structure: "-", cta: "-", risk: "-", overall: "-" }
+      };
+
+      // REVIEW_ISSUES（ダミー）
+      window.REVIEW_ISSUES = window.REVIEW_ISSUES || [
+        {
+          category: "system",
+          severity: "info",
+          text: "テンプレートに実データが注入されていません。",
+          suggestion: "上部に実データの <script id=\"__ASARI_DATA__\"> ブロックを追加して再出力してください。"
+        }
+      ];
+
+      // STYLE_SUGGESTIONS（ダミー）
+      window.STYLE_SUGGESTIONS = window.STYLE_SUGGESTIONS || [];
+    </script>
+
+    <!-- ================================================================================================= -->
+    <!--  Main Script（描画ロジック）                                                                       -->
+    <!--  - 先頭でダミー検知。ダミーならバナー表示＋UIを半透明＆操作不可にして早期リターンはしない（確認用）。 -->
+    <!--  - 実データに上書きされていれば通常レンダリングへ。                                                 -->
+    <!-- ================================================================================================= -->
+    <script>
+      // DOMヘルパー
+      const $  = (s, el = document) => el.querySelector(s);
+      const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
+
+      // --- 0) ダミー検知＆バナー表示（最初に実行） ---
+      (function guardDummy(){
+        const isDummy = !!(window.__ASARI_DUMMY || window.REVIEW_SUMMARY?.__dummy);
+        if(!isDummy) return; // 実データで上書き済み → 通常描画へ
+
+        // バナー（赤）＋全面のマスク
+        document.body.insertAdjacentHTML('afterbegin',
+          `<div class="dummy-banner">🚨 ダミーデータで表示中：__ASARI_DATA__ が注入されていません。</div>`
+        );
+        const mask = document.createElement('div');
+        mask.className = 'dummy-mask';
+        document.body.appendChild(mask);
+
+        // メインUIを半透明＆操作不可に
+        const root = $('#rootWrap');
+        if(root) root.classList.add('dummy-dim');
+        $$('#downloadPatch, #expandAll, #collapseAll').forEach(b => b?.classList.add('disabled'));
+
+        // ダミーでも「何が足りないか」は確認できるよう、以降のレンダリングは実行する
+      })();
+
+      // --- 1) ヘッダとスコア初期化 ---
+      (function initSummary(){
+        const s  = window.REVIEW_SUMMARY || {};
+        const sc = s.scores || {};
+        // 日時表示（ダミーはそのまま "DUMMY" を表示して気づけるように）
+        $('#revAt').textContent   = String(s.reviewedAt ?? '');
+        $('#summaryText').textContent = s.summary ?? '';
+
+        $('#sc-acc').textContent = sc.accuracy      ?? '-';
+        $('#sc-beg').textContent = sc.accessibility ?? '-';
+        $('#sc-ton').textContent = sc.tone          ?? '-';
+        $('#sc-str').textContent = sc.structure     ?? '-';
+        $('#sc-cta').textContent = sc.cta           ?? '-';
+        $('#sc-rsk').textContent = sc.risk          ?? '-';
+        $('#sc-all').textContent = sc.overall       ?? '-';
+      })();
+
+      // --- 2) 代表レベル算出 ---
+      function computeCategorySeverity(list){
+        if(!list || !list.length) return 'info';
+        const rank = { high:3, medium:2, low:1 };
+        let max = 0;
+        for(const i of list){
+          const sev = String(i.severity || '').toLowerCase();
+          max = Math.max(max, rank[sev] || 0);
+        }
+        return max===3 ? 'high' : max===2 ? 'medium' : max===1 ? 'low' : 'info';
+      }
+
+      // --- 3) 指摘なし時のポジティブ文言 ---
+      function getPositiveMessage(key){
+        const m = {
+          typo_card:        "表記揺れ・誤字脱字は確認されませんでした。",
+          policy_card:      "規約・ポリシー違反はありません。",
+          risk_card:        "炎上リスクは検出されませんでした。",
+          youtube_card:     "構成とCTAは自然で推奨構成に準拠しています。",
+          asari_card:       "“アサリらしさ”のトーンに合致しています。",
+          readability_card: "文の区切りと語彙選択は標準に沿っています。",
+          beginner_card:    "初心者向け補足が適切です。"
+        };
+        return m[key] || "良好です。";
+      }
+
+      // --- 4) Issue 描画のHTML断片作成 ---
+      function renderIssueHTML(i){
+        const t=i.text||''; const s=i.suggestion||''; const d=i.details||null;
+        if(!d) return `<div class="t">${t}</div><div class="s">提案：${s||'-'}</div>`;
+        return `
+          <div class="t">${t}</div>
+          <ul class="meta" style="margin:6px 0 0 0;padding-left:18px;line-height:1.6">
+            ${d.line?`<li>位置：L${d.line}</li>`:''}
+            ${d.sentence_length?`<li>文長：${d.sentence_length}文字</li>`:''}
+            ${d.comma_count?`<li>読点：${d.comma_count}個</li>`:''}
+            ${d.rule?`<li>ルール：${d.rule}</li>`:''}
+          </ul>
+          ${d.snippet?`<div class="meta" style="margin-top:6px">該当：</div><pre>${d.snippet}</pre>`:''}
+          ${d.fix?`<div class="meta" style="margin-top:6px">修正例：</div><pre>${d.fix}</pre>`:''}
+          ${s?`<div class="s" style="margin-top:6px">提案：${s}</div>`:''}`;
+      }
+
+      // --- 5) カード描画 ---
+      (function renderCards(){
+        const container = $('#cards');
+        const issues = (window.REVIEW_ISSUES || []).slice();
+
+        // 高重大度（HIGH）のリスクがあれば警告表示
+        const hasHighRisk = issues.some(i => i.category==='risk_tone' && (i.severity||'').toLowerCase()==='high');
+        if(hasHighRisk) $('#riskAlert').style.display = 'block';
+
+        const mapCategoryToCard = {
+          "style_consistency": "typo_card",
+          "review_policy":     "policy_card",
+          "risk_tone":         "risk_card",
+          "youtube_logic":     "youtube_card",
+          "style_guideline":   "asari_card",
+          "readability":       "readability_card",
+          "beginner_fit":      "beginner_card"
+        };
+
+        const cardDefs = {
+          typo_card:        { cls:'typo',    title:'📝 誤字脱字・表記ゆれ', icon:'✏️' },
+          policy_card:      { cls:'policy',  title:'⚖️ 規約違反',         icon:'⚖️' },
+          risk_card:        { cls:'risk',    title:'🔥 炎上リスク',       icon:'🔥' },
+          youtube_card:     { cls:'youtube', title:'🎯 YouTube運用',      icon:'🎯' },
+          asari_card:       { cls:'asari',   title:'🌿 アサリらしさ',     icon:'🌿' },
+          readability_card: { cls:'readab',  title:'📖 可読性',            icon:'📖' },
+          beginner_card:    { cls:'begin',   title:'🎓 初心者向け補足',    icon:'🎓' }
+        };
+
+        // バケット化
+        const buckets = {};
+        for(const it of issues){
+          const key = mapCategoryToCard[it.category] || 'readability_card';
+          (buckets[key] ||= []).push(it);
+        }
+
+        const order = ['risk_card','policy_card','typo_card','readability_card','beginner_card','youtube_card','asari_card'];
+
+        order.forEach(cardKey=>{
+          const list = buckets[cardKey] || [];
+          const def  = cardDefs[cardKey];
+          const topSeverity = computeCategorySeverity(list);
+
+          const card = document.createElement('section');
+          card.className = `review-card ${def.cls}`;
+
+          const sevLabel = {high:'HIGH', medium:'MEDIUM', low:'LOW', info:'INFO'}[topSeverity];
+          const sevClass = {high:'sev-high', medium:'sev-med', low:'sev-low', info:'sev-info'}[topSeverity];
+
+          card.innerHTML = `
+            <header>
+              <span class="icon">${def.icon}</span>
+              <h3>${def.title} <span class="badge ${sevClass}">${sevLabel}</span></h3>
+            </header>
+            <div class="issues"></div>
+          `;
+          const wrap = card.querySelector('.issues');
+
+          if(list.length === 0){
+            // 指摘なし → INFOとして肯定メッセージ
+            const dv = document.createElement('div');
+            dv.className = 'issue';
+            dv.innerHTML = `<div class="t">${getPositiveMessage(cardKey)}</div>`;
+            wrap.appendChild(dv);
+          } else {
+            // 指摘あり → 詳細を描画
+            const sevRank = { high:0, medium:1, low:2 };
+            list.sort((a,b)=>{
+              const sa = sevRank[(a.severity||'').toLowerCase()] ?? 9;
+              const sb = sevRank[(b.severity||'').toLowerCase()] ?? 9;
+              if(sa!==sb) return sa-sb;
+              return String(a.text||'').localeCompare(String(b.text||''),'ja');
+            });
+            list.forEach(i=>{
+              const sev = (i.severity||'info').toLowerCase();
+              const sevCls = {high:'sev-high',medium:'sev-med',low:'sev-low',info:'sev-info'}[sev];
+              const dv = document.createElement('div');
+              dv.className = 'issue';
+              dv.innerHTML = `${renderIssueHTML(i)}<div style="margin-top:6px"><span class="badge ${sevCls}">${sev.toUpperCase()}</span></div>`;
+              wrap.appendChild(dv);
+            });
+          }
+          container.appendChild(card);
+        });
+      })();
+
+      // --- 6) Controls ---
+      $('#expandAll').onclick   = () => $$('details').forEach(d => d.open = true);
+      $('#collapseAll').onclick = () => $$('details').forEach(d => d.open = false);
+
+      const approved = new Set(); // 採用サジェスト
+
+      // --- 7) Download Patch（採用した提案を束ねてJSON出力） ---
+      $('#downloadPatch').onclick = () => {
+        const chosen = (window.STYLE_SUGGESTIONS || []).filter(s => approved.has(s.id));
+        const bundle = {};
+        chosen.forEach(s => (s.patches || []).forEach(p => {
+          (bundle[p.target] ??= []).push(...(p.ops || []));
+        }));
+        const blob = new Blob([JSON.stringify(bundle, null, 2)], { type:'application/json' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'style-patch.json';
+        a.click();
+        URL.revokeObjectURL(a.href);
+      };
+
+      // --- 8) スタイル提案の描画 ---
+      (function renderSuggestions(){
+        const listEl = $('#suggestList');
+        const arr = (window.STYLE_SUGGESTIONS || []);
+        if(!arr.length){
+          listEl.innerHTML = '<div class="meta">今回は追加提案なし。</div>';
+          return;
+        }
+        arr.forEach(s=>{
+          const box = document.createElement('div');
+          box.className = 'sugg';
+          const ev = (s.evidence||[]).map(e=>`「${e.snippet}」(L${e.line??'-'})`).join(' / ');
+          box.innerHTML = `
+            <div style="display:flex;justify-content:space-between;gap:8px;align-items:center">
+              <div><b>[${s.type||'general'}] ${s.purpose||''}</b></div>
+              <label><input type="checkbox" data-id="${s.id}"> 採用</label>
+            </div>
+            <div class="meta" style="margin-top:6px">${s.recommendation||''}</div>
+            <details style="margin-top:6px">
+              <summary>根拠・パッチ</summary>
+              <div class="meta" style="margin:6px 0">${ev||'-'}</div>
+              <pre style="white-space:pre-wrap">${JSON.stringify(s.patches||[], null, 2)}</pre>
+            </details>
+          `;
+          listEl.appendChild(box);
+          box.querySelector('input').onchange = e => {
+            e.target.checked ? approved.add(s.id) : approved.delete(s.id);
+          };
+        });
+      })();
+    </script>
+  </body>
+</html>
