@@ -1,45 +1,36 @@
 {
-  "version": "1.0",
-  "weights": {
-    "style_consistency": 20,
-    "readability": 20,
-    "beginner_fit": 20,
-    "risk_tone": 20,
-    "youtube_logic": 20
+  "version": "2.0",
+  "scoring": {
+    "max_total": 100,
+    "category_distribution": "equal",
+    "min_score_per_category": 0
   },
   "severity": {
     "mapping": {
-      "high":   { "impact": 3, "display": "重大", "color": "#b91c1c" },
-      "medium": { "impact": 2, "display": "注意", "color": "#d97706" },
-      "low":    { "impact": 1, "display": "軽微", "color": "#16a34a" },
-      "info":   { "impact": 0, "display": "情報", "color": "#64748b" }  
-    },
-    "rules": [
-      { "when": "誤情報/誤誘導の可能性", "set": "high" },
-      { "when": "初出略語の説明欠落",   "set": "medium" },
-      { "when": "語尾/表記ゆれのみ",   "set": "low" }
-    ]
+      "high": {
+        "per_issue_deduction": 5,
+        "display": "重大",
+        "color": "#b91c1c"
+      },
+      "medium": {
+        "per_issue_deduction": 3,
+        "display": "注意",
+        "color": "#d97706"
+      },
+      "low": {
+        "per_issue_deduction": 1,
+        "display": "軽微",
+        "color": "#16a34a"
+      },
+      "info": {
+        "per_issue_deduction": 0,
+        "display": "情報",
+        "color": "#64748b"
+      }
+    }
   },
-  "deductions": {
-    "style_consistency": [
-      { "cond": "敬体/常体の混在 > 20%", "minus": 5 },
-      { "cond": "用語の表記ゆれ > 3箇所", "minus": 5 }
-    ],
-    "readability": [
-      { "cond": "平均文長 > 42文字", "minus": 4 },
-      { "cond": "読点>3/文", "minus": 3 },
-      { "cond": "同一語尾の連続 > 2文", "minus": 2 }  
-    ],
-    "beginner_fit": [
-      { "cond": "初出用語の説明欠落 > 2件", "minus": 6 }
-    ],
-    "risk_tone": [
-      { "cond": "断定/誇張の多用（根拠薄）", "minus": 6 }
-    ],
-    "youtube_logic": [
-      { "cond": "Hook不在", "minus": 5 },
-      { "cond": "CTA不在",  "minus": 5 }
-    ]
-  },
-  "output": { "score_round": 1, "show_component_scores": true }
+  "output": {
+    "show_category_scores": true,
+    "score_round": 0
+  }
 }

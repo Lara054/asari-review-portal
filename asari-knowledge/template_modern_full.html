@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
   <meta charset="UTF-8" />
   <title>Asari Script Review Report</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- ========================================================= -->
-  <!--  ここからstyle定義                                         -->
+  <!-- ======================= Styles ======================= -->
   <style>
     :root {
       --bg: #050816;
@@ -14,7 +14,7 @@
       --bg-chip: #111827;
       --border-subtle: #1f2937;
       --accent: #3b82f6;
-      --accent-soft: rgba(59, 130, 246, 0.15);
+      --accent-soft: rgba(59, 130, 246, .15);
       --accent-strong: #2563eb;
       --danger: #ef4444;
       --warn: #f97316;
@@ -24,27 +24,39 @@
       --text-muted: #6b7280;
       --radius-lg: 16px;
       --radius-md: 12px;
-      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.65);
-      --shadow-chip: 0 10px 25px rgba(15, 23, 42, 0.7);
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, .65);
+      --shadow-chip: 0 10px 25px rgba(15, 23, 42, .7);
+      --focus: 0 0 0 3px rgba(59, 130, 246, .45);
     }
 
     * {
-      box-sizing: border-box;
+      box-sizing: border-box
     }
 
     body {
       margin: 0;
       padding: 32px 16px 48px;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
-        "Hiragino Sans", "Noto Sans JP", sans-serif;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Hiragino Sans", "Noto Sans JP", sans-serif;
       background: radial-gradient(circle at top, #0f172a 0, #020617 52%, #000 100%);
       color: var(--text-main);
       -webkit-font-smoothing: antialiased;
     }
 
+    a,
+    button,
+    input {
+      outline: none
+    }
+
+    a:focus,
+    button:focus,
+    input:focus {
+      box-shadow: var(--focus)
+    }
+
     .app {
       max-width: 1100px;
-      margin: 0 auto;
+      margin: 0 auto
     }
 
     .app-header {
@@ -52,13 +64,13 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      margin-bottom: 24px;
+      margin-bottom: 24px
     }
 
     .app-title {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 12px
     }
 
     .app-title-icon {
@@ -71,24 +83,24 @@
       justify-content: center;
       font-weight: 700;
       color: #e5e7eb;
-      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.7);
+      box-shadow: 0 12px 30px rgba(37, 99, 235, .7)
     }
 
     .app-title-text {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 2px
     }
 
     .app-title-text h1 {
       margin: 0;
       font-size: 18px;
-      letter-spacing: 0.03em;
+      letter-spacing: .03em
     }
 
     .app-title-text span {
       font-size: 12px;
-      color: var(--text-sub);
+      color: var(--text-sub)
     }
 
     .badge {
@@ -97,57 +109,49 @@
       gap: 6px;
       padding: 6px 10px;
       border-radius: 999px;
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, .9);
+      border: 1px solid rgba(55, 65, 81, .9);
       font-size: 11px;
-      color: var(--text-sub);
+      color: var(--text-sub)
     }
 
     .badge-dot {
       width: 6px;
       height: 6px;
       border-radius: 999px;
-      background: var(--accent);
+      background: var(--accent)
     }
 
     .layout {
       display: grid;
       grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.2fr);
-      gap: 20px;
+      gap: 20px
     }
 
-    @media (max-width: 900px) {
+    @media (max-width:900px) {
       .layout {
-        grid-template-columns: minmax(0, 1fr);
+        grid-template-columns: minmax(0, 1fr)
       }
     }
 
     .panel {
-      background: linear-gradient(145deg, rgba(15, 23, 42, 0.98), #020617);
+      background: linear-gradient(145deg, rgba(15, 23, 42, .98), #020617);
       border-radius: var(--radius-lg);
-      border: 1px solid rgba(31, 41, 55, 0.9);
+      border: 1px solid rgba(31, 41, 55, .9);
       box-shadow: var(--shadow-soft);
       padding: 18px 18px 20px;
       position: relative;
-      overflow: hidden;
+      overflow: hidden
     }
 
     .panel::before {
       content: "";
       position: absolute;
       inset: -60%;
-      background: conic-gradient(
-        from 220deg,
-        rgba(59, 130, 246, 0.08),
-        transparent,
-        transparent,
-        rgba(16, 185, 129, 0.05),
-        transparent,
-        rgba(59, 130, 246, 0.08)
-      );
-      opacity: 0.5;
+      background: conic-gradient(from 220deg, rgba(59, 130, 246, .08), transparent, transparent, rgba(16, 185, 129, .05), transparent, rgba(59, 130, 246, .08));
+      opacity: .5;
       filter: blur(40px);
-      z-index: -1;
+      z-index: -1
     }
 
     .panel-header {
@@ -155,40 +159,41 @@
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      margin-bottom: 14px;
+      margin-bottom: 14px
     }
 
     .panel-title {
       font-size: 14px;
       font-weight: 600;
-      letter-spacing: 0.05em;
+      letter-spacing: .05em;
       text-transform: uppercase;
-      color: var(--text-sub);
+      color: var(--text-sub)
     }
 
     .panel-sub {
       font-size: 11px;
-      color: var(--text-muted);
+      color: var(--text-muted)
     }
 
     .summary-main {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 12px
     }
 
     .summary-topline {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
       gap: 12px;
-      flex-wrap: wrap;
+      flex-wrap: wrap
     }
 
     .summary-summary {
       font-size: 13px;
       color: var(--text-main);
       line-height: 1.6;
+      max-width: 700px
     }
 
     .summary-meta {
@@ -196,62 +201,62 @@
       flex-direction: column;
       align-items: flex-end;
       gap: 4px;
-      min-width: 170px;
+      min-width: 170px
     }
 
     .summary-meta-label {
       font-size: 11px;
-      color: var(--text-muted);
+      color: var(--text-muted)
     }
 
     .summary-meta-value {
       font-size: 12px;
-      color: var(--text-sub);
+      color: var(--text-sub)
     }
 
     .score-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
-      margin-top: 8px;
+      margin-top: 8px
     }
 
-    @media (max-width: 540px) {
+    @media (max-width:540px) {
       .score-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr))
       }
     }
 
     .score-card {
       border-radius: var(--radius-md);
-      background: radial-gradient(circle at top left, rgba(59, 130, 246, 0.2), rgba(15, 23, 42, 0.98));
+      background: radial-gradient(circle at top left, rgba(59, 130, 246, .18), rgba(15, 23, 42, .98));
       padding: 10px 10px 9px;
-      border: 1px solid rgba(55, 65, 81, 0.9);
-      box-shadow: var(--shadow-chip);
+      border: 1px solid rgba(55, 65, 81, .9);
+      box-shadow: var(--shadow-chip)
     }
 
     .score-label {
       font-size: 11px;
       color: var(--text-muted);
-      margin-bottom: 4px;
+      margin-bottom: 4px
     }
 
     .score-value-row {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
-      gap: 6px;
+      gap: 6px
     }
 
     .score-value {
       font-size: 18px;
       font-weight: 600;
-      color: #e5e7eb;
+      color: #e5e7eb
     }
 
     .score-max {
       font-size: 11px;
-      color: var(--text-muted);
+      color: var(--text-muted)
     }
 
     .score-bar {
@@ -259,8 +264,8 @@
       width: 100%;
       height: 4px;
       border-radius: 999px;
-      background: rgba(31, 41, 55, 0.9);
-      overflow: hidden;
+      background: rgba(31, 41, 55, .9);
+      overflow: hidden
     }
 
     .score-bar-fill {
@@ -269,38 +274,38 @@
       background: linear-gradient(90deg, var(--accent-soft), var(--accent-strong));
       transform-origin: left center;
       transform: scaleX(0);
-      transition: transform 0.4s ease-out;
+      transition: transform .4s ease-out
     }
 
     .issues-list {
       display: flex;
       flex-direction: column;
       gap: 10px;
-      margin-top: 6px;
+      margin-top: 6px
     }
 
     .issue-card {
       border-radius: var(--radius-md);
-      border: 1px solid rgba(31, 41, 55, 0.9);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), #020617);
+      border: 1px solid rgba(31, 41, 55, .9);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, .98), #020617);
       padding: 10px 11px 10px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 6px
     }
 
     .issue-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 8px
     }
 
     .issue-title-wrap {
       display: flex;
       align-items: center;
       gap: 8px;
-      min-width: 0;
+      min-width: 0
     }
 
     .issue-rule {
@@ -309,7 +314,7 @@
       color: var(--text-main);
       white-space: nowrap;
       overflow: hidden;
-      text-overflow: ellipsis;
+      text-overflow: ellipsis
     }
 
     .issue-cat {
@@ -318,40 +323,40 @@
       border-radius: 999px;
       background: var(--bg-chip);
       color: var(--text-sub);
-      border: 1px solid rgba(55, 65, 81, 0.9);
+      border: 1px solid rgba(55, 65, 81, .9)
     }
 
     .issue-sev {
       font-size: 10px;
       padding: 4px 8px;
       border-radius: 999px;
-      font-weight: 500;
+      font-weight: 600;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: .05em
     }
 
     .sev-high {
-      background: rgba(239, 68, 68, 0.14);
-      border: 1px solid rgba(248, 113, 113, 0.9);
-      color: #fecaca;
+      background: rgba(239, 68, 68, .14);
+      border: 1px solid rgba(248, 113, 113, .9);
+      color: #fecaca
     }
 
     .sev-medium {
-      background: rgba(249, 115, 22, 0.14);
-      border: 1px solid rgba(251, 146, 60, 0.9);
-      color: #fed7aa;
+      background: rgba(249, 115, 22, .14);
+      border: 1px solid rgba(251, 146, 60, .9);
+      color: #fed7aa
     }
 
     .sev-low {
-      background: rgba(34, 197, 94, 0.14);
-      border: 1px solid rgba(74, 222, 128, 0.9);
-      color: #bbf7d0;
+      background: rgba(34, 197, 94, .14);
+      border: 1px solid rgba(74, 222, 128, .9);
+      color: #bbf7d0
     }
 
     .sev-info {
-      background: rgba(148, 163, 184, 0.15);
-      border: 1px solid rgba(148, 163, 184, 0.9);
-      color: #e5e7eb;
+      background: rgba(148, 163, 184, .15);
+      border: 1px solid rgba(148, 163, 184, .9);
+      color: #e5e7eb
     }
 
     .issue-body {
@@ -359,29 +364,28 @@
       flex-direction: column;
       gap: 4px;
       font-size: 12px;
-      color: var(--text-sub);
+      color: var(--text-sub)
     }
 
     .issue-problem {
-      color: var(--text-main);
+      color: var(--text-main)
     }
 
     .issue-snippet {
       margin: 2px 0;
       padding: 6px 8px;
       border-radius: 8px;
-      background: rgba(15, 23, 42, 0.95);
-      border: 1px solid rgba(31, 41, 55, 0.9);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
-        "Liberation Mono", "Courier New", monospace;
+      background: rgba(15, 23, 42, .95);
+      border: 1px solid rgba(31, 41, 55, .9);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 11px;
       white-space: pre-wrap;
-      color: #e5e7eb;
+      color: #e5e7eb
     }
 
     .issue-suggestion-label {
       font-size: 11px;
-      color: var(--text-muted);
+      color: var(--text-muted)
     }
 
     .issue-footer {
@@ -391,125 +395,155 @@
       gap: 8px;
       margin-top: 4px;
       font-size: 10px;
-      color: var(--text-muted);
+      color: var(--text-muted)
     }
 
     .issue-footer-left {
       display: flex;
       align-items: center;
       gap: 8px;
-      flex-wrap: wrap;
+      flex-wrap: wrap
     }
 
     .pill {
       padding: 3px 7px;
       border-radius: 999px;
       background: var(--bg-chip);
-      border: 1px solid rgba(31, 41, 55, 0.9);
+      border: 1px solid rgba(31, 41, 55, .9)
     }
 
     .suggested-rules {
       display: flex;
       flex-direction: column;
       gap: 8px;
-      margin-top: 4px;
+      margin-top: 4px
     }
 
     .suggested-card {
       border-radius: var(--radius-md);
-      border: 1px solid rgba(31, 41, 55, 0.9);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.98), #020617);
+      border: 1px solid rgba(31, 41, 55, .9);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, .98), #020617);
       padding: 10px 11px 10px;
       display: flex;
       flex-direction: column;
-      gap: 5px;
+      gap: 5px
     }
 
     .suggested-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 6px;
+      gap: 6px
     }
 
     .suggested-title {
       font-size: 13px;
       font-weight: 500;
-      color: var(--text-main);
+      color: var(--text-main)
     }
 
     .suggested-body {
       font-size: 12px;
       color: var(--text-sub);
-      line-height: 1.6;
+      line-height: 1.6
     }
 
     .suggested-meta {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-top: 4px;
+      margin-top: 4px
     }
 
     .suggested-examples {
       margin-top: 4px;
       font-size: 11px;
-      color: var(--text-muted);
+      color: var(--text-muted)
     }
 
     .empty-note {
       font-size: 12px;
       color: var(--text-muted);
-      margin-top: 8px;
+      margin-top: 8px
+    }
+
+    /* --- Suggested Rules Controls --- */
+    .suggested-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 2px 0 10px
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(37, 99, 235, .18);
+      border: 1px solid rgba(59, 130, 246, .8);
+      color: #e5e7eb;
+      cursor: pointer
+    }
+
+    .btn:disabled {
+      opacity: .5;
+      cursor: not-allowed
+    }
+
+    .sr-check {
+      width: 16px;
+      height: 16px;
+      accent-color: #3b82f6
+    }
+
+    .suggested-card .head-left {
+      display: flex;
+      align-items: center;
+      gap: 8px
     }
   </style>
-  <!-- ========================================================= -->
 
-  <!-- ============================================ -->
-  <!-- ChatGPTにより自動的に差し替えられる3オブジェクト -->
+  <!-- =========== Injection Placeholders (replace by MyGPT) =========== -->
   <script>
-    // 👇 レビューの要約スコア・日時・総評など
+    // これら3つは MyGPT が HTML 生成時に差し替える想定
     window.REVIEW_SUMMARY = __REVIEW_SUMMARY__;
-    
-    // 👇 規約違反の詳細一覧（ルール・該当箇所・提案）
     window.REVIEW_ISSUES = __REVIEW_ISSUES__;
-    
-    // 👇 AIが提案する新しいルール候補
     window.REVIEW_SUGGESTED_RULES = __REVIEW_SUGGESTED_RULES__;
   </script>
-  <!-- ============================================ -->
 </head>
 
-<!-- ========================================================= -->
-<!--  ここからbody定義                                          -->
 <body>
   <div class="app">
-    <header class="app-header">
+    <header class="app-header" role="banner">
       <div class="app-title">
-        <div class="app-title-icon">A</div>
+        <div class="app-title-icon" aria-hidden="true">A</div>
         <div class="app-title-text">
           <h1>Asari Script Review</h1>
           <span>VALORANT 解説台本レビュー レポート</span>
         </div>
       </div>
-      <div class="badge">
-        <span class="badge-dot"></span>
+      <div class="badge" aria-label="自動レビュー結果バッジ">
+        <span class="badge-dot" aria-hidden="true"></span>
         <span>自動レビュー結果</span>
       </div>
     </header>
 
-    <div class="layout">
-      <!-- 左：サマリー ＆ 規約違反一覧 -->
-      <section class="panel">
+    <main class="layout" role="main">
+      <!-- 左：サマリー & 規約違反 -->
+      <section class="panel" aria-labelledby="summary-title">
         <div class="panel-header">
           <div>
-            <div class="panel-title">Summary</div>
-            <div class="panel-sub">全体の印象とスコア</div>
+            <div id="summary-title" class="panel-title">Summary</div>
+            <div class="panel-sub">全体の印象とカテゴリ別スコア</div>
           </div>
         </div>
-        <div id="summary-root" class="summary-main"></div>
+        <div id="summary-root" class="summary-main" aria-live="polite"></div>
 
-        <div class="panel-header" style="margin-top: 18px;">
+        <div class="panel-header" style="margin-top:18px;">
           <div>
             <div class="panel-title">Issues</div>
             <div class="panel-sub">規約違反・改善ポイント一覧</div>
@@ -518,44 +552,55 @@
         <div id="issues-root" class="issues-list"></div>
       </section>
 
-      <!-- 右：新しい規約候補 -->
-      <section class="panel">
+      <!-- 右：提案規約（チェック & JSON DL） -->
+      <section class="panel" aria-labelledby="suggested-title">
         <div class="panel-header">
           <div>
-            <div class="panel-title">Suggested Rules</div>
+            <div id="suggested-title" class="panel-title">Suggested Rules</div>
             <div class="panel-sub">AI が提案する新しい規約候補（最大 5 件）</div>
           </div>
         </div>
+
+        <div class="suggested-controls" aria-label="提案規約 操作">
+          <label style="display:inline-flex;align-items:center;gap:6px;">
+            <input id="sr-check-all" type="checkbox" class="sr-check" aria-label="全選択" />
+            全選択
+          </label>
+          <button id="sr-download" class="btn" aria-label="選択した提案をJSONでダウンロード">選択した提案をJSONでダウンロード</button>
+        </div>
+
         <div id="suggested-root" class="suggested-rules"></div>
       </section>
-    </div>
+    </main>
   </div>
-  <!-- ========================================================= -->
 
-  <!-- ========================================================= -->
-  <!--  ここからscript定義                                         -->
+  <!-- ======================= Scripts ======================= -->
   <script>
     (function () {
       const summary = window.REVIEW_SUMMARY || null;
-      const issues = Array.isArray(window.REVIEW_ISSUES)
-        ? window.REVIEW_ISSUES
-        : [];
-      const suggested = Array.isArray(window.REVIEW_SUGGESTED_RULES)
-        ? window.REVIEW_SUGGESTED_RULES
-        : [];
+      const issues = Array.isArray(window.REVIEW_ISSUES) ? window.REVIEW_ISSUES : [];
+      const suggested = Array.isArray(window.REVIEW_SUGGESTED_RULES) ? window.REVIEW_SUGGESTED_RULES : [];
 
       const summaryRoot = document.getElementById("summary-root");
       const issuesRoot = document.getElementById("issues-root");
       const suggestedRoot = document.getElementById("suggested-root");
 
-      function safeNum(n) {
-        return typeof n === "number" && !Number.isNaN(n) ? n : 0;
-      }
+      function safeNum(n) { return typeof n === "number" && !Number.isNaN(n) ? n : 0; }
 
-      function createScoreCard(label, value, accentKey) {
+      // スコアカード
+      const SCORE_LABELS = {
+        structure: "Structure（文体・構成）",
+        wording: "Wording（言葉遣い）",
+        risk: "Risk（リスク）",
+        delivery: "Delivery（話し方）",
+        logic: "Logic（論理）",
+        audience_fit: "Audience Fit（視聴者適合）",
+        engagement: "Engagement（惹きつけ）",
+        overall: "Overall（総合）"
+      };
+      function createScoreCard(label, value) {
         const outer = document.createElement("div");
         outer.className = "score-card";
-
         const lab = document.createElement("div");
         lab.className = "score-label";
         lab.textContent = label;
@@ -569,8 +614,7 @@
         const max = document.createElement("div");
         max.className = "score-max";
         max.textContent = "/ 10";
-        row.appendChild(val);
-        row.appendChild(max);
+        row.appendChild(val); row.appendChild(max);
         outer.appendChild(row);
 
         const bar = document.createElement("div");
@@ -578,12 +622,9 @@
         const fill = document.createElement("div");
         fill.className = "score-bar-fill";
         const ratio = Math.max(0, Math.min(1, safeNum(value) / 10));
-        requestAnimationFrame(() => {
-          fill.style.transform = `scaleX(${ratio})`;
-        });
+        requestAnimationFrame(() => { fill.style.transform = `scaleX(${ratio})`; });
         bar.appendChild(fill);
         outer.appendChild(bar);
-
         return outer;
       }
 
@@ -595,8 +636,7 @@
 
         const summaryText = document.createElement("div");
         summaryText.className = "summary-summary";
-        summaryText.textContent =
-          summary.summary || "この台本のレビューサマリーがここに表示されます。";
+        summaryText.textContent = summary.summary || "この台本のレビューサマリーがここに表示されます。";
 
         const meta = document.createElement("div");
         meta.className = "summary-meta";
@@ -606,59 +646,30 @@
         const metaValue = document.createElement("div");
         metaValue.className = "summary-meta-value";
         metaValue.textContent = summary.reviewedAt || "-";
-        meta.appendChild(metaLabel);
-        meta.appendChild(metaValue);
+        meta.appendChild(metaLabel); meta.appendChild(metaValue);
 
-        top.appendChild(summaryText);
-        top.appendChild(meta);
+        top.appendChild(summaryText); top.appendChild(meta);
         summaryRoot.appendChild(top);
 
         const scores = summary.scores || {};
         const scoreGrid = document.createElement("div");
         scoreGrid.className = "score-grid";
-
-        scoreGrid.appendChild(
-          createScoreCard("Structure（文体・構成）", scores.structure)
-        );
-        scoreGrid.appendChild(
-          createScoreCard("Tone（トーン・リスク）", scores.tone)
-        );
-        scoreGrid.appendChild(
-          createScoreCard("Overall（総合）", scores.overall)
-        );
-
+        const keysOrder = ["structure", "wording", "risk", "delivery", "logic", "audience_fit", "engagement"]
+          .filter(k => typeof scores[k] === "number");
+        if (typeof scores.overall === "number") keysOrder.push("overall");
+        keysOrder.forEach(k => scoreGrid.appendChild(createScoreCard(SCORE_LABELS[k] || k, scores[k])));
         summaryRoot.appendChild(scoreGrid);
       }
 
-      function severityClass(sev) {
-        switch (sev) {
-          case "high":
-            return "sev-high";
-          case "medium":
-            return "sev-medium";
-          case "low":
-            return "sev-low";
-          default:
-            return "sev-info";
-        }
+      function sevClass(sev) {
+        switch (sev) { case "high": return "sev-high"; case "medium": return "sev-medium"; case "low": return "sev-low"; default: return "sev-info"; }
       }
-
-      function severityLabel(sev) {
-        switch (sev) {
-          case "high":
-            return "HIGH";
-          case "medium":
-            return "MED";
-          case "low":
-            return "LOW";
-          default:
-            return "INFO";
-        }
+      function sevLabel(sev) {
+        switch (sev) { case "high": return "HIGH"; case "medium": return "MED"; case "low": return "LOW"; default: return "INFO"; }
       }
 
       function renderIssues() {
         if (!issuesRoot) return;
-
         if (!issues.length) {
           const empty = document.createElement("div");
           empty.className = "empty-note";
@@ -685,15 +696,13 @@
           cat.className = "issue-cat";
           cat.textContent = issue.category || "uncategorized";
 
-          left.appendChild(rule);
-          left.appendChild(cat);
+          left.appendChild(rule); left.appendChild(cat);
 
           const sev = document.createElement("div");
-          sev.className = "issue-sev " + severityClass(issue.severity);
-          sev.textContent = severityLabel(issue.severity);
+          sev.className = "issue-sev " + sevClass(issue.severity);
+          sev.textContent = sevLabel(issue.severity);
 
-          header.appendChild(left);
-          header.appendChild(sev);
+          header.appendChild(left); header.appendChild(sev);
           card.appendChild(header);
 
           const body = document.createElement("div");
@@ -701,8 +710,7 @@
 
           const problem = document.createElement("div");
           problem.className = "issue-problem";
-          problem.textContent =
-            issue.problem || issue.text || "問題内容が未定義です。";
+          problem.textContent = issue.problem || "問題内容が未定義です。";
           body.appendChild(problem);
 
           if (issue.snippet) {
@@ -718,15 +726,13 @@
             suggLabel.textContent = "修正提案:";
             const sugg = document.createElement("div");
             sugg.textContent = issue.suggestion;
-            body.appendChild(suggLabel);
-            body.appendChild(sugg);
+            body.appendChild(suggLabel); body.appendChild(sugg);
           }
 
           card.appendChild(body);
 
           const footer = document.createElement("div");
           footer.className = "issue-footer";
-
           const leftFoot = document.createElement("div");
           leftFoot.className = "issue-footer-left";
 
@@ -738,14 +744,12 @@
           idPill.className = "pill";
           idPill.textContent = issue.rule_id || "(no id)";
 
-          leftFoot.appendChild(linePill);
-          leftFoot.appendChild(idPill);
+          leftFoot.appendChild(linePill); leftFoot.appendChild(idPill);
 
           const idxLabel = document.createElement("div");
           idxLabel.textContent = `#${idx + 1}`;
 
-          footer.appendChild(leftFoot);
-          footer.appendChild(idxLabel);
+          footer.appendChild(leftFoot); footer.appendChild(idxLabel);
           card.appendChild(footer);
 
           issuesRoot.appendChild(card);
@@ -755,34 +759,45 @@
       function renderSuggested() {
         if (!suggestedRoot) return;
 
+        suggestedRoot.innerHTML = "";
         if (!suggested.length) {
           const empty = document.createElement("div");
           empty.className = "empty-note";
-          empty.textContent =
-            "今回の台本から AI が新たに追加すべきと判断した規約候補はありません。";
+          empty.textContent = "今回の台本から AI が新たに追加すべきと判断した規約候補はありません。";
           suggestedRoot.appendChild(empty);
           return;
         }
 
-        suggested.forEach((rule) => {
+        suggested.forEach((rule, idx) => {
           const card = document.createElement("article");
           card.className = "suggested-card";
 
           const header = document.createElement("div");
           header.className = "suggested-header";
 
+          // 左：チェック + タイトル
+          const left = document.createElement("div");
+          left.className = "head-left";
+
+          const check = document.createElement("input");
+          check.type = "checkbox";
+          check.className = "sr-check";
+          check.dataset.index = String(idx);
+          check.setAttribute("aria-label", "提案を選択");
+
           const title = document.createElement("div");
           title.className = "suggested-title";
           title.textContent = rule.title || "新しい規約候補";
 
+          left.appendChild(check); left.appendChild(title);
+
+          // 右：カテゴリ/重大度
           const metaRight = document.createElement("div");
           metaRight.className = "suggested-meta";
-
           const catPill = document.createElement("div");
           catPill.className = "pill";
-          catPill.textContent =
-            rule.suggested_category || "unassigned";
-
+          catPill.textContent = rule.suggested_category || "unassigned";
+          metaRight.appendChild(catPill);
           if (rule.severity) {
             const sevPill = document.createElement("div");
             sevPill.className = "pill";
@@ -790,53 +805,93 @@
             metaRight.appendChild(sevPill);
           }
 
-          metaRight.appendChild(catPill);
-
-          header.appendChild(title);
-          header.appendChild(metaRight);
+          header.appendChild(left); header.appendChild(metaRight);
           card.appendChild(header);
 
+          // 本文
           const body = document.createElement("div");
           body.className = "suggested-body";
-
           if (rule.description) {
             const desc = document.createElement("div");
             desc.textContent = rule.description;
             body.appendChild(desc);
           }
-
           if (rule.reason) {
             const reason = document.createElement("div");
-            reason.style.marginTop = "4px";
-            reason.style.color = "var(--text-muted)";
+            reason.style.marginTop = "4px"; reason.style.color = "var(--text-muted)";
             reason.textContent = `理由: ${rule.reason}`;
             body.appendChild(reason);
           }
-
-          if (rule.examples && (rule.examples.ng || rule.examples.ok)) {
+          if (rule.examples && (rule.examples.ng?.length || rule.examples.ok?.length)) {
             const ex = document.createElement("div");
             ex.className = "suggested-examples";
             const lines = [];
-            if (Array.isArray(rule.examples.ng) && rule.examples.ng.length) {
-              lines.push("NG例: " + rule.examples.ng.join(" ／ "));
-            }
-            if (Array.isArray(rule.examples.ok) && rule.examples.ok.length) {
-              lines.push("OK例: " + rule.examples.ok.join(" ／ "));
-            }
+            if (Array.isArray(rule.examples.ng) && rule.examples.ng.length) lines.push("NG例: " + rule.examples.ng.join(" ／ "));
+            if (Array.isArray(rule.examples.ok) && rule.examples.ok.length) lines.push("OK例: " + rule.examples.ok.join(" ／ "));
             ex.textContent = lines.join(" / ");
             body.appendChild(ex);
           }
-
           card.appendChild(body);
           suggestedRoot.appendChild(card);
         });
       }
 
+      function setupSuggestedControls() {
+        const btn = document.getElementById("sr-download");
+        const all = document.getElementById("sr-check-all");
+
+        if (all) {
+          all.addEventListener("change", () => {
+            document.querySelectorAll('.sr-check[data-index]').forEach(el => {
+              if (el !== all) el.checked = all.checked;
+            });
+          });
+        }
+
+        if (btn) {
+          btn.addEventListener("click", () => {
+            const selectedIdx = Array.from(document.querySelectorAll('.sr-check[data-index]:checked'))
+              .map(el => Number(el.dataset.index))
+              .filter(n => Number.isInteger(n) && n >= 0 && n < suggested.length);
+
+            if (!selectedIdx.length) {
+              alert("選択された提案がありません。");
+              return;
+            }
+
+            // ダウンロード用に最小限の構造で整形
+            const payload = selectedIdx.map(i => {
+              const r = suggested[i];
+              return {
+                title: r.title,
+                description: r.description,
+                reason: r.reason,
+                suggested_category: r.suggested_category,
+                severity: r.severity,
+                examples: r.examples
+              };
+            });
+
+            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = "suggested_rules_selected.json";
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+          });
+        }
+      }
+
+      // Render
       renderSummary();
       renderIssues();
       renderSuggested();
+      setupSuggestedControls();
     })();
   </script>
-  <!-- ========================================================= -->
 </body>
+
 </html>
