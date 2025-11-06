@@ -5,8 +5,6 @@
   <meta charset="UTF-8" />
   <title>Asari Script Review Report</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- ======================= Styles ======================= -->
   <style>
     :root {
       --bg: #050816;
@@ -27,6 +25,13 @@
       --shadow-soft: 0 18px 45px rgba(0, 0, 0, .65);
       --shadow-chip: 0 10px 25px rgba(15, 23, 42, .7);
       --focus: 0 0 0 3px rgba(59, 130, 246, .45);
+      --cat-structure: #60a5fa;
+      --cat-wording: #22c55e;
+      --cat-risk: #f87171;
+      --cat-delivery: #a78bfa;
+      --cat-logic: #f59e0b;
+      --cat-audience: #14b8a6;
+      --cat-engagement: #e879f9;
     }
 
     * {
@@ -277,11 +282,93 @@
       transition: transform .4s ease-out
     }
 
-    .issues-list {
+    .issues-toolbar {
       display: flex;
-      flex-direction: column;
-      gap: 10px;
-      margin-top: 6px
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 8px 0 10px
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(37, 99, 235, .18);
+      border: 1px solid rgba(59, 130, 246, .8);
+      color: #e5e7eb;
+      cursor: pointer
+    }
+
+    .btn:disabled {
+      opacity: .5;
+      cursor: not-allowed
+    }
+
+    .cat-group {
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(31, 41, 55, .9);
+      margin-bottom: 12px;
+      overflow: hidden;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, .98), #020617)
+    }
+
+    .cat-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(31, 41, 55, .9)
+    }
+
+    .cat-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 13px
+    }
+
+    .cat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px
+    }
+
+    .cat-count {
+      font-size: 11px;
+      color: var(--text-sub)
+    }
+
+    .cat-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .cat-toggle {
+      cursor: pointer;
+      font-size: 12px;
+      color: #c7d2fe;
+      background: rgba(59, 130, 246, .12);
+      border: 1px solid rgba(59, 130, 246, .5);
+      padding: 5px 8px;
+      border-radius: 8px
+    }
+
+    .cat-body {
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px
+    }
+
+    .cat-body.collapsed {
+      display: none
     }
 
     .issue-card {
@@ -315,15 +402,6 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis
-    }
-
-    .issue-cat {
-      font-size: 10px;
-      padding: 3px 7px;
-      border-radius: 999px;
-      background: var(--bg-chip);
-      color: var(--text-sub);
-      border: 1px solid rgba(55, 65, 81, .9)
     }
 
     .issue-sev {
@@ -461,37 +539,11 @@
       color: var(--text-muted)
     }
 
-    .empty-note {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 8px
-    }
-
-    /* --- Suggested Rules Controls --- */
     .suggested-controls {
       display: flex;
       align-items: center;
       gap: 8px;
       margin: 2px 0 10px
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 10px;
-      border-radius: 10px;
-      font-size: 12px;
-      font-weight: 600;
-      background: rgba(37, 99, 235, .18);
-      border: 1px solid rgba(59, 130, 246, .8);
-      color: #e5e7eb;
-      cursor: pointer
-    }
-
-    .btn:disabled {
-      opacity: .5;
-      cursor: not-allowed
     }
 
     .sr-check {
@@ -507,9 +559,7 @@
     }
   </style>
 
-  <!-- =========== Injection Placeholders (replace by MyGPT) =========== -->
   <script>
-    // これら3つは MyGPT が HTML 生成時に差し替える想定
     window.REVIEW_SUMMARY = __REVIEW_SUMMARY__;
     window.REVIEW_ISSUES = __REVIEW_ISSUES__;
     window.REVIEW_SUGGESTED_RULES = __REVIEW_SUGGESTED_RULES__;
@@ -533,7 +583,6 @@
     </header>
 
     <main class="layout" role="main">
-      <!-- 左：サマリー & 規約違反 -->
       <section class="panel" aria-labelledby="summary-title">
         <div class="panel-header">
           <div>
@@ -546,13 +595,16 @@
         <div class="panel-header" style="margin-top:18px;">
           <div>
             <div class="panel-title">Issues</div>
-            <div class="panel-sub">規約違反・改善ポイント一覧</div>
+            <div class="panel-sub">カテゴリごとにグルーピングされた規約違反一覧</div>
+          </div>
+          <div class="issues-toolbar">
+            <button id="btn-expand" class="btn" aria-label="すべて展開">すべて展開</button>
+            <button id="btn-collapse" class="btn" aria-label="すべて折りたたみ">すべて折りたたみ</button>
           </div>
         </div>
-        <div id="issues-root" class="issues-list"></div>
+        <div id="issues-root"></div>
       </section>
 
-      <!-- 右：提案規約（チェック & JSON DL） -->
       <section class="panel" aria-labelledby="suggested-title">
         <div class="panel-header">
           <div>
@@ -574,7 +626,6 @@
     </main>
   </div>
 
-  <!-- ======================= Scripts ======================= -->
   <script>
     (function () {
       const summary = window.REVIEW_SUMMARY || null;
@@ -584,254 +635,160 @@
       const summaryRoot = document.getElementById("summary-root");
       const issuesRoot = document.getElementById("issues-root");
       const suggestedRoot = document.getElementById("suggested-root");
+      const btnExpandAll = document.getElementById("btn-expand");
+      const btnCollapseAll = document.getElementById("btn-collapse");
 
       function safeNum(n) { return typeof n === "number" && !Number.isNaN(n) ? n : 0; }
 
-      // スコアカード
       const SCORE_LABELS = {
-        structure: "Structure（文体・構成）",
-        wording: "Wording（言葉遣い）",
-        risk: "Risk（リスク）",
-        delivery: "Delivery（話し方）",
-        logic: "Logic（論理）",
-        audience_fit: "Audience Fit（視聴者適合）",
-        engagement: "Engagement（惹きつけ）",
-        overall: "Overall（総合）"
+        structure: "Structure（文体・構成）", wording: "Wording（言葉遣い）", risk: "Risk（リスク）",
+        delivery: "Delivery（話し方）", logic: "Logic（論理）", audience_fit: "Audience Fit（視聴者適合）",
+        engagement: "Engagement（惹きつけ）", overall: "Overall（総合）"
       };
+      const CAT_ORDER = ["structure", "wording", "risk", "delivery", "logic", "audience_fit", "engagement"];
+      const CAT_DOT = {
+        structure: "var(--cat-structure)", wording: "var(--cat-wording)", risk: "var(--cat-risk)",
+        delivery: "var(--cat-delivery)", logic: "var(--cat-logic)", audience_fit: "var(--cat-audience)", engagement: "var(--cat-engagement)"
+      };
+
       function createScoreCard(label, value) {
-        const outer = document.createElement("div");
-        outer.className = "score-card";
-        const lab = document.createElement("div");
-        lab.className = "score-label";
-        lab.textContent = label;
-        outer.appendChild(lab);
-
-        const row = document.createElement("div");
-        row.className = "score-value-row";
-        const val = document.createElement("div");
-        val.className = "score-value";
-        val.textContent = safeNum(value).toFixed(1);
-        const max = document.createElement("div");
-        max.className = "score-max";
-        max.textContent = "/ 10";
-        row.appendChild(val); row.appendChild(max);
-        outer.appendChild(row);
-
-        const bar = document.createElement("div");
-        bar.className = "score-bar";
-        const fill = document.createElement("div");
-        fill.className = "score-bar-fill";
+        const outer = document.createElement("div"); outer.className = "score-card";
+        const lab = document.createElement("div"); lab.className = "score-label"; lab.textContent = label; outer.appendChild(lab);
+        const row = document.createElement("div"); row.className = "score-value-row";
+        const val = document.createElement("div"); val.className = "score-value"; val.textContent = safeNum(value).toFixed(1);
+        const max = document.createElement("div"); max.className = "score-max"; max.textContent = "/ 10";
+        row.appendChild(val); row.appendChild(max); outer.appendChild(row);
+        const bar = document.createElement("div"); bar.className = "score-bar";
+        const fill = document.createElement("div"); fill.className = "score-bar-fill";
         const ratio = Math.max(0, Math.min(1, safeNum(value) / 10));
         requestAnimationFrame(() => { fill.style.transform = `scaleX(${ratio})`; });
-        bar.appendChild(fill);
-        outer.appendChild(bar);
+        bar.appendChild(fill); outer.appendChild(bar);
         return outer;
       }
-
       function renderSummary() {
         if (!summary || !summaryRoot) return;
-
-        const top = document.createElement("div");
-        top.className = "summary-topline";
-
-        const summaryText = document.createElement("div");
-        summaryText.className = "summary-summary";
+        const top = document.createElement("div"); top.className = "summary-topline";
+        const summaryText = document.createElement("div"); summaryText.className = "summary-summary";
         summaryText.textContent = summary.summary || "この台本のレビューサマリーがここに表示されます。";
-
-        const meta = document.createElement("div");
-        meta.className = "summary-meta";
-        const metaLabel = document.createElement("div");
-        metaLabel.className = "summary-meta-label";
-        metaLabel.textContent = "Reviewed At";
-        const metaValue = document.createElement("div");
-        metaValue.className = "summary-meta-value";
-        metaValue.textContent = summary.reviewedAt || "-";
+        const meta = document.createElement("div"); meta.className = "summary-meta";
+        const metaLabel = document.createElement("div"); metaLabel.className = "summary-meta-label"; metaLabel.textContent = "Reviewed At";
+        const metaValue = document.createElement("div"); metaValue.className = "summary-meta-value"; metaValue.textContent = summary.reviewedAt || "-";
         meta.appendChild(metaLabel); meta.appendChild(metaValue);
-
         top.appendChild(summaryText); top.appendChild(meta);
         summaryRoot.appendChild(top);
 
         const scores = summary.scores || {};
-        const scoreGrid = document.createElement("div");
-        scoreGrid.className = "score-grid";
-        const keysOrder = ["structure", "wording", "risk", "delivery", "logic", "audience_fit", "engagement"]
-          .filter(k => typeof scores[k] === "number");
+        const scoreGrid = document.createElement("div"); scoreGrid.className = "score-grid";
+        const keysOrder = CAT_ORDER.filter(k => typeof scores[k] === "number");
         if (typeof scores.overall === "number") keysOrder.push("overall");
         keysOrder.forEach(k => scoreGrid.appendChild(createScoreCard(SCORE_LABELS[k] || k, scores[k])));
         summaryRoot.appendChild(scoreGrid);
       }
 
-      function sevClass(sev) {
-        switch (sev) { case "high": return "sev-high"; case "medium": return "sev-medium"; case "low": return "sev-low"; default: return "sev-info"; }
+      function sevClass(sev) { switch (sev) { case "high": return "sev-high"; case "medium": return "sev-medium"; case "low": return "sev-low"; default: return "sev-info"; } }
+      function sevLabel(sev) { switch (sev) { case "high": return "HIGH"; case "medium": return "MED"; case "low": return "LOW"; default: return "INFO"; } }
+
+      function createIssueCard(issue, idx) {
+        const card = document.createElement("article"); card.className = "issue-card";
+        const header = document.createElement("div"); header.className = "issue-header";
+        const left = document.createElement("div"); left.className = "issue-title-wrap";
+        const rule = document.createElement("div"); rule.className = "issue-rule"; rule.textContent = issue.rule_title || "(無題のルール)";
+        left.appendChild(rule);
+        const sev = document.createElement("div"); sev.className = "issue-sev " + sevClass(issue.severity); sev.textContent = sevLabel(issue.severity);
+        header.appendChild(left); header.appendChild(sev); card.appendChild(header);
+
+        const body = document.createElement("div"); body.className = "issue-body";
+        const problem = document.createElement("div"); problem.className = "issue-problem"; problem.textContent = issue.problem || "問題内容が未定義です。"; body.appendChild(problem);
+        if (issue.snippet) { const snippet = document.createElement("pre"); snippet.className = "issue-snippet"; snippet.textContent = issue.snippet; body.appendChild(snippet); }
+        if (issue.suggestion) { const lab = document.createElement("div"); lab.className = "issue-suggestion-label"; lab.textContent = "修正提案:"; const sugg = document.createElement("div"); sugg.textContent = issue.suggestion; body.appendChild(lab); body.appendChild(sugg); }
+        card.appendChild(body);
+
+        const footer = document.createElement("div"); footer.className = "issue-footer";
+        const leftFoot = document.createElement("div"); leftFoot.className = "issue-footer-left";
+        const linePill = document.createElement("div"); linePill.className = "pill"; linePill.textContent = `Line ${issue.line ?? "-"}`;
+        const idPill = document.createElement("div"); idPill.className = "pill"; idPill.textContent = issue.rule_id || "(no id)";
+        leftFoot.appendChild(linePill); leftFoot.appendChild(idPill);
+        const idxLabel = document.createElement("div"); idxLabel.textContent = `#${idx + 1}`;
+        footer.appendChild(leftFoot); footer.appendChild(idxLabel); card.appendChild(footer);
+        return card;
       }
-      function sevLabel(sev) {
-        switch (sev) { case "high": return "HIGH"; case "medium": return "MED"; case "low": return "LOW"; default: return "INFO"; }
+
+      function createCategoryGroup(cat, items) {
+        const wrap = document.createElement("section"); wrap.className = "cat-group"; wrap.dataset.category = cat;
+        const head = document.createElement("div"); head.className = "cat-head";
+        const title = document.createElement("div"); title.className = "cat-title";
+        const dot = document.createElement("span"); dot.className = "cat-dot"; dot.style.background = CAT_DOT[cat] || "var(--accent)";
+        const name = document.createElement("span"); name.textContent = (SCORE_LABELS[cat] || cat).replace(/（.*?）/, "");
+        const count = document.createElement("span"); count.className = "cat-count"; count.textContent = `${items.length} 件`;
+        title.appendChild(dot); title.appendChild(name); title.appendChild(count);
+        const actions = document.createElement("div"); actions.className = "cat-actions";
+        const btn = document.createElement("button"); btn.className = "cat-toggle"; btn.setAttribute("aria-expanded", "true"); btn.textContent = "折りたたむ";
+        actions.appendChild(btn);
+        head.appendChild(title); head.appendChild(actions);
+        const body = document.createElement("div"); body.className = "cat-body";
+        items.forEach((it, i) => body.appendChild(createIssueCard(it, i)));
+        btn.addEventListener("click", () => {
+          const collapsed = body.classList.toggle("collapsed");
+          btn.textContent = collapsed ? "展開する" : "折りたたむ";
+          btn.setAttribute("aria-expanded", String(!collapsed));
+        });
+        wrap.appendChild(head); wrap.appendChild(body);
+        return wrap;
       }
 
       function renderIssues() {
         if (!issuesRoot) return;
+        issuesRoot.innerHTML = "";
         if (!issues.length) {
-          const empty = document.createElement("div");
-          empty.className = "empty-note";
-          empty.textContent = "規約違反・改善ポイントは特に検出されませんでした。";
-          issuesRoot.appendChild(empty);
-          return;
+          const empty = document.createElement("div"); empty.className = "empty-note"; empty.textContent = "規約違反・改善ポイントは特に検出されませんでした。"; issuesRoot.appendChild(empty); return;
         }
+        const groups = issues.reduce((acc, cur) => { const k = cur.category || "uncategorized"; (acc[k] ||= []).push(cur); return acc; }, {});
+        const keys = [...CAT_ORDER.filter(k => groups[k]?.length), ...Object.keys(groups).filter(k => !CAT_ORDER.includes(k))];
+        keys.forEach(k => issuesRoot.appendChild(createCategoryGroup(k, groups[k])));
 
-        issues.forEach((issue, idx) => {
-          const card = document.createElement("article");
-          card.className = "issue-card";
-
-          const header = document.createElement("div");
-          header.className = "issue-header";
-
-          const left = document.createElement("div");
-          left.className = "issue-title-wrap";
-
-          const rule = document.createElement("div");
-          rule.className = "issue-rule";
-          rule.textContent = issue.rule_title || "(無題のルール)";
-
-          const cat = document.createElement("div");
-          cat.className = "issue-cat";
-          cat.textContent = issue.category || "uncategorized";
-
-          left.appendChild(rule); left.appendChild(cat);
-
-          const sev = document.createElement("div");
-          sev.className = "issue-sev " + sevClass(issue.severity);
-          sev.textContent = sevLabel(issue.severity);
-
-          header.appendChild(left); header.appendChild(sev);
-          card.appendChild(header);
-
-          const body = document.createElement("div");
-          body.className = "issue-body";
-
-          const problem = document.createElement("div");
-          problem.className = "issue-problem";
-          problem.textContent = issue.problem || "問題内容が未定義です。";
-          body.appendChild(problem);
-
-          if (issue.snippet) {
-            const snippet = document.createElement("pre");
-            snippet.className = "issue-snippet";
-            snippet.textContent = issue.snippet;
-            body.appendChild(snippet);
-          }
-
-          if (issue.suggestion) {
-            const suggLabel = document.createElement("div");
-            suggLabel.className = "issue-suggestion-label";
-            suggLabel.textContent = "修正提案:";
-            const sugg = document.createElement("div");
-            sugg.textContent = issue.suggestion;
-            body.appendChild(suggLabel); body.appendChild(sugg);
-          }
-
-          card.appendChild(body);
-
-          const footer = document.createElement("div");
-          footer.className = "issue-footer";
-          const leftFoot = document.createElement("div");
-          leftFoot.className = "issue-footer-left";
-
-          const linePill = document.createElement("div");
-          linePill.className = "pill";
-          linePill.textContent = `Line ${issue.line ?? "-"}`;
-
-          const idPill = document.createElement("div");
-          idPill.className = "pill";
-          idPill.textContent = issue.rule_id || "(no id)";
-
-          leftFoot.appendChild(linePill); leftFoot.appendChild(idPill);
-
-          const idxLabel = document.createElement("div");
-          idxLabel.textContent = `#${idx + 1}`;
-
-          footer.appendChild(leftFoot); footer.appendChild(idxLabel);
-          card.appendChild(footer);
-
-          issuesRoot.appendChild(card);
-        });
+        if (btnExpandAll) {
+          btnExpandAll.addEventListener("click", () => {
+            document.querySelectorAll(".cat-group .cat-body.collapsed").forEach(el => el.classList.remove("collapsed"));
+            document.querySelectorAll(".cat-group .cat-toggle").forEach(b => { b.textContent = "折りたたむ"; b.setAttribute("aria-expanded", "true"); });
+          });
+        }
+        if (btnCollapseAll) {
+          btnCollapseAll.addEventListener("click", () => {
+            document.querySelectorAll(".cat-group .cat-body").forEach(el => el.classList.add("collapsed"));
+            document.querySelectorAll(".cat-group .cat-toggle").forEach(b => { b.textContent = "展開する"; b.setAttribute("aria-expanded", "false"); });
+          });
+        }
       }
 
       function renderSuggested() {
         if (!suggestedRoot) return;
-
         suggestedRoot.innerHTML = "";
         if (!suggested.length) {
-          const empty = document.createElement("div");
-          empty.className = "empty-note";
-          empty.textContent = "今回の台本から AI が新たに追加すべきと判断した規約候補はありません。";
-          suggestedRoot.appendChild(empty);
-          return;
+          const empty = document.createElement("div"); empty.className = "empty-note"; empty.textContent = "今回の台本から AI が新たに追加すべきと判断した規約候補はありません。"; suggestedRoot.appendChild(empty); return;
         }
-
         suggested.forEach((rule, idx) => {
-          const card = document.createElement("article");
-          card.className = "suggested-card";
-
-          const header = document.createElement("div");
-          header.className = "suggested-header";
-
-          // 左：チェック + タイトル
-          const left = document.createElement("div");
-          left.className = "head-left";
-
-          const check = document.createElement("input");
-          check.type = "checkbox";
-          check.className = "sr-check";
-          check.dataset.index = String(idx);
-          check.setAttribute("aria-label", "提案を選択");
-
-          const title = document.createElement("div");
-          title.className = "suggested-title";
-          title.textContent = rule.title || "新しい規約候補";
-
+          const card = document.createElement("article"); card.className = "suggested-card";
+          const header = document.createElement("div"); header.className = "suggested-header";
+          const left = document.createElement("div"); left.className = "head-left";
+          const check = document.createElement("input"); check.type = "checkbox"; check.className = "sr-check"; check.dataset.index = String(idx); check.setAttribute("aria-label", "提案を選択");
+          const title = document.createElement("div"); title.className = "suggested-title"; title.textContent = rule.title || "新しい規約候補";
           left.appendChild(check); left.appendChild(title);
-
-          // 右：カテゴリ/重大度
-          const metaRight = document.createElement("div");
-          metaRight.className = "suggested-meta";
-          const catPill = document.createElement("div");
-          catPill.className = "pill";
-          catPill.textContent = rule.suggested_category || "unassigned";
-          metaRight.appendChild(catPill);
-          if (rule.severity) {
-            const sevPill = document.createElement("div");
-            sevPill.className = "pill";
-            sevPill.textContent = `想定重大度: ${rule.severity}`;
-            metaRight.appendChild(sevPill);
-          }
-
+          const metaRight = document.createElement("div"); metaRight.className = "suggested-meta";
+          const catPill = document.createElement("div"); catPill.className = "pill"; catPill.textContent = rule.suggested_category || "unassigned"; metaRight.appendChild(catPill);
+          if (rule.severity) { const sevPill = document.createElement("div"); sevPill.className = "pill"; sevPill.textContent = `想定重大度: ${rule.severity}`; metaRight.appendChild(sevPill); }
           header.appendChild(left); header.appendChild(metaRight);
           card.appendChild(header);
-
-          // 本文
-          const body = document.createElement("div");
-          body.className = "suggested-body";
-          if (rule.description) {
-            const desc = document.createElement("div");
-            desc.textContent = rule.description;
-            body.appendChild(desc);
-          }
-          if (rule.reason) {
-            const reason = document.createElement("div");
-            reason.style.marginTop = "4px"; reason.style.color = "var(--text-muted)";
-            reason.textContent = `理由: ${rule.reason}`;
-            body.appendChild(reason);
-          }
+          const body = document.createElement("div"); body.className = "suggested-body";
+          if (rule.description) { const d = document.createElement("div"); d.textContent = rule.description; body.appendChild(d); }
+          if (rule.reason) { const r = document.createElement("div"); r.style.marginTop = "4px"; r.style.color = "var(--text-muted)"; r.textContent = `理由: ${rule.reason}`; body.appendChild(r); }
           if (rule.examples && (rule.examples.ng?.length || rule.examples.ok?.length)) {
-            const ex = document.createElement("div");
-            ex.className = "suggested-examples";
+            const ex = document.createElement("div"); ex.className = "suggested-examples";
             const lines = [];
             if (Array.isArray(rule.examples.ng) && rule.examples.ng.length) lines.push("NG例: " + rule.examples.ng.join(" ／ "));
             if (Array.isArray(rule.examples.ok) && rule.examples.ok.length) lines.push("OK例: " + rule.examples.ok.join(" ／ "));
             ex.textContent = lines.join(" / ");
             body.appendChild(ex);
           }
-          card.appendChild(body);
           suggestedRoot.appendChild(card);
         });
       }
@@ -839,53 +796,27 @@
       function setupSuggestedControls() {
         const btn = document.getElementById("sr-download");
         const all = document.getElementById("sr-check-all");
-
         if (all) {
           all.addEventListener("change", () => {
-            document.querySelectorAll('.sr-check[data-index]').forEach(el => {
-              if (el !== all) el.checked = all.checked;
-            });
+            document.querySelectorAll('.sr-check[data-index]').forEach(el => { if (el !== all) el.checked = all.checked; });
           });
         }
-
         if (btn) {
           btn.addEventListener("click", () => {
-            const selectedIdx = Array.from(document.querySelectorAll('.sr-check[data-index]:checked'))
-              .map(el => Number(el.dataset.index))
-              .filter(n => Number.isInteger(n) && n >= 0 && n < suggested.length);
-
-            if (!selectedIdx.length) {
-              alert("選択された提案がありません。");
-              return;
-            }
-
-            // ダウンロード用に最小限の構造で整形
+            const selectedIdx = Array.from(document.querySelectorAll('.sr-check[data-index]:checked')).map(el => Number(el.dataset.index)).filter(n => Number.isInteger(n) && n >= 0 && n < suggested.length);
+            if (!selectedIdx.length) { alert("選択された提案がありません。"); return; }
             const payload = selectedIdx.map(i => {
               const r = suggested[i];
-              return {
-                title: r.title,
-                description: r.description,
-                reason: r.reason,
-                suggested_category: r.suggested_category,
-                severity: r.severity,
-                examples: r.examples
-              };
+              return { title: r.title, description: r.description, reason: r.reason, suggested_category: r.suggested_category, severity: r.severity, examples: r.examples };
             });
-
             const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
             const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "suggested_rules_selected.json";
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            URL.revokeObjectURL(url);
+            const a = document.createElement("a"); a.href = url; a.download = "suggested_rules_selected.json";
+            document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
           });
         }
       }
 
-      // Render
       renderSummary();
       renderIssues();
       renderSuggested();
