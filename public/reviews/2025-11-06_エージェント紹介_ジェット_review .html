@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Asari Script Review Report</title>
+  <title>エージェント紹介_ジェット</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -76,36 +76,6 @@
       display: flex;
       align-items: center;
       gap: 12px
-    }
-
-    .app-title-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 0, #e5e7eb, #1d4ed8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      color: #e5e7eb;
-      box-shadow: 0 12px 30px rgba(37, 99, 235, .7)
-    }
-
-    .app-title-text {
-      display: flex;
-      flex-direction: column;
-      gap: 2px
-    }
-
-    .app-title-text h1 {
-      margin: 0;
-      font-size: 18px;
-      letter-spacing: .03em
-    }
-
-    .app-title-text span {
-      font-size: 12px;
-      color: var(--text-sub)
     }
 
     .badge {
@@ -560,9 +530,9 @@
   </style>
 
   <script>
-    window.REVIEW_SUMMARY = {"reviewedAt": "2025-11-06T12:00:00+09:00", "summary": "用語説明と導入のフックが不足し、初心者視点での理解負荷が高めです。一部の文が長く、読点過多や助詞連続で音読しづらい箇所も見られます。「間違いなし」などの断定・誇張は緩和し、CTAと視聴者への問いかけを追加すると効果的です。", "scores": {"structure": 8.0, "wording": 8.0, "risk": 8.0, "delivery": 8.0, "logic": 2.0, "audience_fit": 0.0, "engagement": 4.0, "overall": 5.0}};
-    window.REVIEW_ISSUES = [{"category": "structure", "severity": "medium", "rule_id": "limit_sentence_length", "rule_title": "一文の長さを抑える", "line": 27, "snippet": "またブレイドストームはストッピングを必要とせず、空中や移動時でもクナイは真っすぐ飛ぶため上手い事扱えれば大きな戦力になること間違いなし！", "problem": "一文が長く可読性が下がっています（68文字）。", "suggestion": "接続詞の前後で文を分け、主語と述語を簡潔にしましょう。"}, {"category": "delivery", "severity": "medium", "rule_id": "breath_length", "rule_title": "息継ぎできない長文を避ける", "line": 27, "snippet": "またブレイドストームはストッピングを必要とせず、空中や移動時でもクナイは真っすぐ飛ぶため上手い事扱えれば大きな戦力になること間違いなし！", "problem": "一文が長く、音読時に息継ぎが困難です（68文字）。", "suggestion": "接続詞や読点付近で文を分割し、1文の情報量を減らしてください。"}, {"category": "wording", "severity": "medium", "rule_id": "avoid_absolute", "rule_title": "過度な断定を避ける", "line": 27, "snippet": "またブレイドストームはストッピングを必要とせず、空中や移動時でもクナイは真っすぐ飛ぶため上手い事扱えれば大きな戦力になること間違いなし！", "problem": "断定表現（間違いなし）は強すぎて誤解を招く恐れがあります。", "suggestion": "「〜の可能性が高い」「〜しやすい」などに言い換えましょう。"}, {"category": "risk", "severity": "medium", "rule_id": "avoid_exaggeration", "rule_title": "誇張表現を避ける", "line": 27, "snippet": "またブレイドストームはストッピングを必要とせず、空中や移動時でもクナイは真っすぐ飛ぶため上手い事扱えれば大きな戦力になること間違いなし！", "problem": "誇張表現（間違いなし）が含まれています。", "suggestion": "より中立的な表現に変更しましょう。"}, {"category": "audience_fit", "severity": "high", "rule_id": "unexplained_jargon", "rule_title": "初出用語の説明を付す", "line": 13, "snippet": "アビリティーキーを長押しすることで、自由に操作が可能な、短時間のスモークを展開するアビリティー", "problem": "初出用語（スモーク）に説明がありません。", "suggestion": "例：スモーク＝視界を遮る煙系アビリティ のように簡潔に補ってください。"}, {"category": "audience_fit", "severity": "high", "rule_id": "unexplained_jargon", "rule_title": "初出用語の説明を付す", "line": 15, "snippet": "敵の射線が通る場所を一瞬ふさいだり、有利に打ち合える状態を作りだすことができます", "problem": "初出用語（射線）に説明がありません。", "suggestion": "例：射線＝敵と自分を結ぶ攻撃が通る直線のこと のように簡潔に補ってください。"}, {"category": "audience_fit", "severity": "high", "rule_id": "unexplained_jargon", "rule_title": "初出用語の説明を付す", "line": 19, "snippet": "ブリンクとも呼ばれ、アビリティーキーを１回押すと準備状態に、もう一度押すと移動キーの方向にダッシュするアビリティー", "problem": "初出用語（ブリンク）に説明がありません。", "suggestion": "例：ブリンク＝ダッシュの別名で一瞬で移動する動き のように簡潔に補ってください。"}, {"category": "audience_fit", "severity": "high", "rule_id": "unexplained_jargon", "rule_title": "初出用語の説明を付す", "line": 21, "snippet": "撃ち合い最中の緊急回避はもちろん、サイトにエントリーする際に用いることができます", "problem": "初出用語（サイト）に説明がありません。", "suggestion": "例：サイト＝設置エリア/目標地点 のように簡潔に補ってください。"}, {"category": "audience_fit", "severity": "high", "rule_id": "unexplained_jargon", "rule_title": "初出用語の説明を付す", "line": 21, "snippet": "撃ち合い最中の緊急回避はもちろん、サイトにエントリーする際に用いることができます", "problem": "初出用語（エントリー）に説明がありません。", "suggestion": "例：エントリー＝最初にサイトへ侵入してスペースを作る動き のように簡潔に補ってください。"}, {"category": "audience_fit", "severity": "high", "rule_id": "unexplained_jargon", "rule_title": "初出用語の説明を付す", "line": 27, "snippet": "またブレイドストームはストッピングを必要とせず、空中や移動時でもクナイは真っすぐ飛ぶため上手い事扱えれば大きな戦力になること間違いなし！", "problem": "初出用語（ストッピング）に説明がありません。", "suggestion": "例：ストッピング＝射撃精度を上げるための移動停止 のように簡潔に補ってください。"}, {"category": "logic", "severity": "medium", "rule_id": "weak_transition", "rule_title": "段落間のつなぎを明示する", "line": 5, "snippet": "Qアビリティー　アップドラフト", "problem": "段落間のつなぎが弱く、話の流れが途切れています。", "suggestion": "「次に〜」「一方で〜」などの遷移句を追加してください。"}, {"category": "logic", "severity": "medium", "rule_id": "weak_transition", "rule_title": "段落間のつなぎを明示する", "line": 11, "snippet": "Cアビリティー　クラウドバースト", "problem": "段落間のつなぎが弱く、話の流れが途切れています。", "suggestion": "「次に〜」「一方で〜」などの遷移句を追加してください。"}, {"category": "logic", "severity": "medium", "rule_id": "weak_transition", "rule_title": "段落間のつなぎを明示する", "line": 17, "snippet": "Eアビリティー　テイルウィンド", "problem": "段落間のつなぎが弱く、話の流れが途切れています。", "suggestion": "「次に〜」「一方で〜」などの遷移句を追加してください。"}, {"category": "logic", "severity": "medium", "rule_id": "weak_transition", "rule_title": "段落間のつなぎを明示する", "line": 23, "snippet": "ULTアビリティー　ブレイドストーム", "problem": "段落間のつなぎが弱く、話の流れが途切れています。", "suggestion": "「次に〜」「一方で〜」などの遷移句を追加してください。"}, {"category": "engagement", "severity": "high", "rule_id": "missing_hook", "rule_title": "冒頭フックの欠落", "line": 1, "snippet": "３次元的な動きで敵を撃破する風使いのレディアント", "problem": "冒頭にフックがありません（問い/驚き/共感の提示なし）。", "suggestion": "「なぜ〜？」「多くの人が悩む○○」等のフック文を先頭に追加してください。"}, {"category": "engagement", "severity": "medium", "rule_id": "missing_cta", "rule_title": "CTAの欠落", "line": 29, "snippet": "最後に左クリックで敵を倒した場合はクナイが復活しますが、右クリックだと補充されないのでご注意を……", "problem": "末尾にCTAがありません。", "suggestion": "内容に紐づく具体的CTA（例：使用感や悩みをコメントで教えて等）を1文追加してください。"}, {"category": "engagement", "severity": "low", "rule_id": "no_viewer_prompt", "rule_title": "視聴者問いかけの不足", "line": 1, "snippet": "３次元的な動きで敵を撃破する風使いのレディアント", "problem": "視聴者への問いかけが不足しています。", "suggestion": "「あなたはどっち？」「最近困った場面は？」等の短い問いを1つ入れてください。"}];
-    window.REVIEW_SUGGESTED_RULES = [{"title": "外来語には日本語の短い補足を添える", "description": "ブリンク/エントリー/サイトなどの外来語は初出で1フレーズ解説を加える。", "reason": "初心者にとって意味が直感的でないため。", "suggested_category": "audience_fit", "severity": "medium", "examples": {"ng": ["サイトにエントリーします。"], "ok": ["サイト（設置エリア）にエントリー（先導侵入）します。"]}}, {"title": "各セクションに遷移句を入れる", "description": "アビリティ切り替え時に「次に/続いて」を入れる。", "reason": "話の流れが途切れやすい。", "suggested_category": "logic", "severity": "low", "examples": {"ng": ["Cアビリティー クラウドバースト"], "ok": ["続いて、Cアビリティーのクラウドバースト。"]}}, {"title": "強調は断定でなく確率表現へ", "description": "「間違いなし」等は「大きな戦力になりやすい」などへ。", "reason": "過度な断定・誇張のリスクを下げる。", "suggested_category": "wording", "severity": "medium", "examples": {"ng": ["勝てること間違いなし！"], "ok": ["勝率を上げやすいです。"]}}, {"title": "各アビリティに“次の一歩”を明記", "description": "練習手順やチェック方法を各セクション末に一文追加する。", "reason": "視聴者の行動に直結させるため。", "suggested_category": "audience_fit", "severity": "low", "examples": {"ng": ["アップドラフト〜することができます。"], "ok": ["まずはカスタムで箱越え→高所取りの順に練習しましょう。"]}}];
+    window.REVIEW_SUMMARY = {"reviewedAt": "2025-11-06T23:31:35.198243+09:00", "summary": "各アビリティの要点は押さえていますが、長文・専門用語の未説明と、冒頭/末尾のフックやCTA不足で初学者にはやや難。語尾や断定表現も調整すると、聞きやすく実践に移しやすい台本になります。", "scores": {"structure": 8.0, "wording": 8.0, "risk": 8.0, "delivery": 8.0, "logic": 8.0, "audience_fit": 0.0, "engagement": 3.0, "overall": 6.0}};
+    window.REVIEW_ISSUES = [{"category": "structure", "severity": "medium", "rule_id": "limit_sentence_length", "rule_title": "一文の長さを抑える", "line": 13, "snippet": "またブレイドストームはストッピングを必要とせず、空中や移動時でもクナイは真っすぐ飛ぶため上手い事扱えれば大きな戦力になること間違いなし！", "problem": "一文が長く可読性が下がっています（68文字）。", "suggestion": "接続詞の前後で文を分け、主語と述語を簡潔にしましょう。"}, {"category": "delivery", "severity": "medium", "rule_id": "breath_length", "rule_title": "息継ぎできない長文を避ける", "line": 13, "snippet": "またブレイドストームはストッピングを必要とせず、空中や移動時でもクナイは真っすぐ飛ぶため上手い事扱えれば大きな戦力になること間違いなし！", "problem": "一文が長く、音読時に息継ぎが困難です（68文字）。", "suggestion": "接続詞や読点付近で文を分割し、1文の情報量を減らしてください。"}, {"category": "wording", "severity": "medium", "rule_id": "avoid_absolute", "rule_title": "過度な断定を避ける", "line": 13, "snippet": "またブレイドストームはストッピングを必要とせず、空中や移動時でもクナイは真っすぐ飛ぶため上手い事扱えれば大きな戦力になること間違いなし！", "problem": "断定表現（「間違いなし」）は強すぎて誤解を招く恐れがあります。", "suggestion": "「〜になりやすい」「大きな戦力になり得ます」などへ緩和しましょう。"}, {"category": "risk", "severity": "medium", "rule_id": "avoid_exaggeration", "rule_title": "誇張表現を避ける", "line": 13, "snippet": "またブレイドストームはストッピングを必要とせず、空中や移動時でもクナイは真っすぐ飛ぶため上手い事扱えれば大きな戦力になること間違いなし！", "problem": "誇張表現（「間違いなし」）が含まれています。", "suggestion": "より中立的な表現（例：〜になり得ます／〜な場面で強力です）に変更しましょう。"}, {"category": "audience_fit", "severity": "high", "rule_id": "unexplained_jargon", "rule_title": "初出用語の説明を付す", "line": 1, "snippet": "３次元的な動きで敵を撃破する風使いのレディアント ジェットです", "problem": "初出用語（レディアント）に説明がありません。", "suggestion": "1文で意味・用途・効果のいずれかを補ってください。"}, {"category": "audience_fit", "severity": "high", "rule_id": "unexplained_jargon", "rule_title": "初出用語の説明を付す", "line": 9, "snippet": "ブリンクとも呼ばれ、アビリティーキーを１回押すと準備状態に、もう一度押すと移動キーの方向にダッシュするアビリティー", "problem": "初出用語（ブリンク）に説明がありません。", "suggestion": "1文で意味・用途・効果のいずれかを補ってください。"}, {"category": "audience_fit", "severity": "high", "rule_id": "unexplained_jargon", "rule_title": "初出用語の説明を付す", "line": 10, "snippet": "撃ち合い最中の緊急回避はもちろん、サイトにエントリーする際に用いることができます", "problem": "初出用語（サイト）に説明がありません。", "suggestion": "1文で意味・用途・効果のいずれかを補ってください。"}, {"category": "audience_fit", "severity": "high", "rule_id": "unexplained_jargon", "rule_title": "初出用語の説明を付す", "line": 10, "snippet": "撃ち合い最中の緊急回避はもちろん、サイトにエントリーする際に用いることができます", "problem": "初出用語（エントリー）に説明がありません。", "suggestion": "1文で意味・用途・効果のいずれかを補ってください。"}, {"category": "audience_fit", "severity": "high", "rule_id": "unexplained_jargon", "rule_title": "初出用語の説明を付す", "line": 13, "snippet": "またブレイドストームはストッピングを必要とせず、空中や移動時でもクナイは真っすぐ飛ぶため上手い事扱えれば大きな戦力になること間違いなし！", "problem": "初出用語（ストッピング）に説明がありません。", "suggestion": "1文で意味・用途・効果のいずれかを補ってください。"}, {"category": "audience_fit", "severity": "medium", "rule_id": "overloaded_sentence", "rule_title": "1文1情報を意識する", "line": 13, "snippet": "またブレイドストームはストッピングを必要とせず、空中や移動時でもクナイは真っすぐ飛ぶため上手い事扱えれば大きな戦力になること間違いなし！", "problem": "一文に情報が過多です（要素数: 4）。", "suggestion": "列挙は箇条書き化し、1文あたりの情報量を抑えてください。"}, {"category": "logic", "severity": "medium", "rule_id": "weak_transition", "rule_title": "段落間のつなぎを明示する", "line": 2, "snippet": "Qアビリティー　アップドラフト", "problem": "段落間のつなぎが弱く、話の流れが途切れています。", "suggestion": "「次にQアビリティーの〜」などの遷移句を追加してください。"}, {"category": "engagement", "severity": "high", "rule_id": "missing_hook", "rule_title": "冒頭フックの欠落", "line": 1, "snippet": "３次元的な動きで敵を撃破する風使いのレディアント ジェットです", "problem": "冒頭にフックがありません（問い/驚き/共感の提示なし）。", "suggestion": "「なぜジェットは初心者にも扱いやすい？」「3D機動のコツは？」などのフック文を先頭に追加してください。"}, {"category": "engagement", "severity": "medium", "rule_id": "missing_cta", "rule_title": "CTAの欠落", "line": 14, "snippet": "最後に左クリックで敵を倒した場合はクナイが復活しますが、右クリックだと補充されないのでご注意を……", "problem": "末尾にCTAがありません。", "suggestion": "内容に紐づく具体的CTA（例：あなたの設定や質問をコメントで教えて 等）を1文追加してください。"}, {"category": "engagement", "severity": "low", "rule_id": "no_viewer_prompt", "rule_title": "視聴者問いかけの不足", "line": 12, "snippet": "発動すると５本のクナイが展開され、左クリックで一本ずつ、右クリックで全てを放つことができます", "problem": "視聴者への問いかけが不足しています。", "suggestion": "「あなたは左/右クリックどちら派？」等の短い問いを1つ入れてください。"}, {"category": "engagement", "severity": "low", "rule_id": "flat_emotion_curve", "rule_title": "感情の盛り上がり不足", "line": 3, "snippet": "ジェット自身を上方向に飛ばすアビリティー", "problem": "感情の盛り上がり（強調ポイント）が不足しています。", "suggestion": "要点の前に前振りや強調語を追加し、抑揚を作ってください。"}];
+    window.REVIEW_SUGGESTED_RULES = [{"title": "略称・外来語は初出で簡潔に定義する", "description": "UI略称（Q/E/C）や外来語（ブリンク/サイト等）は初出時に1行で意味を補足する。", "reason": "初心者が迷いやすく、誤解を招くため。", "suggested_category": "audience_fit", "severity": "medium", "examples": {"ng": ["サイトにエントリーします。"], "ok": ["サイト（爆破地点）にエントリー＝突入します。"]}}, {"title": "効果・使いどころは数値目安を添える", "description": "持続秒数やリチャージ、射程などの簡単な数値を1つ示す。", "reason": "状況判断の基準ができ、練習に移しやすい。", "suggested_category": "logic", "severity": "low", "examples": {"ng": ["短時間のスモークを展開するアビリティー。"], "ok": ["短時間（約●秒）のスモークを展開する。入口を1つ隠すのに最適。"]}}, {"title": "断定表現は控えめに、条件を明記する", "description": "「間違いなし」などの断定は避け、前提条件や具体例を添える。", "reason": "過度な期待や誤解を防ぐため。", "suggested_category": "wording", "severity": "medium", "examples": {"ng": ["大きな戦力になること間違いなし！"], "ok": ["位置取りが噛み合えば大きな戦力になり得ます。"]}}];
   </script>
 </head>
 
@@ -570,11 +540,7 @@
   <div class="app">
     <header class="app-header" role="banner">
       <div class="app-title">
-        <div class="app-title-icon" aria-hidden="true">A</div>
-        <div class="app-title-text">
-          <h1>Asari Script Review</h1>
-          <span>VALORANT 解説台本レビュー レポート</span>
-        </div>
+        <h1>エージェント紹介_ジェット</h1>
       </div>
       <div class="badge" aria-label="自動レビュー結果バッジ">
         <span class="badge-dot" aria-hidden="true"></span>
