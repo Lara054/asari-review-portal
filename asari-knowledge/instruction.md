@@ -106,6 +106,7 @@
 ```
 
 ### 5) HTML生成
+- INPUT STYLEにある{slug}の値を抽出し、template_modern_full.html の <title> と header H1 にある{Slug}をそのslugを差し替えること。
 - `$TEMPLATE_HTML` の 3プレースホルダーを**完全置換**して完成HTMLを得る。  
 - 画面本文は**ダウンロードリンクのみ**表示。
 

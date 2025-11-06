@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>Asari Script Review Report</title>
+  <title>{Slug}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -76,36 +76,6 @@
       display: flex;
       align-items: center;
       gap: 12px
-    }
-
-    .app-title-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 0, #e5e7eb, #1d4ed8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      color: #e5e7eb;
-      box-shadow: 0 12px 30px rgba(37, 99, 235, .7)
-    }
-
-    .app-title-text {
-      display: flex;
-      flex-direction: column;
-      gap: 2px
-    }
-
-    .app-title-text h1 {
-      margin: 0;
-      font-size: 18px;
-      letter-spacing: .03em
-    }
-
-    .app-title-text span {
-      font-size: 12px;
-      color: var(--text-sub)
     }
 
     .badge {
@@ -570,11 +540,7 @@
   <div class="app">
     <header class="app-header" role="banner">
       <div class="app-title">
-        <div class="app-title-icon" aria-hidden="true">A</div>
-        <div class="app-title-text">
-          <h1>Asari Script Review</h1>
-          <span>VALORANT 解説台本レビュー レポート</span>
-        </div>
+        <h1>{Slug}</h1>
       </div>
       <div class="badge" aria-label="自動レビュー結果バッジ">
         <span class="badge-dot" aria-hidden="true"></span>
