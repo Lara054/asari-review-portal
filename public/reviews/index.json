@@ -1,11 +1,19 @@
 {
-  "generatedAt": "2025-10-30T12:34:12.717Z",
-  "count": 8,
+  "generatedAt": "2025-11-06T13:54:49.582Z",
+  "count": 9,
   "items": [
+    {
+      "title": "Asari Script Review Report",
+      "tags": [],
+      "date": "2025-11-06T13:54:48.936Z",
+      "href": "/reviews/エージェント紹介_ジェット.html",
+      "slug": "エージェント紹介_ジェット",
+      "file": "エージェント紹介_ジェット.html"
+    },
     {
       "title": "サンプル2：台本レビュー",
       "tags": [],
-      "date": "2025-10-30T12:34:06.077Z",
+      "date": "2025-11-06T13:54:48.936Z",
       "href": "/reviews/20251026-1010_sample2.html",
       "slug": "20251026-1010_sample2",
       "file": "20251026-1010_sample2.html"
@@ -13,7 +21,7 @@
     {
       "title": "サンプル2：台本レビュー",
       "tags": [],
-      "date": "2025-10-30T12:34:06.077Z",
+      "date": "2025-11-06T13:54:48.936Z",
       "href": "/reviews/20251026-1010_sample.html",
       "slug": "20251026-1010_sample",
       "file": "20251026-1010_sample.html"
@@ -21,7 +29,7 @@
     {
       "title": "初回テスト：台本レビュー",
       "tags": [],
-      "date": "2025-10-30T12:34:06.077Z",
+      "date": "2025-11-06T13:54:48.936Z",
       "href": "/reviews/20251026-0900_test.html",
       "slug": "20251026-0900_test",
       "file": "20251026-0900_test.html"
@@ -29,7 +37,7 @@
     {
       "title": "Asari Review – VC強要はNG。Gameeで同目的の仲間探し",
       "tags": [],
-      "date": "2025-10-30T12:34:06.077Z",
+      "date": "2025-11-06T13:54:48.936Z",
       "href": "/reviews/2025-10-30_vc-ng-gamee_review.html",
       "slug": "2025-10-30_vc-ng-gamee_review",
       "file": "2025-10-30_vc-ng-gamee_review.html"
@@ -37,7 +45,7 @@
     {
       "title": "Asari Review – 0から学ぶVALORANT – ジェット編レビュー",
       "tags": [],
-      "date": "2025-10-30T12:34:06.077Z",
+      "date": "2025-11-06T13:54:48.936Z",
       "href": "/reviews/2025-10-30_valorant-jet-guide_review.html",
       "slug": "2025-10-30_valorant-jet-guide_review",
       "file": "2025-10-30_valorant-jet-guide_review.html"
@@ -45,7 +53,7 @@
     {
       "title": "Asari Review – VALORANT フルパの本当の理由",
       "tags": [],
-      "date": "2025-10-30T12:34:06.077Z",
+      "date": "2025-11-06T13:54:48.936Z",
       "href": "/reviews/2025-10-30_valorant-fullparty-reason_review.html",
       "slug": "2025-10-30_valorant-fullparty-reason_review",
       "file": "2025-10-30_valorant-fullparty-reason_review.html"
@@ -53,7 +61,7 @@
     {
       "title": "Asari Review – ブリムストーン解説レビュー",
       "tags": [],
-      "date": "2025-10-30T12:34:06.077Z",
+      "date": "2025-11-06T13:54:48.936Z",
       "href": "/reviews/2025-10-26_brimstone_review.html",
       "slug": "2025-10-26_brimstone_review",
       "file": "2025-10-26_brimstone_review.html"
@@ -61,7 +69,7 @@
     {
       "title": "Asari Review – ソーヴァ解説レビュー",
       "tags": [],
-      "date": "2025-10-30T12:34:06.077Z",
+      "date": "2025-11-06T13:54:48.935Z",
       "href": "/reviews/2025-10-25_sova-review.html",
       "slug": "2025-10-25_sova-review",
       "file": "2025-10-25_sova-review.html"
