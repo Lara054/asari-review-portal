@@ -14,6 +14,15 @@
       --accent: #3b82f6;
       --accent-soft: rgba(59, 130, 246, .15);
       --accent-strong: #2563eb;
+      --warm: #ffc08c;
+      /* 温かみのある色 */
+      --warm-soft: rgba(251, 146, 60, .06);
+      /* カード用の薄い暖色オーバーレイ（背景の最上層に重ねる） */
+      --card-warm-overlay: linear-gradient(180deg, rgba(251, 146, 60, 0.04), transparent);
+      /* 折りたたみボタン（デフォルト：ダークで青系） */
+      --toggle-bg: rgba(59, 130, 246, .12);
+      --toggle-border: rgba(59, 130, 246, .5);
+      --toggle-color: #c7d2fe;
       --danger: #ef4444;
       --warn: #f97316;
       --ok: #22c55e;
@@ -32,6 +41,107 @@
       --cat-logic: #f59e0b;
       --cat-audience: #14b8a6;
       --cat-engagement: #e879f9;
+
+      /* 背景グラデ用の可変プロパティ（darkデフォルト） */
+      --bg-gradient: radial-gradient(circle at top, #0f172a 0, #020617 52%, #000 100%);
+
+      /* コンポーネント共通変数（ダークデフォルト） */
+      --panel-bg: linear-gradient(145deg, rgba(15, 23, 42, .98), #020617);
+      --panel-border: rgba(31, 41, 55, .9);
+      --panel-before: conic-gradient(from 220deg, rgba(59, 130, 246, .08), transparent, var(--warm-soft), rgba(16, 185, 129, .05), transparent, rgba(59, 130, 246, .08));
+
+      /* card-bg に暖色オーバーレイを重ねる（順序: オーバーレイ, ベース） */
+      --card-bg: var(--card-warm-overlay), radial-gradient(circle at top left, rgba(15, 23, 42, .98), #020617);
+      --card-border: rgba(31, 41, 55, .9);
+
+      /* スコアカードにも薄い暖色を重ねる */
+      --score-card-bg: var(--card-warm-overlay), radial-gradient(circle at top left, rgba(59, 130, 246, .18), rgba(15, 23, 42, .98));
+      --score-card-border: rgba(55, 65, 81, .9);
+      --score-bar-bg: rgba(31, 41, 55, .9);
+      --score-value: #e5e7eb;
+
+      --btn-bg: rgba(37, 99, 235, .18);
+      --btn-border: rgba(59, 130, 246, .8);
+      --btn-color: #e5e7eb;
+
+      --badge-bg: rgba(15, 23, 42, .9);
+      --badge-border: rgba(55, 65, 81, .9);
+      --badge-color: var(--text-sub);
+
+      --snippet-bg: rgba(15, 23, 42, .95);
+      --snippet-border: rgba(31, 41, 55, .9);
+      --snippet-color: #e5e7eb;
+
+      --pill-border: rgba(31, 41, 55, .9);
+
+      --sev-info-color: #e5e7eb;
+    }
+
+    /* ライトモード用の上書き */
+    .light-theme {
+      /* ライトでは暖色オーバーレイをやや強めに */
+      --card-warm-overlay: linear-gradient(180deg, rgba(251, 146, 60, 0.06), transparent);
+      /* 折りたたみボタンをライト時は暖色系に変更（青のままにならないように） */
+      --toggle-bg: rgba(251, 146, 60, .08);
+      --toggle-border: rgba(251, 146, 60, .18);
+      --toggle-color: var(--text-main);
+      --bg: #f8fafc;
+      --bg-elevated: #ffffff;
+      --bg-chip: #f1f5f9;
+      --border-subtle: #e6eef8;
+      --accent: #2563eb;
+      --accent-soft: rgba(37, 99, 235, .12);
+      --accent-strong: #1d4ed8;
+      --warm: #fb923c;
+      --warm-soft: rgba(251, 146, 60, .08);
+      --danger: #dc2626;
+      --warn: #fb923c;
+      --ok: #16a34a;
+      --text-main: #0f172a;
+      --text-sub: #334155;
+      --text-muted: #475569;
+      --shadow-soft: 0 10px 30px rgba(2, 6, 23, .06);
+      --shadow-chip: 0 6px 12px rgba(2, 6, 23, .04);
+      --focus: 0 0 0 3px rgba(37, 99, 235, .12);
+      --cat-structure: #3b82f6;
+      --cat-wording: #10b981;
+      --cat-risk: #ef4444;
+      --cat-delivery: #8b5cf6;
+      --cat-logic: #f59e0b;
+      --cat-audience: #0ea5a4;
+      --cat-engagement: #e879f9;
+
+      /* ライト用背景グラデ */
+      --bg-gradient: radial-gradient(circle at top, #ffffff 0, #f8fafc 52%, #eef2ff 100%);
+
+      /* ライト用コンポーネント色 */
+      --panel-bg: linear-gradient(145deg, rgba(255, 255, 255, 1), #f8fafc);
+      --panel-border: rgba(226, 232, 240, .9);
+      --panel-before: conic-gradient(from 220deg, rgba(37, 99, 235, .06), transparent, transparent, rgba(6, 182, 160, .03), transparent, rgba(37, 99, 235, .06));
+
+      --card-bg: var(--card-warm-overlay), linear-gradient(145deg, #ffffff, #fbfdff);
+      --card-border: rgba(226, 232, 240, .9);
+
+      --score-card-bg: var(--card-warm-overlay), linear-gradient(90deg, rgba(37, 99, 235, .06), rgba(255, 255, 255, 1));
+      --score-card-border: rgba(226, 232, 240, .9);
+      --score-bar-bg: rgba(226, 232, 240, .9);
+      --score-value: #0f172a;
+
+      --btn-bg: rgba(37, 99, 235, .06);
+      --btn-border: rgba(37, 99, 235, .18);
+      --btn-color: var(--text-main);
+
+      --badge-bg: rgba(255, 255, 255, .9);
+      --badge-border: rgba(226, 232, 240, .9);
+      --badge-color: var(--text-sub);
+
+      --snippet-bg: #f8fafc;
+      --snippet-border: rgba(226, 232, 240, .9);
+      --snippet-color: #0f172a;
+
+      --pill-border: rgba(226, 232, 240, .9);
+
+      --sev-info-color: #0f172a;
     }
 
     * {
@@ -42,21 +152,35 @@
       margin: 0;
       padding: 32px 16px 48px;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Hiragino Sans", "Noto Sans JP", sans-serif;
-      background: radial-gradient(circle at top, #0f172a 0, #020617 52%, #000 100%);
+      background: var(--bg-gradient);
       color: var(--text-main);
       -webkit-font-smoothing: antialiased;
     }
 
-    a,
-    button,
-    input {
-      outline: none
+    /* トグルボタン */
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--text-main);
+      cursor: pointer;
     }
 
-    a:focus,
-    button:focus,
-    input:focus {
+    .theme-toggle:focus {
       box-shadow: var(--focus)
+    }
+
+    .theme-toggle.light {
+      background: rgba(2, 6, 23, 0.04);
+      border-color: rgba(2, 6, 23, 0.06);
+      color: var(--text-main);
     }
 
     .app {
@@ -84,17 +208,17 @@
       gap: 6px;
       padding: 6px 10px;
       border-radius: 999px;
-      background: rgba(15, 23, 42, .9);
-      border: 1px solid rgba(55, 65, 81, .9);
+      background: var(--badge-bg);
+      border: 1px solid var(--badge-border);
       font-size: 11px;
-      color: var(--text-sub)
+      color: var(--badge-color)
     }
 
     .badge-dot {
       width: 6px;
       height: 6px;
       border-radius: 999px;
-      background: var(--accent)
+      background: linear-gradient(90deg, var(--warm), var(--accent));
     }
 
     .layout {
@@ -110,9 +234,9 @@
     }
 
     .panel {
-      background: linear-gradient(145deg, rgba(15, 23, 42, .98), #020617);
+      background: var(--panel-bg);
       border-radius: var(--radius-lg);
-      border: 1px solid rgba(31, 41, 55, .9);
+      border: 1px solid var(--panel-border);
       box-shadow: var(--shadow-soft);
       padding: 18px 18px 20px;
       position: relative;
@@ -123,7 +247,7 @@
       content: "";
       position: absolute;
       inset: -60%;
-      background: conic-gradient(from 220deg, rgba(59, 130, 246, .08), transparent, transparent, rgba(16, 185, 129, .05), transparent, rgba(59, 130, 246, .08));
+      background: var(--panel-before);
       opacity: .5;
       filter: blur(40px);
       z-index: -1
@@ -204,9 +328,9 @@
 
     .score-card {
       border-radius: var(--radius-md);
-      background: radial-gradient(circle at top left, rgba(59, 130, 246, .18), rgba(15, 23, 42, .98));
+      background: var(--score-card-bg);
       padding: 10px 10px 9px;
-      border: 1px solid rgba(55, 65, 81, .9);
+      border: 1px solid var(--score-card-border);
       box-shadow: var(--shadow-chip)
     }
 
@@ -226,7 +350,7 @@
     .score-value {
       font-size: 18px;
       font-weight: 600;
-      color: #e5e7eb
+      color: var(--score-value)
     }
 
     .score-max {
@@ -239,7 +363,7 @@
       width: 100%;
       height: 4px;
       border-radius: 999px;
-      background: rgba(31, 41, 55, .9);
+      background: var(--score-bar-bg);
       overflow: hidden
     }
 
@@ -267,9 +391,9 @@
       border-radius: 10px;
       font-size: 12px;
       font-weight: 600;
-      background: rgba(37, 99, 235, .18);
-      border: 1px solid rgba(59, 130, 246, .8);
-      color: #e5e7eb;
+      background: var(--btn-bg);
+      border: 1px solid var(--btn-border);
+      color: var(--btn-color);
       cursor: pointer
     }
 
@@ -280,10 +404,10 @@
 
     .cat-group {
       border-radius: var(--radius-lg);
-      border: 1px solid rgba(31, 41, 55, .9);
+      border: 1px solid var(--panel-border);
       margin-bottom: 12px;
       overflow: hidden;
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, .98), #020617)
+      background: var(--card-bg)
     }
 
     .cat-head {
@@ -292,7 +416,7 @@
       justify-content: space-between;
       gap: 8px;
       padding: 10px 12px;
-      border-bottom: 1px solid rgba(31, 41, 55, .9)
+      border-bottom: 1px solid var(--panel-border)
     }
 
     .cat-title {
@@ -323,9 +447,9 @@
     .cat-toggle {
       cursor: pointer;
       font-size: 12px;
-      color: #c7d2fe;
-      background: rgba(59, 130, 246, .12);
-      border: 1px solid rgba(59, 130, 246, .5);
+      color: var(--toggle-color);
+      background: var(--toggle-bg);
+      border: 1px solid var(--toggle-border);
       padding: 5px 8px;
       border-radius: 8px
     }
@@ -343,8 +467,8 @@
 
     .issue-card {
       border-radius: var(--radius-md);
-      border: 1px solid rgba(31, 41, 55, .9);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, .98), #020617);
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
       padding: 10px 11px 10px;
       display: flex;
       flex-direction: column;
@@ -404,7 +528,7 @@
     .sev-info {
       background: rgba(148, 163, 184, .15);
       border: 1px solid rgba(148, 163, 184, .9);
-      color: #e5e7eb
+      color: var(--sev-info-color)
     }
 
     .issue-body {
@@ -423,12 +547,12 @@
       margin: 2px 0;
       padding: 6px 8px;
       border-radius: 8px;
-      background: rgba(15, 23, 42, .95);
-      border: 1px solid rgba(31, 41, 55, .9);
+      background: var(--snippet-bg);
+      border: 1px solid var(--snippet-border);
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 11px;
       white-space: pre-wrap;
-      color: #e5e7eb
+      color: var(--snippet-color)
     }
 
     .issue-suggestion-label {
@@ -457,7 +581,7 @@
       padding: 3px 7px;
       border-radius: 999px;
       background: var(--bg-chip);
-      border: 1px solid rgba(31, 41, 55, .9)
+      border: 1px solid var(--pill-border)
     }
 
     .suggested-rules {
@@ -469,8 +593,8 @@
 
     .suggested-card {
       border-radius: var(--radius-md);
-      border: 1px solid rgba(31, 41, 55, .9);
-      background: radial-gradient(circle at top left, rgba(15, 23, 42, .98), #020617);
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
       padding: 10px 11px 10px;
       display: flex;
       flex-direction: column;
@@ -529,6 +653,19 @@
     }
   </style>
 
+  <!-- テーマ初期化: localStorage と prefers-color-scheme に基づいて起動時に適用 -->
+  <script>
+    (function () {
+      try {
+        const key = "asari_theme";
+        const stor = localStorage.getItem(key);
+        let theme = stor || (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+        if (theme === "light") document.documentElement.classList.add("light-theme");
+      } catch (e) {
+        /* ignore */
+      }
+    })();
+  </script>
   <script>
     window.REVIEW_SUMMARY = __REVIEW_SUMMARY__;
     window.REVIEW_ISSUES = __REVIEW_ISSUES__;
@@ -546,6 +683,8 @@
         <span class="badge-dot" aria-hidden="true"></span>
         <span>自動レビュー結果</span>
       </div>
+      <!-- テーマ切替ボタン -->
+      <button id="theme-toggle" class="theme-toggle" aria-pressed="false" aria-label="ライトモードに切替">ライト</button>
     </header>
 
     <main class="layout" role="main">
@@ -594,6 +733,42 @@
 
   <script>
     (function () {
+      const key = "asari_theme";
+      const btn = document.getElementById("theme-toggle");
+
+      function applyTheme(theme) {
+        if (theme === "light") {
+          document.documentElement.classList.add("light-theme");
+          btn.classList.add("light");
+          btn.textContent = "ライト";
+          btn.setAttribute("aria-pressed", "true");
+          btn.setAttribute("aria-label", "ダークモードに切替");
+        } else {
+          document.documentElement.classList.remove("light-theme");
+          btn.classList.remove("light");
+          btn.textContent = "ダーク";
+          btn.setAttribute("aria-pressed", "false");
+          btn.setAttribute("aria-label", "ライトモードに切替");
+        }
+        try { localStorage.setItem(key, theme); } catch (e) { /* ignore */ }
+      }
+      if (btn) {
+        // 初期表示（head の初期化スクリプトと二重にならないよう localStorage を優先）
+        try {
+          const stor = localStorage.getItem(key);
+          const initial = stor || (document.documentElement.classList.contains("light-theme") ? "light" : "dark");
+          applyTheme(initial);
+        } catch (e) { /* ignore */ }
+        btn.addEventListener("click", () => {
+          const isLight = document.documentElement.classList.toggle("light-theme");
+          applyTheme(isLight ? "light" : "dark");
+        });
+      }
+    })();
+  </script>
+
+  <script>
+    (function () {
       const summary = window.REVIEW_SUMMARY || null;
       const issues = Array.isArray(window.REVIEW_ISSUES) ? window.REVIEW_ISSUES : [];
       const suggested = Array.isArray(window.REVIEW_SUGGESTED_RULES) ? window.REVIEW_SUGGESTED_RULES : [];
@@ -614,7 +789,7 @@
       const CAT_ORDER = ["structure", "wording", "risk", "delivery", "logic", "audience_fit", "engagement"];
       const CAT_DOT = {
         structure: "var(--cat-structure)", wording: "var(--cat-wording)", risk: "var(--cat-risk)",
-        delivery: "var(--cat-delivery)", logic: "var(--cat-logic)", audience_fit: "var(--cat-audience)", engagement: "var(--cat-engagement)"
+        delivery: "var(--cat-delivery)", logic: "var(--cat-logic)", audience_fit: "var(--cat-audience", engagement: "var(--cat-engagement)"
       };
 
       function createScoreCard(label, value) {
