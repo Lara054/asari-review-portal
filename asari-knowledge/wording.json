@@ -1,14 +1,10 @@
 {
-  "ruleset": "phrasebank",
-  "defaults": {
-    "category": "wording",
-    "severity": "medium"
-  },
   "rules": [
     {
       "id": "avoid_absolute",
       "title": "過度な断定を避ける",
       "description": "「絶対〜」「必ず〜」のような断定は避ける。",
+      "severity": "medium",
       "problem_template": "断定表現（{{term}}）は強すぎて誤解を招く恐れがあります。",
       "suggestion_template": "「〜の可能性が高い」「〜しやすい」などに言い換えましょう。"
     },
@@ -16,6 +12,7 @@
       "id": "unify_ult_word",
       "title": "「アルティメット」を「ウルト」に統一",
       "description": "チャンネル内では「ウルト」で統一する。",
+      "severity": "low",
       "problem_template": "「アルティメット」という表現はチャンネル用語と異なります。",
       "suggestion_template": "「ウルト」に統一してください。"
     },
@@ -23,6 +20,7 @@
       "id": "prefer_specific_terms",
       "title": "専門用語の統一",
       "description": "「スキル」「アビリティ」などの用語を一貫して使用する。",
+      "severity": "low",
       "problem_template": "同義語（{{term}}）が混在しています。",
       "suggestion_template": "チャンネル方針に合わせた用語を使用しましょう。"
     }

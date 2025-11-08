@@ -1,0 +1,36 @@
+{
+    "rules": [
+        {
+            "id": "missing_hook",
+            "title": "冒頭フックの欠落",
+            "description": "冒頭15秒に問い・驚き・共感のいずれかのフックを置く。",
+            "severity": "high",
+            "problem_template": "冒頭にフックがありません（問い/驚き/共感の提示なし）。",
+            "suggestion_template": "「なぜ〜？」「多くの人が悩む○○」等のフック文を先頭に追加してください。"
+        },
+        {
+            "id": "missing_cta",
+            "title": "CTAの欠落",
+            "description": "動画末尾でコメント・高評価・チャンネル登録などのCTAが欠落していないか確認する。",
+            "severity": "medium",
+            "problem_template": "末尾にCTAがありません。",
+            "suggestion_template": "内容に紐づく具体的CTA（例：使用感や悩みをコメントで教えて等）を1文追加してください。"
+        },
+        {
+            "id": "no_viewer_prompt",
+            "title": "視聴者問いかけの不足",
+            "description": "視聴者の自己関連化を促す問いかけが不足していないか確認する。",
+            "severity": "low",
+            "problem_template": "視聴者への問いかけが不足しています。",
+            "suggestion_template": "「あなたはどっち？」「最近困った場面は？」等の短い問いを1つ入れてください。"
+        },
+        {
+            "id": "flat_emotion_curve",
+            "title": "感情の盛り上がり不足",
+            "description": "全体が平板になっていないか、強調ポイントや抑揚を設計する。",
+            "severity": "low",
+            "problem_template": "感情の盛り上がり（強調ポイント）が不足しています。",
+            "suggestion_template": "要点の前に前振りや強調語を追加し、抑揚を作ってください。"
+        }
+    ]
+}
