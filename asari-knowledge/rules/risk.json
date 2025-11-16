@@ -6,7 +6,11 @@
       "description": "人格攻撃や侮辱的と受け取られる語を避ける。",
       "severity": "high",
       "problem_template": "侮辱的表現（{{term}}）が含まれています。",
-      "suggestion_template": "冗談であっても避けるのが安全です。"
+      "suggestion_template": "冗談であっても避けるのが安全です。",
+      "examples": {
+        "ng": ["あいつはバカだ。"],
+        "ok": ["相手の行動に対して具体的に問題点を指摘する。"]
+      }
     },
     {
       "id": "avoid_gender_bias",
@@ -14,7 +18,11 @@
       "description": "性別に基づく偏見を含む言い回しを避ける。",
       "severity": "high",
       "problem_template": "性別バイアスを含む表現（{{term}}）が検出されました。",
-      "suggestion_template": "ニュートラルな表現に置き換えましょう。"
+      "suggestion_template": "ニュートラルな表現に置き換えましょう。",
+      "examples": {
+        "ng": ["女だから弱い。"],
+        "ok": ["性別に関係なく技術や立ち回りで評価する表現。"]
+      }
     },
     {
       "id": "avoid_exaggeration",
@@ -22,7 +30,11 @@
       "description": "「最強」「ぶっ壊れ」など誇張しすぎる言葉を避ける。",
       "severity": "medium",
       "problem_template": "誇張表現（{{term}}）が含まれています。",
-      "suggestion_template": "より中立的な表現に変更しましょう。"
+      "suggestion_template": "より中立的な表現に変更しましょう。",
+      "examples": {
+        "ng": ["この武器は最強すぎてゲームが崩れる。"],
+        "ok": ["多くの状況で有利に働く傾向があります。"]
+      }
     }
   ]
 }
