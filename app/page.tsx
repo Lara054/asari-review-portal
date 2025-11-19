@@ -79,7 +79,7 @@ export default function ReviewsPage() {
             <option value="old">古い順</option>
           </select>
         </div>
-        <a href="/privacy" style={{fontSize:13,color:"var(--muted)"}}>
+        <a href="#privacy" style={{fontSize:13,color:"var(--muted)"}}>
           プライバシーポリシー
         </a>
       </div>
@@ -109,6 +109,32 @@ export default function ReviewsPage() {
       {!error && filtered.length===0 && (
         <div className="empty">該当するレビューがありません。</div>
       )}
+
+      {/* ページ内プライバシー */}
+      <section id="privacy" style={{padding:20,maxWidth:900,margin:"24px auto 80px",background:"var(--card)",borderRadius:8}}>
+        <h2 style={{marginTop:0}}>プライバシーポリシー</h2>
+        <p>本プライバシーポリシーは、shell's（以下「本サービス」）が収集・利用する情報について説明します。</p>
+        <h3>1. 収集する情報</h3>
+        <ul>
+          <li>ユーザーが本サービスに入力するテキスト（例：台本本文、slug 等）</li>
+          <li>本サービスに添付されたファイルおよびそのメタ情報</li>
+          <li>利用状況に関するログ（利用日時、エラー情報等）</li>
+        </ul>
+        <h3>2. 利用目的</h3>
+        <ul>
+          <li>ユーザー入力に対する生成結果の提供</li>
+          <li>本サービスの保守・改善</li>
+          <li>問い合わせ対応</li>
+        </ul>
+        <h3>3. 第三者提供および外部送信</h3>
+        <p>外部サービスへ送信する場合があります（送信項目：slug, 台本本文, メタ情報）。範囲と目的は最小化します。</p>
+        <h3>4. 保管期間</h3>
+        <p>受領したデータは最大30日保管し、その後削除または匿名化します（例外あり）。</p>
+        <h3>5. セキュリティ</h3>
+        <p>TLS等の標準的な暗号化を使用し、保存データは適切に保護します。</p>
+        <h3>6. お問い合わせ</h3>
+        <p>問い合わせ先：&lt;katutosi0504@icloud.com&gt;</p>
+      </section>
     </div>
   );
 }
