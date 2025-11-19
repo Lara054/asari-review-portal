@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 
 type Item = {
   title: string;
@@ -79,9 +80,9 @@ export default function ReviewsPage() {
             <option value="old">古い順</option>
           </select>
         </div>
-        <a href="#privacy" style={{fontSize:13,color:"var(--muted)"}}>
+        <Link href="/privacy" style={{fontSize:13,color:"var(--muted)"}}>
           プライバシーポリシー
-        </a>
+        </Link>
       </div>
 
       {/* エラー */}
