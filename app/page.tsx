@@ -80,6 +80,9 @@ export default function ReviewsPage() {
             <option value="old">古い順</option>
           </select>
         </div>
+          <Link href="/privacy" style={{fontSize:13,color:"var(--muted)"}}>
+            プライバシーポリシー
+          </Link>
       </div>
 
       {/* エラー */}

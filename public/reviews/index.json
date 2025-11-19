@@ -1,86 +1,14 @@
 {
-  "generatedAt": "2025-11-08T12:31:40.047Z",
-  "count": 10,
+  "generatedAt": "2025-11-19T14:53:25.814Z",
+  "count": 1,
   "items": [
-    {
-      "title": "サンプル2：台本レビュー",
-      "tags": [],
-      "date": "2025-11-08T12:31:37.665Z",
-      "href": "/reviews/20251026-1010_sample2.html",
-      "slug": "20251026-1010_sample2",
-      "file": "20251026-1010_sample2.html"
-    },
-    {
-      "title": "サンプル2：台本レビュー",
-      "tags": [],
-      "date": "2025-11-08T12:31:37.665Z",
-      "href": "/reviews/20251026-1010_sample.html",
-      "slug": "20251026-1010_sample",
-      "file": "20251026-1010_sample.html"
-    },
-    {
-      "title": "初回テスト：台本レビュー",
-      "tags": [],
-      "date": "2025-11-08T12:31:37.665Z",
-      "href": "/reviews/20251026-0900_test.html",
-      "slug": "20251026-0900_test",
-      "file": "20251026-0900_test.html"
-    },
     {
       "title": "Gamee-21-now",
       "tags": [],
-      "date": "2025-11-08T12:31:37.664Z",
+      "date": "2025-11-08T12:29:59.613Z",
       "href": "/reviews/2025-11-08_Gamee-21-now_review.html",
       "slug": "2025-11-08_Gamee-21-now_review",
       "file": "2025-11-08_Gamee-21-now_review.html"
-    },
-    {
-      "title": "エージェント紹介_ジェット",
-      "tags": [],
-      "date": "2025-11-08T12:31:37.664Z",
-      "href": "/reviews/2025-11-06_エージェント紹介_ジェット_review .html",
-      "slug": "2025-11-06_エージェント紹介_ジェット_review ",
-      "file": "2025-11-06_エージェント紹介_ジェット_review .html"
-    },
-    {
-      "title": "Asari Review – VC強要はNG。Gameeで同目的の仲間探し",
-      "tags": [],
-      "date": "2025-11-08T12:31:37.664Z",
-      "href": "/reviews/2025-10-30_vc-ng-gamee_review.html",
-      "slug": "2025-10-30_vc-ng-gamee_review",
-      "file": "2025-10-30_vc-ng-gamee_review.html"
-    },
-    {
-      "title": "Asari Review – 0から学ぶVALORANT – ジェット編レビュー",
-      "tags": [],
-      "date": "2025-11-08T12:31:37.664Z",
-      "href": "/reviews/2025-10-30_valorant-jet-guide_review.html",
-      "slug": "2025-10-30_valorant-jet-guide_review",
-      "file": "2025-10-30_valorant-jet-guide_review.html"
-    },
-    {
-      "title": "Asari Review – VALORANT フルパの本当の理由",
-      "tags": [],
-      "date": "2025-11-08T12:31:37.664Z",
-      "href": "/reviews/2025-10-30_valorant-fullparty-reason_review.html",
-      "slug": "2025-10-30_valorant-fullparty-reason_review",
-      "file": "2025-10-30_valorant-fullparty-reason_review.html"
-    },
-    {
-      "title": "Asari Review – ブリムストーン解説レビュー",
-      "tags": [],
-      "date": "2025-11-08T12:31:37.664Z",
-      "href": "/reviews/2025-10-26_brimstone_review.html",
-      "slug": "2025-10-26_brimstone_review",
-      "file": "2025-10-26_brimstone_review.html"
-    },
-    {
-      "title": "Asari Review – ソーヴァ解説レビュー",
-      "tags": [],
-      "date": "2025-11-08T12:31:37.664Z",
-      "href": "/reviews/2025-10-25_sova-review.html",
-      "slug": "2025-10-25_sova-review",
-      "file": "2025-10-25_sova-review.html"
     }
   ]
 }
