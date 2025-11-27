@@ -665,19 +665,52 @@
 
         const body = document.createElement("div"); body.className = "issue-body";
         const problem = document.createElement("div"); problem.className = "issue-problem"; problem.textContent = issue.problem || "問題内容が未定義です。"; body.appendChild(problem);
-        if (issue.snippet) { const snippet = document.createElement("pre"); snippet.className = "issue-snippet"; snippet.textContent = issue.snippet; body.appendChild(snippet); }
-        if (issue.suggestion) { const lab = document.createElement("div"); lab.className = "issue-suggestion-label"; lab.textContent = "修正提案:"; const sugg = document.createElement("div"); sugg.textContent = issue.suggestion; body.appendChild(lab); body.appendChild(sugg); }
+        if (issue.snippet) {
+          const snippet = document.createElement("pre"); snippet.className = "issue-snippet"; snippet.textContent = issue.snippet; body.appendChild(snippet);
+        }
+        if (issue.suggestion) {
+          const lab = document.createElement("div"); lab.className = "issue-suggestion-label"; lab.textContent = "修正提案:";
+          const sugg = document.createElement("div"); sugg.textContent = issue.suggestion;
+          body.appendChild(lab); body.appendChild(sugg);
+        }
         card.appendChild(body);
 
         const footer = document.createElement("div"); footer.className = "issue-footer";
         const leftFoot = document.createElement("div"); leftFoot.className = "issue-footer-left";
-        const linePill = document.createElement("div"); linePill.className = "pill"; linePill.textContent = `Line ${issue.line ?? "-"}`;
-        const idPill = document.createElement("div"); idPill.className = "pill"; idPill.textContent = issue.rule_id || "(no id)";
-        leftFoot.appendChild(linePill); leftFoot.appendChild(idPill);
-        const idxLabel = document.createElement("div"); idxLabel.textContent = `#${idx + 1}`;
-        footer.appendChild(leftFoot); footer.appendChild(idxLabel); card.appendChild(footer);
+
+        // 行番号ピル
+        const linePill = document.createElement("div");
+        linePill.className = "pill";
+        linePill.textContent = `Line ${issue.line ?? "-"}`;
+        leftFoot.appendChild(linePill);
+
+        // ルールIDピル
+        const idPill = document.createElement("div");
+        idPill.className = "pill";
+        idPill.textContent = issue.rule_id || "(no id)";
+        leftFoot.appendChild(idPill);
+
+        // ルールセット表示ピル
+        const rulesetLabel = issue.ruleset_name || issue.ruleset_display_name || issue.ruleset_id;
+        if (rulesetLabel) {
+          const rsPill = document.createElement("div");
+          rsPill.className = "pill";
+          rsPill.textContent = rulesetLabel;
+          leftFoot.appendChild(rsPill);
+        }
+        
+        
+        // インデックス表示
+        const idxLabel = document.createElement("div");
+        idxLabel.textContent = `#${idx + 1}`;
+
+        footer.appendChild(leftFoot);
+        footer.appendChild(idxLabel);
+        card.appendChild(footer);
+
         return card;
       }
+
 
       function createCategoryGroup(cat, items) {
         const wrap = document.createElement("section"); wrap.className = "cat-group"; wrap.dataset.category = cat;

@@ -143,6 +143,16 @@
             "type": "string",
             "minLength": 1
           }
+        },
+        "ruleset_id": {
+        "type": "string",
+        "minLength": 1,
+        "description": "この指摘が属するルールセットID（例: base / risk / asari_persona）"
+        },
+        "ruleset_name": {
+          "type": "string",
+          "minLength": 1,
+          "description": "ルールセットの表示名（例: Base Rules）"
         }
       }
     },
