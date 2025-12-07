@@ -194,9 +194,11 @@
 - `reason`：なぜ既存ルールでは不足していると判断したのか
 - `suggested_category`：どのカテゴリに追加するのが適切か（structure / wording / risk / delivery / logic / audience_fit / engagement 等）
 - `severity`：想定される重大度（high / medium / low / info）
+- `checklist`：このルール候補を実際に適用する際に確認すべき観点の配列。5-1 の `checklist` と同様に、短い日本語文を箇条書きで並べる
 - `examples`（任意）：`ng` / `ok` 例の配列
-
----
+- `problem_template`（任意）：このルール候補を本番ルールとして適用する場合に使用する指摘メッセージのテンプレート。**固定値として、本番に適用する場合は運用側で記入する。候補段階では空でもよい。**
+- `suggestion_template`（任意）：このルール候補を本番ルールとして適用する場合に使用する改善提案メッセージのテンプレート。**固定値として、本番に適用する場合は運用側で記入する。候補段階では空でもよい。**
+- `enabled`:`true`
 
 ## 9. HTML GENERATION（HTML 生成）
 

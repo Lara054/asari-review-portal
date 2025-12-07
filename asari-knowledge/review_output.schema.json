@@ -204,6 +204,21 @@
               "info"
             ]
           },
+          "checklist": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "このルール候補を実際に適用する際に確認すべき観点の配列（任意）。5-1 の checklist と同様に短い日本語文を並べる。"
+          },
+          "problem_template": {
+            "type": "string",
+            "description": "このルール候補を本番ルールとして適用する場合に使用する指摘メッセージのテンプレート（任意。固定値として本番運用時に記入）。"
+          },
+          "suggestion_template": {
+            "type": "string",
+            "description": "このルール候補を本番ルールとして適用する場合に使用する改善提案メッセージのテンプレート（任意。固定値として本番運用時に記入）。"
+          },
           "examples": {
             "type": "object",
             "additionalProperties": false,
@@ -225,6 +240,11 @@
                 }
               }
             }
+          },
+          "enable": {
+            "type": "boolean",
+            "description": "このルール候補を本番ルールとして有効化するかどうかのフラグ（任意。false に設定すると本番ルールには追加されない）。"
+          
           }
         }
       }
