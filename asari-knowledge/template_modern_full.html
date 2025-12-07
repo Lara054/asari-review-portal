@@ -804,9 +804,20 @@
           btn.addEventListener("click", () => {
             const selectedIdx = Array.from(document.querySelectorAll('.sr-check[data-index]:checked')).map(el => Number(el.dataset.index)).filter(n => Number.isInteger(n) && n >= 0 && n < suggested.length);
             if (!selectedIdx.length) { alert("選択された提案がありません。"); return; }
-            const payload = selectedIdx.map(i => {
+          const payload = selectedIdx.map(i => {
               const r = suggested[i];
-              return { title: r.title, description: r.description, reason: r.reason, suggested_category: r.suggested_category, severity: r.severity, examples: r.examples };
+              return {
+                title: r.title,
+                description: r.description,
+                reason: r.reason,
+                suggested_category: r.suggested_category,
+                severity: r.severity,
+                checklist: r.checklist,
+                problem_template: r.problem_template,
+                suggestion_template: r.suggestion_template,
+                examples: r.examples,
+                enabled: r.enabled 
+              };
             });
             const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
             const url = URL.createObjectURL(blob);
