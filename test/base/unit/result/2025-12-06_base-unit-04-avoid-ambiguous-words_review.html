@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>base-unit-04-avoid-ambiguous-words</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-elevated: #0b1020;
+      --bg-chip: #111827;
+      --border-subtle: #1f2937;
+      --accent: #3b82f6;
+      --accent-soft: rgba(59, 130, 246, .15);
+      --accent-strong: #2563eb;
+      --danger: #ef4444;
+      --warn: #f97316;
+      --ok: #22c55e;
+      --text-main: #f9fafb;
+      --text-sub: #9ca3af;
+      --text-muted: #6b7280;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, .65);
+      --shadow-chip: 0 10px 25px rgba(15, 23, 42, .7);
+      --focus: 0 0 0 3px rgba(59, 130, 246, .45);
+      --cat-structure: #60a5fa;
+      --cat-wording: #22c55e;
+      --cat-risk: #f87171;
+      --cat-delivery: #a78bfa;
+      --cat-logic: #f59e0b;
+      --cat-audience: #14b8a6;
+      --cat-engagement: #e879f9;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      padding: 32px 16px 48px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Hiragino Sans", "Noto Sans JP", sans-serif;
+      background: radial-gradient(circle at top, #0f172a 0, #020617 52%, #000 100%);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a,
+    button,
+    input {
+      outline: none
+    }
+
+    a:focus,
+    button:focus,
+    input:focus {
+      box-shadow: var(--focus)
+    }
+
+    .app {
+      max-width: 1100px;
+      margin: 0 auto
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px
+    }
+
+    .app-title {
+      display: flex;
+      align-items: center;
+      gap: 12px
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, .9);
+      border: 1px solid rgba(55, 65, 81, .9);
+      font-size: 11px;
+      color: var(--text-sub)
+    }
+
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: var(--accent)
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.2fr);
+      gap: 20px
+    }
+
+    @media (max-width:900px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr)
+      }
+    }
+
+    .panel {
+      background: linear-gradient(145deg, rgba(15, 23, 42, .98), #020617);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(31, 41, 55, .9);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 18px 20px;
+      position: relative;
+      overflow: hidden
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: -60%;
+      background: conic-gradient(from 220deg, rgba(59, 130, 246, .08), transparent, transparent, rgba(16, 185, 129, .05), transparent, rgba(59, 130, 246, .08));
+      opacity: .5;
+      filter: blur(40px);
+      z-index: -1
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px
+    }
+
+    .panel-title {
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--text-sub)
+    }
+
+    .panel-sub {
+      font-size: 11px;
+      color: var(--text-muted)
+    }
+
+    .summary-main {
+      display: flex;
+      flex-direction: column;
+      gap: 12px
+    }
+
+    .summary-topline {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap
+    }
+
+    .summary-summary {
+      font-size: 13px;
+      color: var(--text-main);
+      line-height: 1.6;
+      max-width: 700px
+    }
+
+    .summary-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 4px;
+      min-width: 170px
+    }
+
+    .summary-meta-label {
+      font-size: 11px;
+      color: var(--text-muted)
+    }
+
+    .summary-meta-value {
+      font-size: 12px;
+      color: var(--text-sub)
+    }
+
+    .score-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 8px
+    }
+
+    @media (max-width:540px) {
+      .score-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr))
+      }
+    }
+
+    .score-card {
+      border-radius: var(--radius-md);
+      background: radial-gradient(circle at top left, rgba(59, 130, 246, .18), rgba(15, 23, 42, .98));
+      padding: 10px 10px 9px;
+      border: 1px solid rgba(55, 65, 81, .9);
+      box-shadow: var(--shadow-chip)
+    }
+
+    .score-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px
+    }
+
+    .score-value-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 6px
+    }
+
+    .score-value {
+      font-size: 18px;
+      font-weight: 600;
+      color: #e5e7eb
+    }
+
+    .score-max {
+      font-size: 11px;
+      color: var(--text-muted)
+    }
+
+    .score-bar {
+      margin-top: 5px;
+      width: 100%;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(31, 41, 55, .9);
+      overflow: hidden
+    }
+
+    .score-bar-fill {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--accent-soft), var(--accent-strong));
+      transform-origin: left center;
+      transform: scaleX(0);
+      transition: transform .4s ease-out
+    }
+
+    .issues-toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 8px 0 10px
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(37, 99, 235, .18);
+      border: 1px solid rgba(59, 130, 246, .8);
+      color: #e5e7eb;
+      cursor: pointer
+    }
+
+    .btn:disabled {
+      opacity: .5;
+      cursor: not-allowed
+    }
+
+    .cat-group {
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(31, 41, 55, .9);
+      margin-bottom: 12px;
+      overflow: hidden;
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, .98), #020617)
+    }
+
+    .cat-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(31, 41, 55, .9)
+    }
+
+    .cat-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 13px
+    }
+
+    .cat-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px
+    }
+
+    .cat-count {
+      font-size: 11px;
+      color: var(--text-sub)
+    }
+
+    .cat-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px
+    }
+
+    .cat-toggle {
+      cursor: pointer;
+      font-size: 12px;
+      color: #c7d2fe;
+      background: rgba(59, 130, 246, .12);
+      border: 1px solid rgba(59, 130, 246, .5);
+      padding: 5px 8px;
+      border-radius: 8px
+    }
+
+    .cat-body {
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px
+    }
+
+    .cat-body.collapsed {
+      display: none
+    }
+
+    .issue-card {
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(31, 41, 55, .9);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, .98), #020617);
+      padding: 10px 11px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px
+    }
+
+    .issue-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px
+    }
+
+    .issue-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0
+    }
+
+    .issue-rule {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-main);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .issue-sev {
+      font-size: 10px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .05em
+    }
+
+    .sev-high {
+      background: rgba(239, 68, 68, .14);
+      border: 1px solid rgba(248, 113, 113, .9);
+      color: #fecaca
+    }
+
+    .sev-medium {
+      background: rgba(249, 115, 22, .14);
+      border: 1px solid rgba(251, 146, 60, .9);
+      color: #fed7aa
+    }
+
+    .sev-low {
+      background: rgba(34, 197, 94, .14);
+      border: 1px solid rgba(74, 222, 128, .9);
+      color: #bbf7d0
+    }
+
+    .sev-info {
+      background: rgba(148, 163, 184, .15);
+      border: 1px solid rgba(148, 163, 184, .9);
+      color: #e5e7eb
+    }
+
+    .issue-body {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--text-sub)
+    }
+
+    .issue-problem {
+      color: var(--text-main)
+    }
+
+    .issue-snippet {
+      margin: 2px 0;
+      padding: 6px 8px;
+      border-radius: 8px;
+      background: rgba(15, 23, 42, .95);
+      border: 1px solid rgba(31, 41, 55, .9);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 11px;
+      white-space: pre-wrap;
+      color: #e5e7eb
+    }
+
+    .issue-suggestion-label {
+      font-size: 11px;
+      color: var(--text-muted)
+    }
+
+    .issue-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 4px;
+      font-size: 10px;
+      color: var(--text-muted)
+    }
+
+    .issue-footer-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap
+    }
+
+    .pill {
+      padding: 3px 7px;
+      border-radius: 999px;
+      background: var(--bg-chip);
+      border: 1px solid rgba(31, 41, 55, .9)
+    }
+
+    .suggested-rules {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px
+    }
+
+    .suggested-card {
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(31, 41, 55, .9);
+      background: radial-gradient(circle at top left, rgba(15, 23, 42, .98), #020617);
+      padding: 10px 11px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px
+    }
+
+    .suggested-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px
+    }
+
+    .suggested-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-main)
+    }
+
+    .suggested-body {
+      font-size: 12px;
+      color: var(--text-sub);
+      line-height: 1.6
+    }
+
+    .suggested-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px
+    }
+
+    .suggested-examples {
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--text-muted)
+    }
+
+    .suggested-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 2px 0 10px
+    }
+
+    .sr-check {
+      width: 16px;
+      height: 16px;
+      accent-color: #3b82f6
+    }
+
+    .suggested-card .head-left {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+  </style>
+
+  <script>
+    window.REVIEW_SUMMARY = {
+  "reviewedAt": "2025-12-06",
+  "summary": "全体的に内容は明瞭ですが、「多分」「結構」「ちょっと」などのあいまいな副詞が多く、聞き手に具体的な印象を与えにくい点が見られました。それぞれ根拠や程度を具体的に言い換えることで、説得力が高まります。",
+  "scores": {
+    "structure": 10,
+    "wording": 1,
+    "risk": 10,
+    "delivery": 10,
+    "logic": 10,
+    "audience_fit": 10,
+    "engagement": 10,
+    "overall": 8.7
+  }
+};
+    window.REVIEW_ISSUES = [
+  {
+    "category": "wording",
+    "severity": "medium",
+    "rule_id": "avoid_ambiguous_phrases",
+    "rule_title": "あいまいな副詞を避ける",
+    "line": 1,
+    "snippet": "このキャラは多分かなり強いです。",
+    "problem": "『多分』はあいまいで断定を避けすぎた表現になっています。",
+    "suggestion": "『多分』を削除するか、『おそらく現環境では強い部類です』のように根拠を補足して具体化しましょう。",
+    "ruleset_id": "base",
+    "ruleset_name": "Base Rules"
+  },
+  {
+    "category": "wording",
+    "severity": "medium",
+    "rule_id": "avoid_ambiguous_phrases",
+    "rule_title": "あいまいな副詞を避ける",
+    "line": 2,
+    "snippet": "結構いろんな場面で使えると思います。",
+    "problem": "『結構』は程度が不明確で、人によって解釈が変わりやすい表現です。",
+    "suggestion": "『結構』を削除して、『多くの場面で使える』など明確な表現にしましょう。",
+    "ruleset_id": "base",
+    "ruleset_name": "Base Rules"
+  },
+  {
+    "category": "wording",
+    "severity": "medium",
+    "rule_id": "avoid_ambiguous_phrases",
+    "rule_title": "あいまいな副詞を避ける",
+    "line": 3,
+    "snippet": "ちょっと練習すれば誰でもそれなりに活躍できるはずです。",
+    "problem": "『ちょっと』『それなりに』は曖昧で、練習量や成果のイメージが伝わりにくいです。",
+    "suggestion": "『少し練習すれば十分活躍できるはずです』のように、より明確な言い方に変えましょう。",
+    "ruleset_id": "base",
+    "ruleset_name": "Base Rules"
+  }
+];
+    window.REVIEW_SUGGESTED_RULES = [
+  {
+    "title": "あいまいな副詞の使用を制限する",
+    "description": "『多分』『結構』『ちょっと』『それなりに』など、意味が曖昧な副詞の使用を制限し、具体的な程度を明示する。",
+    "reason": "現行ルールでは指示語や受け身の曖昧さに対処しているが、副詞の曖昧さは対象外のため。",
+    "suggested_category": "wording",
+    "severity": "medium",
+    "examples": {
+      "ng": [
+        "多分強いです。",
+        "結構使えます。",
+        "ちょっと難しいです。"
+      ],
+      "ok": [
+        "おそらく強い部類です。",
+        "多くの場面で使えます。",
+        "少し慣れが必要です。"
+      ]
+    }
+  }
+];
+  </script>
+</head>
+
+<body>
+  <div class="app">
+    <header class="app-header" role="banner">
+      <div class="app-title">
+        <h1>base-unit-04-avoid-ambiguous-words</h1>
+      </div>
+      <div class="badge" aria-label="自動レビュー結果バッジ">
+        <span class="badge-dot" aria-hidden="true"></span>
+        <span>自動レビュー結果</span>
+      </div>
+    </header>
+
+    <main class="layout" role="main">
+      <section class="panel" aria-labelledby="summary-title">
+        <div class="panel-header">
+          <div>
+            <div id="summary-title" class="panel-title">Summary</div>
+            <div class="panel-sub">全体の印象とカテゴリ別スコア</div>
+          </div>
+        </div>
+        <div id="summary-root" class="summary-main" aria-live="polite"></div>
+
+        <div class="panel-header" style="margin-top:18px;">
+          <div>
+            <div class="panel-title">Issues</div>
+            <div class="panel-sub">カテゴリごとにグルーピングされた規約違反一覧</div>
+          </div>
+          <div class="issues-toolbar">
+            <button id="btn-expand" class="btn" aria-label="すべて展開">すべて展開</button>
+            <button id="btn-collapse" class="btn" aria-label="すべて折りたたみ">すべて折りたたみ</button>
+          </div>
+        </div>
+        <div id="issues-root"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="suggested-title">
+        <div class="panel-header">
+          <div>
+            <div id="suggested-title" class="panel-title">Suggested Rules</div>
+            <div class="panel-sub">AI が提案する新しい規約候補（最大 5 件）</div>
+          </div>
+        </div>
+
+        <div class="suggested-controls" aria-label="提案規約 操作">
+          <label style="display:inline-flex;align-items:center;gap:6px;">
+            <input id="sr-check-all" type="checkbox" class="sr-check" aria-label="全選択" />
+            全選択
+          </label>
+          <button id="sr-download" class="btn" aria-label="選択した提案をJSONでダウンロード">選択した提案をJSONでダウンロード</button>
+        </div>
+
+        <div id="suggested-root" class="suggested-rules"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      const summary = window.REVIEW_SUMMARY || null;
+      const issues = Array.isArray(window.REVIEW_ISSUES) ? window.REVIEW_ISSUES : [];
+      const suggested = Array.isArray(window.REVIEW_SUGGESTED_RULES) ? window.REVIEW_SUGGESTED_RULES : [];
+
+      const summaryRoot = document.getElementById("summary-root");
+      const issuesRoot = document.getElementById("issues-root");
+      const suggestedRoot = document.getElementById("suggested-root");
+      const btnExpandAll = document.getElementById("btn-expand");
+      const btnCollapseAll = document.getElementById("btn-collapse");
+
+      function safeNum(n) { return typeof n === "number" && !Number.isNaN(n) ? n : 0; }
+
+      const SCORE_LABELS = {
+        structure: "Structure（文体・構成）", wording: "Wording（言葉遣い）", risk: "Risk（リスク）",
+        delivery: "Delivery（話し方）", logic: "Logic（論理）", audience_fit: "Audience Fit（視聴者適合）",
+        engagement: "Engagement（惹きつけ）", overall: "Overall（総合）"
+      };
+      const CAT_ORDER = ["structure", "wording", "risk", "delivery", "logic", "audience_fit", "engagement"];
+      const CAT_DOT = {
+        structure: "var(--cat-structure)", wording: "var(--cat-wording)", risk: "var(--cat-risk)",
+        delivery: "var(--cat-delivery)", logic: "var(--cat-logic)", audience_fit: "var(--cat-audience)", engagement: "var(--cat-engagement)"
+      };
+
+      function createScoreCard(label, value) {
+        const outer = document.createElement("div"); outer.className = "score-card";
+        const lab = document.createElement("div"); lab.className = "score-label"; lab.textContent = label; outer.appendChild(lab);
+        const row = document.createElement("div"); row.className = "score-value-row";
+        const val = document.createElement("div"); val.className = "score-value"; val.textContent = safeNum(value).toFixed(1);
+        const max = document.createElement("div"); max.className = "score-max"; max.textContent = "/ 10";
+        row.appendChild(val); row.appendChild(max); outer.appendChild(row);
+        const bar = document.createElement("div"); bar.className = "score-bar";
+        const fill = document.createElement("div"); fill.className = "score-bar-fill";
+        const ratio = Math.max(0, Math.min(1, safeNum(value) / 10));
+        requestAnimationFrame(() => { fill.style.transform = `scaleX(${ratio})`; });
+        bar.appendChild(fill); outer.appendChild(bar);
+        return outer;
+      }
+      function renderSummary() {
+        if (!summary || !summaryRoot) return;
+        const top = document.createElement("div"); top.className = "summary-topline";
+        const summaryText = document.createElement("div"); summaryText.className = "summary-summary";
+        summaryText.textContent = summary.summary || "この台本のレビューサマリーがここに表示されます。";
+        const meta = document.createElement("div"); meta.className = "summary-meta";
+        const metaLabel = document.createElement("div"); metaLabel.className = "summary-meta-label"; metaLabel.textContent = "Reviewed At";
+        const metaValue = document.createElement("div"); metaValue.className = "summary-meta-value"; metaValue.textContent = summary.reviewedAt || "-";
+        meta.appendChild(metaLabel); meta.appendChild(metaValue);
+        top.appendChild(summaryText); top.appendChild(meta);
+        summaryRoot.appendChild(top);
+
+        const scores = summary.scores || {};
+        const scoreGrid = document.createElement("div"); scoreGrid.className = "score-grid";
+        const keysOrder = CAT_ORDER.filter(k => typeof scores[k] === "number");
+        if (typeof scores.overall === "number") keysOrder.push("overall");
+        keysOrder.forEach(k => scoreGrid.appendChild(createScoreCard(SCORE_LABELS[k] || k, scores[k])));
+        summaryRoot.appendChild(scoreGrid);
+      }
+
+      function sevClass(sev) { switch (sev) { case "high": return "sev-high"; case "medium": return "sev-medium"; case "low": return "sev-low"; default: return "sev-info"; } }
+      function sevLabel(sev) { switch (sev) { case "high": return "HIGH"; case "medium": return "MED"; case "low": return "LOW"; default: return "INFO"; } }
+
+      function createIssueCard(issue, idx) {
+        const card = document.createElement("article"); card.className = "issue-card";
+        const header = document.createElement("div"); header.className = "issue-header";
+        const left = document.createElement("div"); left.className = "issue-title-wrap";
+        const rule = document.createElement("div"); rule.className = "issue-rule"; rule.textContent = issue.rule_title || "(無題のルール)";
+        left.appendChild(rule);
+        const sev = document.createElement("div"); sev.className = "issue-sev " + sevClass(issue.severity); sev.textContent = sevLabel(issue.severity);
+        header.appendChild(left); header.appendChild(sev); card.appendChild(header);
+
+        const body = document.createElement("div"); body.className = "issue-body";
+        const problem = document.createElement("div"); problem.className = "issue-problem"; problem.textContent = issue.problem || "問題内容が未定義です。"; body.appendChild(problem);
+        if (issue.snippet) {
+          const snippet = document.createElement("pre"); snippet.className = "issue-snippet"; snippet.textContent = issue.snippet; body.appendChild(snippet);
+        }
+        if (issue.suggestion) {
+          const lab = document.createElement("div"); lab.className = "issue-suggestion-label"; lab.textContent = "修正提案:";
+          const sugg = document.createElement("div"); sugg.textContent = issue.suggestion;
+          body.appendChild(lab); body.appendChild(sugg);
+        }
+        card.appendChild(body);
+
+        const footer = document.createElement("div"); footer.className = "issue-footer";
+        const leftFoot = document.createElement("div"); leftFoot.className = "issue-footer-left";
+
+        // 行番号ピル
+        const linePill = document.createElement("div");
+        linePill.className = "pill";
+        linePill.textContent = `Line ${issue.line ?? "-"}`;
+        leftFoot.appendChild(linePill);
+
+        // ルールIDピル
+        const idPill = document.createElement("div");
+        idPill.className = "pill";
+        idPill.textContent = issue.rule_id || "(no id)";
+        leftFoot.appendChild(idPill);
+
+        // ルールセット表示ピル
+        const rulesetLabel = issue.ruleset_name || issue.ruleset_display_name || issue.ruleset_id;
+        if (rulesetLabel) {
+          const rsPill = document.createElement("div");
+          rsPill.className = "pill";
+          rsPill.textContent = rulesetLabel;
+          leftFoot.appendChild(rsPill);
+        }
+        
+        
+        // インデックス表示
+        const idxLabel = document.createElement("div");
+        idxLabel.textContent = `#${idx + 1}`;
+
+        footer.appendChild(leftFoot);
+        footer.appendChild(idxLabel);
+        card.appendChild(footer);
+
+        return card;
+      }
+
+
+      function createCategoryGroup(cat, items) {
+        const wrap = document.createElement("section"); wrap.className = "cat-group"; wrap.dataset.category = cat;
+        const head = document.createElement("div"); head.className = "cat-head";
+        const title = document.createElement("div"); title.className = "cat-title";
+        const dot = document.createElement("span"); dot.className = "cat-dot"; dot.style.background = CAT_DOT[cat] || "var(--accent)";
+        const name = document.createElement("span"); name.textContent = (SCORE_LABELS[cat] || cat).replace(/（.*?）/, "");
+        const count = document.createElement("span"); count.className = "cat-count"; count.textContent = `${items.length} 件`;
+        title.appendChild(dot); title.appendChild(name); title.appendChild(count);
+        const actions = document.createElement("div"); actions.className = "cat-actions";
+        const btn = document.createElement("button"); btn.className = "cat-toggle"; btn.setAttribute("aria-expanded", "true"); btn.textContent = "折りたたむ";
+        actions.appendChild(btn);
+        head.appendChild(title); head.appendChild(actions);
+        const body = document.createElement("div"); body.className = "cat-body";
+        items.forEach((it, i) => body.appendChild(createIssueCard(it, i)));
+        btn.addEventListener("click", () => {
+          const collapsed = body.classList.toggle("collapsed");
+          btn.textContent = collapsed ? "展開する" : "折りたたむ";
+          btn.setAttribute("aria-expanded", String(!collapsed));
+        });
+        wrap.appendChild(head); wrap.appendChild(body);
+        return wrap;
+      }
+
+      function renderIssues() {
+        if (!issuesRoot) return;
+        issuesRoot.innerHTML = "";
+        if (!issues.length) {
+          const empty = document.createElement("div"); empty.className = "empty-note"; empty.textContent = "規約違反・改善ポイントは特に検出されませんでした。"; issuesRoot.appendChild(empty); return;
+        }
+        const groups = issues.reduce((acc, cur) => { const k = cur.category || "uncategorized"; (acc[k] ||= []).push(cur); return acc; }, {});
+        const keys = [...CAT_ORDER.filter(k => groups[k]?.length), ...Object.keys(groups).filter(k => !CAT_ORDER.includes(k))];
+        keys.forEach(k => issuesRoot.appendChild(createCategoryGroup(k, groups[k])));
+
+        if (btnExpandAll) {
+          btnExpandAll.addEventListener("click", () => {
+            document.querySelectorAll(".cat-group .cat-body.collapsed").forEach(el => el.classList.remove("collapsed"));
+            document.querySelectorAll(".cat-group .cat-toggle").forEach(b => { b.textContent = "折りたたむ"; b.setAttribute("aria-expanded", "true"); });
+          });
+        }
+        if (btnCollapseAll) {
+          btnCollapseAll.addEventListener("click", () => {
+            document.querySelectorAll(".cat-group .cat-body").forEach(el => el.classList.add("collapsed"));
+            document.querySelectorAll(".cat-group .cat-toggle").forEach(b => { b.textContent = "展開する"; b.setAttribute("aria-expanded", "false"); });
+          });
+        }
+      }
+
+      function renderSuggested() {
+        if (!suggestedRoot) return;
+        suggestedRoot.innerHTML = "";
+        if (!suggested.length) {
+          const empty = document.createElement("div"); empty.className = "empty-note"; empty.textContent = "今回の台本から AI が新たに追加すべきと判断した規約候補はありません。"; suggestedRoot.appendChild(empty); return;
+        }
+        suggested.forEach((rule, idx) => {
+          const card = document.createElement("article"); card.className = "suggested-card";
+          const header = document.createElement("div"); header.className = "suggested-header";
+          const left = document.createElement("div"); left.className = "head-left";
+          const check = document.createElement("input"); check.type = "checkbox"; check.className = "sr-check"; check.dataset.index = String(idx); check.setAttribute("aria-label", "提案を選択");
+          const title = document.createElement("div"); title.className = "suggested-title"; title.textContent = rule.title || "新しい規約候補";
+          left.appendChild(check); left.appendChild(title);
+          const metaRight = document.createElement("div"); metaRight.className = "suggested-meta";
+          const catPill = document.createElement("div"); catPill.className = "pill"; catPill.textContent = rule.suggested_category || "unassigned"; metaRight.appendChild(catPill);
+          if (rule.severity) { const sevPill = document.createElement("div"); sevPill.className = "pill"; sevPill.textContent = `想定重大度: ${rule.severity}`; metaRight.appendChild(sevPill); }
+          header.appendChild(left); header.appendChild(metaRight);
+          card.appendChild(header);
+          const body = document.createElement("div"); body.className = "suggested-body";
+          if (rule.description) { const d = document.createElement("div"); d.textContent = rule.description; body.appendChild(d); }
+          if (rule.reason) { const r = document.createElement("div"); r.style.marginTop = "4px"; r.style.color = "var(--text-muted)"; r.textContent = `理由: ${rule.reason}`; body.appendChild(r); }
+          if (rule.examples && (rule.examples.ng?.length || rule.examples.ok?.length)) {
+            const ex = document.createElement("div"); ex.className = "suggested-examples";
+            const lines = [];
+            if (Array.isArray(rule.examples.ng) && rule.examples.ng.length) lines.push("NG例: " + rule.examples.ng.join(" ／ "));
+            if (Array.isArray(rule.examples.ok) && rule.examples.ok.length) lines.push("OK例: " + rule.examples.ok.join(" ／ "));
+            ex.textContent = lines.join(" / ");
+            body.appendChild(ex);
+          }
+          suggestedRoot.appendChild(card);
+        });
+      }
+
+      function setupSuggestedControls() {
+        const btn = document.getElementById("sr-download");
+        const all = document.getElementById("sr-check-all");
+        if (all) {
+          all.addEventListener("change", () => {
+            document.querySelectorAll('.sr-check[data-index]').forEach(el => { if (el !== all) el.checked = all.checked; });
+          });
+        }
+        if (btn) {
+          btn.addEventListener("click", () => {
+            const selectedIdx = Array.from(document.querySelectorAll('.sr-check[data-index]:checked')).map(el => Number(el.dataset.index)).filter(n => Number.isInteger(n) && n >= 0 && n < suggested.length);
+            if (!selectedIdx.length) { alert("選択された提案がありません。"); return; }
+            const payload = selectedIdx.map(i => {
+              const r = suggested[i];
+              return { title: r.title, description: r.description, reason: r.reason, suggested_category: r.suggested_category, severity: r.severity, examples: r.examples };
+            });
+            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a"); a.href = url; a.download = "suggested_rules_selected.json";
+            document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+          });
+        }
+      }
+
+      renderSummary();
+      renderIssues();
+      renderSuggested();
+      setupSuggestedControls();
+    })();
+  </script>
+</body>
+
+</html>

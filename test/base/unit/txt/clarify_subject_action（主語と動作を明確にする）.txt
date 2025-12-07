@@ -1,0 +1,4 @@
+<<<SCRIPT_START>>>
+<title>base-unit-05-clarify-subject-action</title>
+撃たれて倒しました。そのあとスキルを使って逃げられました。
+<<<SCRIPT_END>>>
