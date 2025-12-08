@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://asari.review/specs/review_output.schema.v2.json",
-  "title": "Asari Review Output v2 (Category-first)",
+  "title": "Asari Review Output",
   "type": "object",
   "additionalProperties": false,
   "required": [
