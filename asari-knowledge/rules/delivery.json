@@ -1,0 +1,52 @@
+{
+  "rules": [
+    {
+      "id": "breath_length",
+      "title": "息継ぎできない長文を避ける",
+      "description": "音読時に息継ぎが困難になる長文を避け、適切な位置で文を分割する。",
+      "severity": "medium",
+      "problem_template": "一文が長く、音読時に息継ぎが困難です（{{chars}}文字）。",
+      "suggestion_template": "接続詞や読点付近で文を分割し、1文の情報量を減らしてください。",
+      "examples": {
+        "ng": ["とても長い説明が続き、途中で息が続かなくなるような文の例がここにあります。"],
+        "ok": ["説明を分けて、短い文で要点を伝える構成にしています。"]
+      }
+    },
+    {
+      "id": "awkward_particle_run",
+      "title": "助詞の連続によるリズム崩れを抑える",
+      "description": "「が・の・を」などの助詞が近接して連続し、リズムが悪化している箇所を見直す。",
+      "severity": "low",
+      "problem_template": "助詞（{{particle}}）の連続によりリズムが崩れています（{{run}}回）。",
+      "suggestion_template": "語順の入れ替えや名詞化・言い換えで助詞の連続を緩和してください。",
+      "examples": {
+        "ng": ["彼がそののを使ってしまったのです。"],
+        "ok": ["彼がそれを使った。／彼はそれを使用した。"]
+      }
+    },
+    {
+      "id": "tongue_twister",
+      "title": "言いにくい音の連続を避ける",
+      "description": "同音・近似音が連続して発音しづらい箇所を避ける。",
+      "severity": "medium",
+      "problem_template": "発音が難しい音連続（{{sequence}}）があります。",
+      "suggestion_template": "同義の別表現へ言い換え、または語の順序を調整してください。",
+      "examples": {
+        "ng": ["かかかがががかかかががが"],
+        "ok": ["言い換えて発音が楽になる表現にしています。"]
+      }
+    },
+    {
+      "id": "filler_words",
+      "title": "不要な間投詞を削る",
+      "description": "えー・そのー などの間を示す語を台本から極力排除する。",
+      "severity": "low",
+      "problem_template": "不要な間投詞（{{term}}）が含まれています。",
+      "suggestion_template": "台本段階で削除し、編集で間を調整してください。",
+      "examples": {
+        "ng": ["えー、そのー、今日は〜"],
+        "ok": ["今日は〜（間投詞を除去）"]
+      }
+    }
+  ]
+}

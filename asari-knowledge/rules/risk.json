@@ -22,8 +22,16 @@
         "別の選択肢の方が安定します。"
       ],
       "problem_template": "侮辱的表現（{{term}}）が含まれています。",
+<<<<<<< HEAD:asari-knowledge/risk.json
       "suggestion_template": "人格ではなくプレイ内容や行動にフォーカスし、穏やかな表現に言い換えてください。",
       "enabled": true
+=======
+      "suggestion_template": "冗談であっても避けるのが安全です。",
+      "examples": {
+        "ng": ["あいつはバカだ。"],
+        "ok": ["相手の行動に対して具体的に問題点を指摘する。"]
+      }
+>>>>>>> refs/remotes/origin/main:asari-knowledge/rules/risk.json
     },
     {
       "id": "avoid_gender_bias",
@@ -45,8 +53,16 @@
         "このロールは味方の動きをよく見て動く人に向いています。"
       ],
       "problem_template": "性別バイアスを含む表現（{{term}}）が検出されました。",
+<<<<<<< HEAD:asari-knowledge/risk.json
       "suggestion_template": "性別ではなく、プレイスタイルや経験など中立的な観点で説明する表現に置き換えてください。",
       "enabled": true
+=======
+      "suggestion_template": "ニュートラルな表現に置き換えましょう。",
+      "examples": {
+        "ng": ["女だから弱い。"],
+        "ok": ["性別に関係なく技術や立ち回りで評価する表現。"]
+      }
+>>>>>>> refs/remotes/origin/main:asari-knowledge/rules/risk.json
     },
     {
       "id": "avoid_exaggeration",
@@ -68,8 +84,16 @@
         "このセットアップを覚えると、勝率を上げやすくなります。"
       ],
       "problem_template": "誇張表現（{{term}}）が含まれています。",
+<<<<<<< HEAD:asari-knowledge/risk.json
       "suggestion_template": "『最強』『絶対』などの言葉は控えめにし、どのような点で強いのかを具体的に説明する表現に変更してください。",
       "enabled": true
+=======
+      "suggestion_template": "より中立的な表現に変更しましょう。",
+      "examples": {
+        "ng": ["この武器は最強すぎてゲームが崩れる。"],
+        "ok": ["多くの状況で有利に働く傾向があります。"]
+      }
+>>>>>>> refs/remotes/origin/main:asari-knowledge/rules/risk.json
     }
   ]
 }
