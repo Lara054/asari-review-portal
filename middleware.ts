@@ -14,7 +14,13 @@ const BASIC_AUTH_PASS = process.env.BASIC_AUTH_PASS ?? "";
 const SHARE_TOKEN     = process.env.SHARE_TOKEN ?? ""; // 任意
 
 export function middleware(req: NextRequest) {
-  if (process.env.NODE_ENV !== "production") return NextResponse.next();
+  // 開発環境では認証をスキップ
+  // process.env.NODE_ENV が undefined の場合もスキップ
+  const isDev = process.env.NODE_ENV === "development" || !process.env.NODE_ENV || process.env.NODE_ENV !== "production";
+  if (isDev) {
+    return NextResponse.next();
+  }
+  
   if (!BASIC_AUTH_USER || !BASIC_AUTH_PASS) {
     return new NextResponse("Auth not configured", { status: 500 });
   }
