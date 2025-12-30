@@ -1,0 +1,4 @@
+<<<SCRIPT_START>>>
+<title>base-unit-09-use-reaction-phrases</title>
+今のラウンドでは敵を一人倒しました。続けてサイトに進みました。スパイクを設置しました。味方と一緒に時間を稼ぎました。そのままラウンドを取得しました。
+<<<SCRIPT_END>>>

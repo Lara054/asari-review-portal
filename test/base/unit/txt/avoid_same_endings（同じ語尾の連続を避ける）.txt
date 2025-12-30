@@ -1,0 +1,4 @@
+<<<SCRIPT_START>>>
+<title>base-unit-03-avoid-same-endings</title>
+このキャラは初心者にもおすすめです。このスキルはとても扱いやすいです。この武器との相性もいいです。
+<<<SCRIPT_END>>>

@@ -1,0 +1,13 @@
+TestCaseID,テスト種別,ruleset_id,rule_id,rule_title,入力タイトル（<title>）,テスト目的,想定される指摘内容,想定severity,実行日,実行者,結果,備考
+risk-unit-01-avoid-player-disrespect,単体,risk,avoid_player_disrespect,プレイヤーへの侮辱を避ける,risk-unit-01-avoid-player-disrespect,味方プレイヤー個人への侮辱表現を確実に検知できるか確認,味方ジェットへの「足引っ張ってる」などの表現がプレイヤーへの侮辱として指摘される,high,,,,
+risk-unit-02-avoid-game-disrespect,単体,risk,avoid_game_disrespect,作品や運営への過度な批判を避ける,risk-unit-02-avoid-game-disrespect,ゲームや運営への感情的な罵倒表現を検知できるか確認,「クソ運営」「バグ放置」など作品・運営への過度な批判が指摘される,medium,,,,
+risk-unit-03-avoid-hate-speech,単体,risk,avoid_hate_speech,侮辱・暴言・攻撃的表現を避ける,risk-unit-03-avoid-hate-speech,暴言・攻撃的な言い回し全般を検知できるか確認,「ゴミすぎる」「頭悪い」など強い罵倒表現が指摘される,high,,,,
+risk-unit-04-avoid-sensitive-topics,単体,risk,avoid_sensitive_topics,社会的・政治的・性的話題を避ける,risk-unit-04-avoid-sensitive-topics,政治・性的などセンシティブな話題への踏み込みを検知できるか確認,政党名や性的な外見評価がセンシティブトピックとして指摘される,high,,,,
+risk-unit-05-avoid-false-info,単体,risk,avoid_false_info,誤情報や憶測を避ける,risk-unit-05-avoid-false-info,ソース不明の噂話や憶測の断定を検知できるか確認,「完全削除される」「間違いない」など根拠不明の断定が指摘される,medium,,,,
+risk-unit-06-avoid-comparative-disrespect,単体,risk,avoid_comparative_disrespect,他作品・他配信者との比較での侮辱を避ける,risk-unit-06-avoid-comparative-disrespect,他配信者を引き合いに出した貶め表現を検知できるか確認,特定実況者より自分が上といった比較侮辱が指摘される,medium,,,,
+risk-int-01-integrated,結合,risk,avoid_player_disrespect,プレイヤーへの侮辱を避ける,risk-int-01-integrated,1本の台本に対して risk 全ルールの同時適用時の挙動と優先順位を確認する,「味方ゴミすぎ」など味方プレイヤー個人への侮辱が検知される,high,,,,
+risk-int-01-integrated,結合,risk,avoid_game_disrespect,作品や運営への過度な批判を避ける,risk-int-01-integrated,1本の台本に対して risk 全ルールの同時適用時の挙動と優先順位を確認する,「クソ運営」「バグまみれ」など作品・運営への過度な批判が検知される,medium,,,,
+risk-int-01-integrated,結合,risk,avoid_hate_speech,侮辱・暴言・攻撃的表現を避ける,risk-int-01-integrated,1本の台本に対して risk 全ルールの同時適用時の挙動と優先順位を確認する,全体の口調として攻撃的・侮辱的な表現が検知される,high,,,,
+risk-int-01-integrated,結合,risk,avoid_sensitive_topics,社会的・政治的・性的話題を避ける,risk-int-01-integrated,1本の台本に対して risk 全ルールの同時適用時の挙動と優先順位を確認する,政党名や性的外見の話題がセンシティブトピックとして指摘される,high,,,,
+risk-int-01-integrated,結合,risk,avoid_false_info,誤情報や憶測を避ける,risk-int-01-integrated,1本の台本に対して risk 全ルールの同時適用時の挙動と優先順位を確認する,「弱体化確定」「内部で決まっている」など根拠不明の断定が指摘される,medium,,,,
+risk-int-01-integrated,結合,risk,avoid_comparative_disrespect,他作品・他配信者との比較での侮辱を避ける,risk-int-01-integrated,1本の台本に対して risk 全ルールの同時適用時の挙動と優先順位を確認する,他の実況者を引き合いに出した貶め表現が指摘される,medium,,,,

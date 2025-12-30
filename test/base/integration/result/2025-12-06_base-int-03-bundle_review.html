@@ -530,9 +530,9 @@
   </style>
 
   <script>
-    window.REVIEW_SUMMARY = __REVIEW_SUMMARY__;
-    window.REVIEW_ISSUES = __REVIEW_ISSUES__;
-    window.REVIEW_SUGGESTED_RULES = __REVIEW_SUGGESTED_RULES__;
+    window.REVIEW_SUMMARY = {"reviewedAt": "2025-12-06 02:50:37", "summary": "台本全体が構成・説明ともに不足しており、視聴者にとって学びが薄い内容です。Asariらしさや署名がなく、構成テンプレートの導入が求められます。", "scores": {"structure": 5.0, "wording": 8.0, "risk": 9.5, "delivery": 6.0, "logic": 5.0, "audience_fit": 6.5, "engagement": 6.0, "overall": 6.7}};
+    window.REVIEW_ISSUES = [{"category": "delivery", "severity": "high", "rule_id": "must_have_signature", "rule_title": "署名フレーズを入れる", "line": 1, "snippet": "このキャラはとにかく強いです。本当に本当に強いです。とにかく強いので、とにかくこのキャラを使ってください。強いってことだけ覚えておけば大丈夫です、多分。", "problem": "署名フレーズ（例：「こんにちはAsariです」）が台本内に見当たりません。", "suggestion": "台本の冒頭か締めに「こんにちはAsariです」のような署名フレーズを1回入れてください。", "ruleset_id": "asari_persona", "ruleset_name": "Asari Persona Rules"}, {"category": "structure", "severity": "low", "rule_id": "avoid_repeated_endings", "rule_title": "同一語尾の連続を避ける", "line": 13, "snippet": "さっきのラウンドは明らかにミスが多かったのですが、なぜ悪かったのかは特に振り返りません", "problem": "同一の語尾（「None」）が3文連続しています。", "suggestion": "一部の語尾を別形（です／ます／となります 等）に変えて、リズムに変化をつけてください。", "ruleset_id": "base", "ruleset_name": "Base Rules"}, {"category": "structure", "severity": "medium", "rule_id": "limit_sentence_length", "rule_title": "一文の長さを抑える", "line": 5, "snippet": "\n\n今回の動画のゴールは特に決めていませんが、とりあえずランクマッチをだらだら流しながら、思いついたことをその場で適当に", "problem": "一文が長く可読性が下がっています（69文字）。", "suggestion": "接続詞の前後で文を分け、主語と述語を簡潔にしてください。", "ruleset_id": "base", "ruleset_name": "Base Rules"}, {"category": "structure", "severity": "medium", "rule_id": "limit_sentence_length", "rule_title": "一文の長さを抑える", "line": 17, "snippet": "\n\n途中で急に場面が変わりますが、編集でどこをカットしたのかとか、このシーンと前のシーンがどうつながっているのかも説明し", "problem": "一文が長く可読性が下がっています（63文字）。", "suggestion": "接続詞の前後で文を分け、主語と述語を簡潔にしてください。", "ruleset_id": "base", "ruleset_name": "Base Rules"}, {"category": "engagement", "severity": "low", "rule_id": "use_preferred_phrases", "rule_title": "らしさのある言い回しを適度に入れる", "line": 1, "snippet": "このキャラはとにかく強いです。本当に本当に強いです。とにかく強いので、とにかくこのキャラを使ってください。強いってことだけ覚えておけば大丈夫です、多分。", "problem": "Asari らしさを感じる言い回しが少ない可能性があります。", "suggestion": "「〜って感じだよね」「やってみよう」「一緒に上手くなっていこう」などを自然に入れてください。", "ruleset_id": "asari_persona", "ruleset_name": "Asari Persona Rules"}, {"category": "logic", "severity": "medium", "rule_id": "missing_explanation", "rule_title": "説明不足・論理の欠落", "line": 3, "snippet": "なぜここにいるのかは説明しません。", "problem": "判断理由や行動意図の説明が不足しており、視聴者が理解しにくいです。", "suggestion": "プレイや選択の理由を1〜2文で補足して、意図を明確にしてください。", "ruleset_id": "base", "ruleset_name": "Base Rules"}, {"category": "structure", "severity": "high", "rule_id": "missing_structure", "rule_title": "構成の欠落・整理不足", "line": 2, "snippet": "今回の動画のゴールは特に決めていませんが、とりあえずランクマッチをだらだら流しながら、思いついたことをその場で適当にしゃべっていきます。", "problem": "動画全体の構成が定まっておらず、内容が散漫になっています。", "suggestion": "導入・解説・実践・まとめのような基本構成を決めてから話すようにしてください。", "ruleset_id": "base", "ruleset_name": "Base Rules"}];
+    window.REVIEW_SUGGESTED_RULES = [{"title": "プレイ意図説明義務ルール", "description": "『なぜその行動をしたのか』を最低1ラウンドにつき1回は説明する。", "reason": "行動意図の説明が欠けており、視聴者の理解を助けるため。", "suggested_category": "logic", "severity": "high", "examples": {"ng": ["なぜここにいるのかは説明しません。"], "ok": ["この位置を取るのは、敵の詰めに対応しやすいからです。"]}}];
   </script>
 </head>
 
@@ -596,12 +596,7 @@
     (function () {
       const summary = window.REVIEW_SUMMARY || null;
       const issues = Array.isArray(window.REVIEW_ISSUES) ? window.REVIEW_ISSUES : [];
-      // REVIEW_SUGGESTED_RULES は「rulesetオブジェクト」として受け取る
-      const suggestedRuleset = window.REVIEW_SUGGESTED_RULES || null;
-      const suggested = suggestedRuleset && Array.isArray(suggestedRuleset.rules)
-        ? suggestedRuleset.rules
-        : [];
-
+      const suggested = Array.isArray(window.REVIEW_SUGGESTED_RULES) ? window.REVIEW_SUGGESTED_RULES : [];
 
       const summaryRoot = document.getElementById("summary-root");
       const issuesRoot = document.getElementById("issues-root");
@@ -764,182 +759,62 @@
         }
       }
 
-     function renderSuggested() {
+      function renderSuggested() {
         if (!suggestedRoot) return;
         suggestedRoot.innerHTML = "";
-
         if (!suggested.length) {
-          const empty = document.createElement("div");
-          empty.className = "empty-note";
-          empty.textContent = "今回の台本から AI が新たに追加すべきと判断した規約候補はありません。";
-          suggestedRoot.appendChild(empty);
-          return;
+          const empty = document.createElement("div"); empty.className = "empty-note"; empty.textContent = "今回の台本から AI が新たに追加すべきと判断した規約候補はありません。"; suggestedRoot.appendChild(empty); return;
         }
-
         suggested.forEach((rule, idx) => {
-          const card = document.createElement("article");
-          card.className = "suggested-card";
-
-          // ヘッダー（チェックボックス＋タイトル＋カテゴリ／severity）
-          const header = document.createElement("div");
-          header.className = "suggested-header";
-
-          const left = document.createElement("div");
-          left.className = "head-left";
-
-          const check = document.createElement("input");
-          check.type = "checkbox";
-          check.className = "sr-check";
-          check.dataset.index = String(idx);
-          check.setAttribute("aria-label", "提案を選択");
-
-          const title = document.createElement("div");
-          title.className = "suggested-title";
-          title.textContent = rule.title || "新しい規約候補";
-
-          left.appendChild(check);
-          left.appendChild(title);
-
-          const metaRight = document.createElement("div");
-          metaRight.className = "suggested-meta";
-
-          // category ピル
-          const catPill = document.createElement("div");
-          catPill.className = "pill";
-          catPill.textContent = rule.category || "unassigned";
-          metaRight.appendChild(catPill);
-
-          // severity ピル
-          if (rule.severity) {
-            const sevPill = document.createElement("div");
-            sevPill.className = "pill";
-            sevPill.textContent = `重大度: ${rule.severity}`;
-            metaRight.appendChild(sevPill);
-          }
-
-          header.appendChild(left);
-          header.appendChild(metaRight);
+          const card = document.createElement("article"); card.className = "suggested-card";
+          const header = document.createElement("div"); header.className = "suggested-header";
+          const left = document.createElement("div"); left.className = "head-left";
+          const check = document.createElement("input"); check.type = "checkbox"; check.className = "sr-check"; check.dataset.index = String(idx); check.setAttribute("aria-label", "提案を選択");
+          const title = document.createElement("div"); title.className = "suggested-title"; title.textContent = rule.title || "新しい規約候補";
+          left.appendChild(check); left.appendChild(title);
+          const metaRight = document.createElement("div"); metaRight.className = "suggested-meta";
+          const catPill = document.createElement("div"); catPill.className = "pill"; catPill.textContent = rule.suggested_category || "unassigned"; metaRight.appendChild(catPill);
+          if (rule.severity) { const sevPill = document.createElement("div"); sevPill.className = "pill"; sevPill.textContent = `想定重大度: ${rule.severity}`; metaRight.appendChild(sevPill); }
+          header.appendChild(left); header.appendChild(metaRight);
           card.appendChild(header);
-
-          // 本文
-          const body = document.createElement("div");
-          body.className = "suggested-body";
-
-          // description
-          if (rule.description) {
-            const d = document.createElement("div");
-            d.textContent = rule.description;
-            body.appendChild(d);
-          }
-
-          // checklist
-          if (Array.isArray(rule.checklist) && rule.checklist.length) {
-            const cl = document.createElement("div");
-            cl.style.marginTop = "4px";
-            cl.style.fontSize = "11px";
-            cl.style.color = "var(--text-muted)";
-
-            const titleEl = document.createElement("div");
-            titleEl.textContent = "チェック観点:";
-            cl.appendChild(titleEl);
-
-            const ul = document.createElement("ul");
-            ul.style.margin = "4px 0 0";
-            ul.style.paddingLeft = "18px";
-
-            rule.checklist.forEach(item => {
-              const li = document.createElement("li");
-              li.textContent = item;
-              ul.appendChild(li);
-            });
-
-            cl.appendChild(ul);
-            body.appendChild(cl);
-          }
-
-          // NG / OK 例
-          const hasNg = Array.isArray(rule.ng_examples) && rule.ng_examples.length;
-          const hasOk = Array.isArray(rule.ok_examples) && rule.ok_examples.length;
-          if (hasNg || hasOk) {
-            const ex = document.createElement("div");
-            ex.className = "suggested-examples";
-
+          const body = document.createElement("div"); body.className = "suggested-body";
+          if (rule.description) { const d = document.createElement("div"); d.textContent = rule.description; body.appendChild(d); }
+          if (rule.reason) { const r = document.createElement("div"); r.style.marginTop = "4px"; r.style.color = "var(--text-muted)"; r.textContent = `理由: ${rule.reason}`; body.appendChild(r); }
+          if (rule.examples && (rule.examples.ng?.length || rule.examples.ok?.length)) {
+            const ex = document.createElement("div"); ex.className = "suggested-examples";
             const lines = [];
-            if (hasNg) lines.push("NG例: " + rule.ng_examples.join(" ／ "));
-            if (hasOk) lines.push("OK例: " + rule.ok_examples.join(" ／ "));
-
+            if (Array.isArray(rule.examples.ng) && rule.examples.ng.length) lines.push("NG例: " + rule.examples.ng.join(" ／ "));
+            if (Array.isArray(rule.examples.ok) && rule.examples.ok.length) lines.push("OK例: " + rule.examples.ok.join(" ／ "));
             ex.textContent = lines.join(" / ");
             body.appendChild(ex);
           }
-
-          card.appendChild(body);
           suggestedRoot.appendChild(card);
         });
       }
 
-
       function setupSuggestedControls() {
         const btn = document.getElementById("sr-download");
         const all = document.getElementById("sr-check-all");
-
-        // 全選択チェックボックス
         if (all) {
           all.addEventListener("change", () => {
-            document
-              .querySelectorAll('.sr-check[data-index]')
-              .forEach(el => {
-                if (el !== all) el.checked = all.checked;
-              });
+            document.querySelectorAll('.sr-check[data-index]').forEach(el => { if (el !== all) el.checked = all.checked; });
           });
         }
-
-        // JSON ダウンロード
         if (btn) {
           btn.addEventListener("click", () => {
-            const selectedIdx = Array
-              .from(document.querySelectorAll('.sr-check[data-index]:checked'))
-              .map(el => Number(el.dataset.index))
-              .filter(n => Number.isInteger(n) && n >= 0 && n < suggested.length);
-
-            if (!selectedIdx.length) {
-              alert("選択された提案がありません。");
-              return;
-            }
-
-            const payload = {
-              ruleset_id: suggestedRuleset?.ruleset_id || "persona",
-              display_name: suggestedRuleset?.display_name || "Persona Rules",
-              rules: selectedIdx.map(i => {
-                const r = suggested[i];
-                return {
-                  id: r.id,
-                  category: r.category,
-                  title: r.title,
-                  description: r.description,
-                  severity: r.severity,
-                  checklist: r.checklist,
-                  ng_examples: r.ng_examples,
-                  ok_examples: r.ok_examples,
-                  problem_template: r.problem_template,
-                  suggestion_template: r.suggestion_template,
-                  enabled: r.enabled
-                };
-              })
-            };
-
+            const selectedIdx = Array.from(document.querySelectorAll('.sr-check[data-index]:checked')).map(el => Number(el.dataset.index)).filter(n => Number.isInteger(n) && n >= 0 && n < suggested.length);
+            if (!selectedIdx.length) { alert("選択された提案がありません。"); return; }
+            const payload = selectedIdx.map(i => {
+              const r = suggested[i];
+              return { title: r.title, description: r.description, reason: r.reason, suggested_category: r.suggested_category, severity: r.severity, examples: r.examples };
+            });
             const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
             const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "suggested_rules_selected.json";
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            URL.revokeObjectURL(url);
+            const a = document.createElement("a"); a.href = url; a.download = "suggested_rules_selected.json";
+            document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
           });
         }
       }
-
 
       renderSummary();
       renderIssues();

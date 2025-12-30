@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>{Slug}</title>
+  <title>risk-unit-02-avoid-game-disrespect</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -530,9 +530,89 @@
   </style>
 
   <script>
-    window.REVIEW_SUMMARY = __REVIEW_SUMMARY__;
-    window.REVIEW_ISSUES = __REVIEW_ISSUES__;
-    window.REVIEW_SUGGESTED_RULES = __REVIEW_SUGGESTED_RULES__;
+    window.REVIEW_SUMMARY = {
+  "reviewedAt": "2025-12-07 13:00:26",
+  "summary": "この台本には、運営や開発者を侮辱する表現が複数含まれています。『クソ運営』『なに考えてるのか分からない』といった攻撃的な言い方は炎上リスクが非常に高く、批判の意図があっても、建設的かつ冷静な表現に言い換える必要があります。",
+  "scores": {
+    "structure": 9.0,
+    "wording": 8.0,
+    "risk": 1.0,
+    "delivery": 7.0,
+    "logic": 6.0,
+    "audience_fit": 5.0,
+    "engagement": 6.0,
+    "overall": 4.0
+  }
+};
+    window.REVIEW_ISSUES = [
+  {
+    "category": "risk",
+    "severity": "high",
+    "rule_id": "insult_baka",
+    "rule_title": "侮辱表現を避ける",
+    "line": 1,
+    "snippet": "このゲームほんとクソ運営なんだよな。",
+    "problem": "『クソ運営』という表現は運営に対する侮辱的発言であり、炎上リスクが非常に高いです。",
+    "suggestion": "『運営の対応に不満がある』など、冷静で建設的な言い方に変更してください。",
+    "ruleset_id": "risk",
+    "ruleset_name": "Risk Rules"
+  },
+  {
+    "category": "risk",
+    "severity": "high",
+    "rule_id": "insult_baka",
+    "rule_title": "侮辱表現を避ける",
+    "line": 2,
+    "snippet": "バグ放置しすぎだし、開発陣なに考えてるのかマジで分からない。",
+    "problem": "『開発陣なに考えてるのか分からない』という文は、開発者の人格や能力を否定するように聞こえます。",
+    "suggestion": "『バグ対応が遅れている点は気になります』など、意見としての表現に変えてください。",
+    "ruleset_id": "risk",
+    "ruleset_name": "Risk Rules"
+  },
+  {
+    "category": "risk",
+    "severity": "medium",
+    "rule_id": "avoid_exaggeration",
+    "rule_title": "誇張表現を避ける",
+    "line": 3,
+    "snippet": "真面目に遊んでるプレイヤーのこと全然見てないでしょ。",
+    "problem": "『全然見てないでしょ』という断定的な表現が誇張にあたります。",
+    "suggestion": "『プレイヤーの意見が十分に反映されていないように感じる』など、柔らかい表現に修正してください。",
+    "ruleset_id": "risk",
+    "ruleset_name": "Risk Rules"
+  },
+  {
+    "category": "delivery",
+    "severity": "high",
+    "rule_id": "must_have_signature",
+    "rule_title": "署名フレーズを入れる",
+    "line": 3,
+    "snippet": "（全体）",
+    "problem": "署名フレーズ（例：「こんにちはAsariです」）が台本内に見当たりません。",
+    "suggestion": "台本の冒頭か締めに「こんにちはAsariです」のような署名フレーズを1回入れてください。",
+    "ruleset_id": "asari_persona",
+    "ruleset_name": "Asari Persona Rules"
+  }
+];
+    window.REVIEW_SUGGESTED_RULES = [
+  {
+    "title": "運営・開発者への過激批判を避ける",
+    "description": "運営や開発陣を侮辱・嘲笑するような発言は、視聴者や関係者の反感を買う可能性が高く、炎上リスクが大きい。",
+    "reason": "既存ルールの『侮辱表現を避ける』では一般的な悪口を対象としているが、ゲーム運営・開発者への批判特有のトーンを明確に区別できていないため。",
+    "suggested_category": "risk",
+    "severity": "high",
+    "examples": {
+      "ng": [
+        "このゲームの運営マジで終わってる。",
+        "開発陣ほんと何も考えてない。"
+      ],
+      "ok": [
+        "最近はバグが多くて困っている。",
+        "もう少し改善されると嬉しいですね。"
+      ]
+    }
+  }
+];
   </script>
 </head>
 
@@ -540,7 +620,7 @@
   <div class="app">
     <header class="app-header" role="banner">
       <div class="app-title">
-        <h1>{Slug}</h1>
+        <h1>risk-unit-02-avoid-game-disrespect</h1>
       </div>
       <div class="badge" aria-label="自動レビュー結果バッジ">
         <span class="badge-dot" aria-hidden="true"></span>
@@ -596,12 +676,7 @@
     (function () {
       const summary = window.REVIEW_SUMMARY || null;
       const issues = Array.isArray(window.REVIEW_ISSUES) ? window.REVIEW_ISSUES : [];
-      // REVIEW_SUGGESTED_RULES は「rulesetオブジェクト」として受け取る
-      const suggestedRuleset = window.REVIEW_SUGGESTED_RULES || null;
-      const suggested = suggestedRuleset && Array.isArray(suggestedRuleset.rules)
-        ? suggestedRuleset.rules
-        : [];
-
+      const suggested = Array.isArray(window.REVIEW_SUGGESTED_RULES) ? window.REVIEW_SUGGESTED_RULES : [];
 
       const summaryRoot = document.getElementById("summary-root");
       const issuesRoot = document.getElementById("issues-root");
@@ -764,182 +839,62 @@
         }
       }
 
-     function renderSuggested() {
+      function renderSuggested() {
         if (!suggestedRoot) return;
         suggestedRoot.innerHTML = "";
-
         if (!suggested.length) {
-          const empty = document.createElement("div");
-          empty.className = "empty-note";
-          empty.textContent = "今回の台本から AI が新たに追加すべきと判断した規約候補はありません。";
-          suggestedRoot.appendChild(empty);
-          return;
+          const empty = document.createElement("div"); empty.className = "empty-note"; empty.textContent = "今回の台本から AI が新たに追加すべきと判断した規約候補はありません。"; suggestedRoot.appendChild(empty); return;
         }
-
         suggested.forEach((rule, idx) => {
-          const card = document.createElement("article");
-          card.className = "suggested-card";
-
-          // ヘッダー（チェックボックス＋タイトル＋カテゴリ／severity）
-          const header = document.createElement("div");
-          header.className = "suggested-header";
-
-          const left = document.createElement("div");
-          left.className = "head-left";
-
-          const check = document.createElement("input");
-          check.type = "checkbox";
-          check.className = "sr-check";
-          check.dataset.index = String(idx);
-          check.setAttribute("aria-label", "提案を選択");
-
-          const title = document.createElement("div");
-          title.className = "suggested-title";
-          title.textContent = rule.title || "新しい規約候補";
-
-          left.appendChild(check);
-          left.appendChild(title);
-
-          const metaRight = document.createElement("div");
-          metaRight.className = "suggested-meta";
-
-          // category ピル
-          const catPill = document.createElement("div");
-          catPill.className = "pill";
-          catPill.textContent = rule.category || "unassigned";
-          metaRight.appendChild(catPill);
-
-          // severity ピル
-          if (rule.severity) {
-            const sevPill = document.createElement("div");
-            sevPill.className = "pill";
-            sevPill.textContent = `重大度: ${rule.severity}`;
-            metaRight.appendChild(sevPill);
-          }
-
-          header.appendChild(left);
-          header.appendChild(metaRight);
+          const card = document.createElement("article"); card.className = "suggested-card";
+          const header = document.createElement("div"); header.className = "suggested-header";
+          const left = document.createElement("div"); left.className = "head-left";
+          const check = document.createElement("input"); check.type = "checkbox"; check.className = "sr-check"; check.dataset.index = String(idx); check.setAttribute("aria-label", "提案を選択");
+          const title = document.createElement("div"); title.className = "suggested-title"; title.textContent = rule.title || "新しい規約候補";
+          left.appendChild(check); left.appendChild(title);
+          const metaRight = document.createElement("div"); metaRight.className = "suggested-meta";
+          const catPill = document.createElement("div"); catPill.className = "pill"; catPill.textContent = rule.suggested_category || "unassigned"; metaRight.appendChild(catPill);
+          if (rule.severity) { const sevPill = document.createElement("div"); sevPill.className = "pill"; sevPill.textContent = `想定重大度: ${rule.severity}`; metaRight.appendChild(sevPill); }
+          header.appendChild(left); header.appendChild(metaRight);
           card.appendChild(header);
-
-          // 本文
-          const body = document.createElement("div");
-          body.className = "suggested-body";
-
-          // description
-          if (rule.description) {
-            const d = document.createElement("div");
-            d.textContent = rule.description;
-            body.appendChild(d);
-          }
-
-          // checklist
-          if (Array.isArray(rule.checklist) && rule.checklist.length) {
-            const cl = document.createElement("div");
-            cl.style.marginTop = "4px";
-            cl.style.fontSize = "11px";
-            cl.style.color = "var(--text-muted)";
-
-            const titleEl = document.createElement("div");
-            titleEl.textContent = "チェック観点:";
-            cl.appendChild(titleEl);
-
-            const ul = document.createElement("ul");
-            ul.style.margin = "4px 0 0";
-            ul.style.paddingLeft = "18px";
-
-            rule.checklist.forEach(item => {
-              const li = document.createElement("li");
-              li.textContent = item;
-              ul.appendChild(li);
-            });
-
-            cl.appendChild(ul);
-            body.appendChild(cl);
-          }
-
-          // NG / OK 例
-          const hasNg = Array.isArray(rule.ng_examples) && rule.ng_examples.length;
-          const hasOk = Array.isArray(rule.ok_examples) && rule.ok_examples.length;
-          if (hasNg || hasOk) {
-            const ex = document.createElement("div");
-            ex.className = "suggested-examples";
-
+          const body = document.createElement("div"); body.className = "suggested-body";
+          if (rule.description) { const d = document.createElement("div"); d.textContent = rule.description; body.appendChild(d); }
+          if (rule.reason) { const r = document.createElement("div"); r.style.marginTop = "4px"; r.style.color = "var(--text-muted)"; r.textContent = `理由: ${rule.reason}`; body.appendChild(r); }
+          if (rule.examples && (rule.examples.ng?.length || rule.examples.ok?.length)) {
+            const ex = document.createElement("div"); ex.className = "suggested-examples";
             const lines = [];
-            if (hasNg) lines.push("NG例: " + rule.ng_examples.join(" ／ "));
-            if (hasOk) lines.push("OK例: " + rule.ok_examples.join(" ／ "));
-
+            if (Array.isArray(rule.examples.ng) && rule.examples.ng.length) lines.push("NG例: " + rule.examples.ng.join(" ／ "));
+            if (Array.isArray(rule.examples.ok) && rule.examples.ok.length) lines.push("OK例: " + rule.examples.ok.join(" ／ "));
             ex.textContent = lines.join(" / ");
             body.appendChild(ex);
           }
-
-          card.appendChild(body);
           suggestedRoot.appendChild(card);
         });
       }
 
-
       function setupSuggestedControls() {
         const btn = document.getElementById("sr-download");
         const all = document.getElementById("sr-check-all");
-
-        // 全選択チェックボックス
         if (all) {
           all.addEventListener("change", () => {
-            document
-              .querySelectorAll('.sr-check[data-index]')
-              .forEach(el => {
-                if (el !== all) el.checked = all.checked;
-              });
+            document.querySelectorAll('.sr-check[data-index]').forEach(el => { if (el !== all) el.checked = all.checked; });
           });
         }
-
-        // JSON ダウンロード
         if (btn) {
           btn.addEventListener("click", () => {
-            const selectedIdx = Array
-              .from(document.querySelectorAll('.sr-check[data-index]:checked'))
-              .map(el => Number(el.dataset.index))
-              .filter(n => Number.isInteger(n) && n >= 0 && n < suggested.length);
-
-            if (!selectedIdx.length) {
-              alert("選択された提案がありません。");
-              return;
-            }
-
-            const payload = {
-              ruleset_id: suggestedRuleset?.ruleset_id || "persona",
-              display_name: suggestedRuleset?.display_name || "Persona Rules",
-              rules: selectedIdx.map(i => {
-                const r = suggested[i];
-                return {
-                  id: r.id,
-                  category: r.category,
-                  title: r.title,
-                  description: r.description,
-                  severity: r.severity,
-                  checklist: r.checklist,
-                  ng_examples: r.ng_examples,
-                  ok_examples: r.ok_examples,
-                  problem_template: r.problem_template,
-                  suggestion_template: r.suggestion_template,
-                  enabled: r.enabled
-                };
-              })
-            };
-
+            const selectedIdx = Array.from(document.querySelectorAll('.sr-check[data-index]:checked')).map(el => Number(el.dataset.index)).filter(n => Number.isInteger(n) && n >= 0 && n < suggested.length);
+            if (!selectedIdx.length) { alert("選択された提案がありません。"); return; }
+            const payload = selectedIdx.map(i => {
+              const r = suggested[i];
+              return { title: r.title, description: r.description, reason: r.reason, suggested_category: r.suggested_category, severity: r.severity, examples: r.examples };
+            });
             const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
             const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "suggested_rules_selected.json";
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            URL.revokeObjectURL(url);
+            const a = document.createElement("a"); a.href = url; a.download = "suggested_rules_selected.json";
+            document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
           });
         }
       }
-
 
       renderSummary();
       renderIssues();

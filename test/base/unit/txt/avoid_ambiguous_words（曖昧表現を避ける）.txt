@@ -1,0 +1,4 @@
+<<<SCRIPT_START>>>
+<title>base-unit-04-avoid-ambiguous-words</title>
+このキャラは多分かなり強いです。結構いろんな場面で使えると思います。ちょっと練習すれば誰でもそれなりに活躍できるはずです。
+<<<SCRIPT_END>>>

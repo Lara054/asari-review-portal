@@ -1,0 +1,4 @@
+<<<SCRIPT_START>>>
+<title>base-unit-07-explain-game-terms</title>
+ここではAサイトにリテイクが来ます。スモークの中からピークして、相手のエントリーを止めましょう。
+<<<SCRIPT_END>>>

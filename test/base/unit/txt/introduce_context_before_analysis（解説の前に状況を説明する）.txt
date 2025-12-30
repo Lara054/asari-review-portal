@@ -1,0 +1,4 @@
+<<<SCRIPT_START>>>
+<title>base-unit-06-introduce-context-before-analysis</title>
+この判断はかなり悪いです。もっと前に詰めるべきでした。慎重すぎてチャンスを逃しています。
+<<<SCRIPT_END>>>

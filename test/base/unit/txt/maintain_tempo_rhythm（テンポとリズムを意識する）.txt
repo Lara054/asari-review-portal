@@ -1,0 +1,4 @@
+<<<SCRIPT_START>>>
+<title>base-unit-08-maintain-tempo-rhythm</title>
+このキャラはスキルが強くて移動も速くて火力も高くて本当に強くてどんなマップでも活躍できてどんな構成にも入れやすくてとにかく文句のつけようがないキャラです。
+<<<SCRIPT_END>>>
