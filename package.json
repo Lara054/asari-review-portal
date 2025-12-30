@@ -5,6 +5,7 @@
   "scripts": {
     "predev": "node scripts/generate-index.mjs",
     "dev": "next dev",
+    "prebuild": "node scripts/generate-index.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
