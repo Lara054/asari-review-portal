@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <title>{Slug}</title>
+  <title>base-unit-01-limit-sentence-length</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root {
@@ -530,9 +530,51 @@
   </style>
 
   <script>
-    window.REVIEW_SUMMARY = __REVIEW_SUMMARY__;
-    window.REVIEW_ISSUES = __REVIEW_ISSUES__;
-    window.REVIEW_SUGGESTED_RULES = __REVIEW_SUGGESTED_RULES__;
+    window.REVIEW_SUMMARY = {
+  "reviewedAt": "2025-12-06",
+  "summary": "情報量が多い文を1文に詰め込みすぎているため、途中で理解が追いつきにくくなっています。接続詞の前後で文を分けるだけでも、読みやすくテンポの良い構成になります。",
+  "scores": {
+    "structure": 7,
+    "wording": 10,
+    "risk": 10,
+    "delivery": 10,
+    "logic": 9,
+    "audience_fit": 10,
+    "engagement": 9,
+    "overall": 9.3
+  }
+};
+    window.REVIEW_ISSUES = [
+  {
+    "category": "structure",
+    "severity": "medium",
+    "rule_id": "limit_sentence_length",
+    "rule_title": "一文の長さを抑える",
+    "line": 1,
+    "snippet": "このキャラはスキルの発動が遅くて位置取りもかなり難しくて、しかも味方との連携が求められるので、最初からこのキャラを使おうとすると操作だけで精一杯になって解説の内容を理解する余裕がなくなってしまう可能性があります。",
+    "problem": "一文が非常に長く（106文字）なっており、途中で内容を追いにくくなっています。",
+    "suggestion": "『スキルの発動が遅くて位置取りも難しいです。さらに味方との連携も必要です。』のように、文を2〜3文に分けてください。",
+    "ruleset_id": "base",
+    "ruleset_name": "Base Rules"
+  }
+];
+    window.REVIEW_SUGGESTED_RULES = [
+  {
+    "title": "60文字を超える長文を分割する",
+    "description": "一文が60文字を超えると、リスナーが内容を把握しづらくなるため、接続詞や区切りで文を分ける。",
+    "reason": "既存ルールでは『長文を避ける』とされているが、明確な数値基準（60文字程度）を明示することで自動チェックがしやすくなる。",
+    "suggested_category": "structure",
+    "severity": "medium",
+    "examples": {
+      "ng": [
+        "このキャラはスキルが遅くて位置取りも難しくて味方との連携が求められるので扱いが難しいです。"
+      ],
+      "ok": [
+        "スキルの発動が遅く、位置取りも難しいです。味方との連携が重要になります。"
+      ]
+    }
+  }
+];
   </script>
 </head>
 
@@ -540,7 +582,7 @@
   <div class="app">
     <header class="app-header" role="banner">
       <div class="app-title">
-        <h1>{Slug}</h1>
+        <h1>base-unit-01-limit-sentence-length</h1>
       </div>
       <div class="badge" aria-label="自動レビュー結果バッジ">
         <span class="badge-dot" aria-hidden="true"></span>
@@ -596,12 +638,7 @@
     (function () {
       const summary = window.REVIEW_SUMMARY || null;
       const issues = Array.isArray(window.REVIEW_ISSUES) ? window.REVIEW_ISSUES : [];
-      // REVIEW_SUGGESTED_RULES は「rulesetオブジェクト」として受け取る
-      const suggestedRuleset = window.REVIEW_SUGGESTED_RULES || null;
-      const suggested = suggestedRuleset && Array.isArray(suggestedRuleset.rules)
-        ? suggestedRuleset.rules
-        : [];
-
+      const suggested = Array.isArray(window.REVIEW_SUGGESTED_RULES) ? window.REVIEW_SUGGESTED_RULES : [];
 
       const summaryRoot = document.getElementById("summary-root");
       const issuesRoot = document.getElementById("issues-root");
@@ -764,182 +801,62 @@
         }
       }
 
-     function renderSuggested() {
+      function renderSuggested() {
         if (!suggestedRoot) return;
         suggestedRoot.innerHTML = "";
-
         if (!suggested.length) {
-          const empty = document.createElement("div");
-          empty.className = "empty-note";
-          empty.textContent = "今回の台本から AI が新たに追加すべきと判断した規約候補はありません。";
-          suggestedRoot.appendChild(empty);
-          return;
+          const empty = document.createElement("div"); empty.className = "empty-note"; empty.textContent = "今回の台本から AI が新たに追加すべきと判断した規約候補はありません。"; suggestedRoot.appendChild(empty); return;
         }
-
         suggested.forEach((rule, idx) => {
-          const card = document.createElement("article");
-          card.className = "suggested-card";
-
-          // ヘッダー（チェックボックス＋タイトル＋カテゴリ／severity）
-          const header = document.createElement("div");
-          header.className = "suggested-header";
-
-          const left = document.createElement("div");
-          left.className = "head-left";
-
-          const check = document.createElement("input");
-          check.type = "checkbox";
-          check.className = "sr-check";
-          check.dataset.index = String(idx);
-          check.setAttribute("aria-label", "提案を選択");
-
-          const title = document.createElement("div");
-          title.className = "suggested-title";
-          title.textContent = rule.title || "新しい規約候補";
-
-          left.appendChild(check);
-          left.appendChild(title);
-
-          const metaRight = document.createElement("div");
-          metaRight.className = "suggested-meta";
-
-          // category ピル
-          const catPill = document.createElement("div");
-          catPill.className = "pill";
-          catPill.textContent = rule.category || "unassigned";
-          metaRight.appendChild(catPill);
-
-          // severity ピル
-          if (rule.severity) {
-            const sevPill = document.createElement("div");
-            sevPill.className = "pill";
-            sevPill.textContent = `重大度: ${rule.severity}`;
-            metaRight.appendChild(sevPill);
-          }
-
-          header.appendChild(left);
-          header.appendChild(metaRight);
+          const card = document.createElement("article"); card.className = "suggested-card";
+          const header = document.createElement("div"); header.className = "suggested-header";
+          const left = document.createElement("div"); left.className = "head-left";
+          const check = document.createElement("input"); check.type = "checkbox"; check.className = "sr-check"; check.dataset.index = String(idx); check.setAttribute("aria-label", "提案を選択");
+          const title = document.createElement("div"); title.className = "suggested-title"; title.textContent = rule.title || "新しい規約候補";
+          left.appendChild(check); left.appendChild(title);
+          const metaRight = document.createElement("div"); metaRight.className = "suggested-meta";
+          const catPill = document.createElement("div"); catPill.className = "pill"; catPill.textContent = rule.suggested_category || "unassigned"; metaRight.appendChild(catPill);
+          if (rule.severity) { const sevPill = document.createElement("div"); sevPill.className = "pill"; sevPill.textContent = `想定重大度: ${rule.severity}`; metaRight.appendChild(sevPill); }
+          header.appendChild(left); header.appendChild(metaRight);
           card.appendChild(header);
-
-          // 本文
-          const body = document.createElement("div");
-          body.className = "suggested-body";
-
-          // description
-          if (rule.description) {
-            const d = document.createElement("div");
-            d.textContent = rule.description;
-            body.appendChild(d);
-          }
-
-          // checklist
-          if (Array.isArray(rule.checklist) && rule.checklist.length) {
-            const cl = document.createElement("div");
-            cl.style.marginTop = "4px";
-            cl.style.fontSize = "11px";
-            cl.style.color = "var(--text-muted)";
-
-            const titleEl = document.createElement("div");
-            titleEl.textContent = "チェック観点:";
-            cl.appendChild(titleEl);
-
-            const ul = document.createElement("ul");
-            ul.style.margin = "4px 0 0";
-            ul.style.paddingLeft = "18px";
-
-            rule.checklist.forEach(item => {
-              const li = document.createElement("li");
-              li.textContent = item;
-              ul.appendChild(li);
-            });
-
-            cl.appendChild(ul);
-            body.appendChild(cl);
-          }
-
-          // NG / OK 例
-          const hasNg = Array.isArray(rule.ng_examples) && rule.ng_examples.length;
-          const hasOk = Array.isArray(rule.ok_examples) && rule.ok_examples.length;
-          if (hasNg || hasOk) {
-            const ex = document.createElement("div");
-            ex.className = "suggested-examples";
-
+          const body = document.createElement("div"); body.className = "suggested-body";
+          if (rule.description) { const d = document.createElement("div"); d.textContent = rule.description; body.appendChild(d); }
+          if (rule.reason) { const r = document.createElement("div"); r.style.marginTop = "4px"; r.style.color = "var(--text-muted)"; r.textContent = `理由: ${rule.reason}`; body.appendChild(r); }
+          if (rule.examples && (rule.examples.ng?.length || rule.examples.ok?.length)) {
+            const ex = document.createElement("div"); ex.className = "suggested-examples";
             const lines = [];
-            if (hasNg) lines.push("NG例: " + rule.ng_examples.join(" ／ "));
-            if (hasOk) lines.push("OK例: " + rule.ok_examples.join(" ／ "));
-
+            if (Array.isArray(rule.examples.ng) && rule.examples.ng.length) lines.push("NG例: " + rule.examples.ng.join(" ／ "));
+            if (Array.isArray(rule.examples.ok) && rule.examples.ok.length) lines.push("OK例: " + rule.examples.ok.join(" ／ "));
             ex.textContent = lines.join(" / ");
             body.appendChild(ex);
           }
-
-          card.appendChild(body);
           suggestedRoot.appendChild(card);
         });
       }
 
-
       function setupSuggestedControls() {
         const btn = document.getElementById("sr-download");
         const all = document.getElementById("sr-check-all");
-
-        // 全選択チェックボックス
         if (all) {
           all.addEventListener("change", () => {
-            document
-              .querySelectorAll('.sr-check[data-index]')
-              .forEach(el => {
-                if (el !== all) el.checked = all.checked;
-              });
+            document.querySelectorAll('.sr-check[data-index]').forEach(el => { if (el !== all) el.checked = all.checked; });
           });
         }
-
-        // JSON ダウンロード
         if (btn) {
           btn.addEventListener("click", () => {
-            const selectedIdx = Array
-              .from(document.querySelectorAll('.sr-check[data-index]:checked'))
-              .map(el => Number(el.dataset.index))
-              .filter(n => Number.isInteger(n) && n >= 0 && n < suggested.length);
-
-            if (!selectedIdx.length) {
-              alert("選択された提案がありません。");
-              return;
-            }
-
-            const payload = {
-              ruleset_id: suggestedRuleset?.ruleset_id || "persona",
-              display_name: suggestedRuleset?.display_name || "Persona Rules",
-              rules: selectedIdx.map(i => {
-                const r = suggested[i];
-                return {
-                  id: r.id,
-                  category: r.category,
-                  title: r.title,
-                  description: r.description,
-                  severity: r.severity,
-                  checklist: r.checklist,
-                  ng_examples: r.ng_examples,
-                  ok_examples: r.ok_examples,
-                  problem_template: r.problem_template,
-                  suggestion_template: r.suggestion_template,
-                  enabled: r.enabled
-                };
-              })
-            };
-
+            const selectedIdx = Array.from(document.querySelectorAll('.sr-check[data-index]:checked')).map(el => Number(el.dataset.index)).filter(n => Number.isInteger(n) && n >= 0 && n < suggested.length);
+            if (!selectedIdx.length) { alert("選択された提案がありません。"); return; }
+            const payload = selectedIdx.map(i => {
+              const r = suggested[i];
+              return { title: r.title, description: r.description, reason: r.reason, suggested_category: r.suggested_category, severity: r.severity, examples: r.examples };
+            });
             const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
             const url = URL.createObjectURL(blob);
-            const a = document.createElement("a");
-            a.href = url;
-            a.download = "suggested_rules_selected.json";
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            URL.revokeObjectURL(url);
+            const a = document.createElement("a"); a.href = url; a.download = "suggested_rules_selected.json";
+            document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
           });
         }
       }
-
 
       renderSummary();
       renderIssues();

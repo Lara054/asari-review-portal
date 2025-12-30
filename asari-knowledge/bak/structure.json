@@ -1,0 +1,64 @@
+{
+  "rules": [
+    {
+      "id": "avoid_repeated_endings",
+      "title": "同一語尾の連続を避ける",
+      "description": "同じ語尾が2文以上続かないようにする。",
+      "severity": "low",
+      "problem_template": "同一の語尾（「{{ending}}」）が{{run}}文連続しています。",
+      "suggestion_template": "一部の語尾を別形（です／ます／となります 等）に変えましょう。",
+      "examples": {
+        "ng": ["〜です。〜です。〜です。"],
+        "ok": ["〜です。〜ます。〜となります。"]
+      }
+    },
+    {
+      "id": "limit_sentence_length",
+      "title": "一文の長さを抑える",
+      "description": "1文の目安を60字以内にし、長い場合は2文に分割する。",
+      "severity": "medium",
+      "problem_template": "一文が長く可読性が下がっています（{{chars}}文字）。",
+      "suggestion_template": "接続詞の前後で文を分け、主語と述語を簡潔にしましょう。",
+      "examples": {
+        "ng": ["非常に長い説明が1つの文に詰め込まれていて、読む人に負担がかかっています。"],
+        "ok": ["説明を2文に分け、各文で1つの要点に絞っています。"]
+      }
+    },
+    {
+      "id": "limit_commas_per_sentence",
+      "title": "読点は一文に3つまで",
+      "description": "「、」の多用は読みにくくなるため抑える。",
+      "severity": "low",
+      "problem_template": "読点が多すぎます（{{count}}個）。",
+      "suggestion_template": "並列を箇条書き化、または文を分割して整理しましょう。",
+      "examples": {
+        "ng": ["〜で、そして、さらに、また、〜です。"],
+        "ok": ["〜です。さらに〜です。"]
+      }
+    },
+    {
+      "id": "prefer_active_voice",
+      "title": "受け身の連続を避ける",
+      "description": "「〜されます」「〜されがちです」などの受け身を連発しない。",
+      "severity": "medium",
+      "problem_template": "受け身表現が連続しています（{{run}}文）。",
+      "suggestion_template": "主語を明確にし、能動的な言い回しに置き換えましょう。",
+      "examples": {
+        "ng": ["投げられます。倒されます。奪われます。"],
+        "ok": ["相手が投げます。こちらは倒されます。こちらがウルトを奪います。"]
+      }
+    },
+    {
+      "id": "avoid_ambiguous_pronouns",
+      "title": "指示語の連発を避ける",
+      "description": "「これ」「それ」「あれ」などを連続使用せず、名詞で具体化する。",
+      "severity": "medium",
+      "problem_template": "指示語が多く、対象が不明確です（{{count}}箇所）。",
+      "suggestion_template": "直前の名詞を再提示し、具体的に書き直してください。",
+      "examples": {
+        "ng": ["これが強いです。これを使って、それを止めます。"],
+        "ok": ["ショックダーツが強いです。ショックダーツでプッシュを止めます。"]
+      }
+    }
+  ]
+}

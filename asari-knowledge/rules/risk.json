@@ -1,40 +1,99 @@
 {
+  "ruleset_id": "risk",
+  "display_name": "Risk Rules",
   "rules": [
     {
       "id": "insult_baka",
+      "category": "risk",
       "title": "侮辱表現を避ける",
-      "description": "人格攻撃や侮辱的と受け取られる語を避ける。",
       "severity": "high",
+      "description": "人格攻撃や、視聴者・特定の個人／集団を下に見るような侮辱的表現は、炎上や規約違反につながるため避ける。",
+      "checklist": [
+        "特定の個人や集団に対して、人格を否定する表現を使っていないか確認する",
+        "感情的な罵倒語（例: バカ、ゴミ 等）をそのまま使っていないかを見る",
+        "ネタのつもりでも、第三者が見て不快にならないかを想像して判断する"
+      ],
+      "ng_examples": [
+        "こんなのはバカしかやらないでしょ。",
+        "マジであいつはゴミ。"
+      ],
+      "ok_examples": [
+        "このやり方はあまりおすすめできません。",
+        "別の選択肢の方が安定します。"
+      ],
       "problem_template": "侮辱的表現（{{term}}）が含まれています。",
+<<<<<<< HEAD:asari-knowledge/rules/risk.json
       "suggestion_template": "冗談であっても避けるのが安全です。",
       "examples": {
         "ng": ["あいつはバカだ。"],
         "ok": ["相手の行動に対して具体的に問題点を指摘する。"]
       }
+=======
+      "suggestion_template": "人格ではなくプレイ内容や行動にフォーカスし、穏やかな表現に言い換えてください。",
+      "enabled": true
+>>>>>>> develop/new_model:asari-knowledge/risk.json
     },
     {
       "id": "avoid_gender_bias",
+      "category": "risk",
       "title": "性別バイアス表現を避ける",
-      "description": "性別に基づく偏見を含む言い回しを避ける。",
       "severity": "high",
+      "description": "性別によって役割や能力を決めつけるような表現は、差別的と受け取られる可能性があるため避ける。",
+      "checklist": [
+        "「男だから〜」「女なのに〜」のように性別で能力や性格を決めつけていないか確認する",
+        "特定の性別に対してステレオタイプなイメージを押し付けていないかを見る",
+        "必要な場合は、性別ではなくプレイスタイルや役割など中立的な軸で話せないか検討する"
+      ],
+      "ng_examples": [
+        "男ならこれくらい余裕でしょ。",
+        "女の子にはこのキャラは無理だよ。"
+      ],
+      "ok_examples": [
+        "このキャラはエイム力が必要です。",
+        "このロールは味方の動きをよく見て動く人に向いています。"
+      ],
       "problem_template": "性別バイアスを含む表現（{{term}}）が検出されました。",
+<<<<<<< HEAD:asari-knowledge/rules/risk.json
       "suggestion_template": "ニュートラルな表現に置き換えましょう。",
       "examples": {
         "ng": ["女だから弱い。"],
         "ok": ["性別に関係なく技術や立ち回りで評価する表現。"]
       }
+=======
+      "suggestion_template": "性別ではなく、プレイスタイルや経験など中立的な観点で説明する表現に置き換えてください。",
+      "enabled": true
+>>>>>>> develop/new_model:asari-knowledge/risk.json
     },
     {
       "id": "avoid_exaggeration",
+      "category": "risk",
       "title": "誇張表現を避ける",
-      "description": "「最強」「ぶっ壊れ」など誇張しすぎる言葉を避ける。",
       "severity": "medium",
+      "description": "『最強』『ぶっ壊れ』『絶対勝てる』などの過度な誇張表現は、誤解や炎上の火種になりやすいため控えめにする。",
+      "checklist": [
+        "『最強』『ぶっ壊れ』『100%』『絶対』などの言葉を多用していないか確認する",
+        "事実ベースではなく、煽りだけが強くなっていないかを見る",
+        "どう強いのか（理由・条件）をセットで説明できているか確認する"
+      ],
+      "ng_examples": [
+        "このキャラはマジで最強、ぶっ壊れです。これさえ使っておけば絶対に勝てます。",
+        "このセットアップを真似すれば誰でも100%勝てます。"
+      ],
+      "ok_examples": [
+        "このキャラは現環境ではかなり強い部類です。",
+        "このセットアップを覚えると、勝率を上げやすくなります。"
+      ],
       "problem_template": "誇張表現（{{term}}）が含まれています。",
+<<<<<<< HEAD:asari-knowledge/rules/risk.json
       "suggestion_template": "より中立的な表現に変更しましょう。",
       "examples": {
         "ng": ["この武器は最強すぎてゲームが崩れる。"],
         "ok": ["多くの状況で有利に働く傾向があります。"]
       }
+=======
+      "suggestion_template": "『最強』『絶対』などの言葉は控えめにし、どのような点で強いのかを具体的に説明する表現に変更してください。",
+      "enabled": true
+>>>>>>> develop/new_model:asari-knowledge/risk.json
     }
   ]
 }

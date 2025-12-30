@@ -3,10 +3,14 @@ import fs from "node:fs/promises";
 import path from "node:path";
 
 const ROOT = process.cwd();
-const REVIEWS_DIR = path.join(ROOT, "public", "reviews");
-const OUT_PATH = path.join(REVIEWS_DIR, "index.json");
 
-// 対象: public/reviews/*.html （index.htmlと先頭._は除外）
+// 対象フォルダの設定
+const TARGETS = [
+  { dir: path.join(ROOT, "public", "reviews"), urlPrefix: "/reviews" },
+  { dir: path.join(ROOT, "public", "instructions"), urlPrefix: "/instructions" },
+];
+
+// 対象: *.html （index.htmlと先頭._は除外）
 const isTargetHtml = (name) =>
   name.endsWith(".html") &&
   name !== "index.html" &&
@@ -41,12 +45,14 @@ function toSlug(filename) {
   return filename.replace(/\.html$/i, "");
 }
 
-async function main() {
+async function generateIndex(targetDir, urlPrefix) {
   // 1) ディレクトリ存在チェック
-  await fs.mkdir(REVIEWS_DIR, { recursive: true });
+  await fs.mkdir(targetDir, { recursive: true });
+
+  const outPath = path.join(targetDir, "index.json");
 
   // 2) ファイル一覧
-  const entries = await fs.readdir(REVIEWS_DIR, { withFileTypes: true });
+  const entries = await fs.readdir(targetDir, { withFileTypes: true });
   const htmlFiles = entries
     .filter((e) => e.isFile() && isTargetHtml(e.name))
     .map((e) => e.name);
@@ -54,7 +60,7 @@ async function main() {
   // 3) HTMLごとにメタ抽出
   const items = [];
   for (const file of htmlFiles) {
-    const full = path.join(REVIEWS_DIR, file);
+    const full = path.join(targetDir, file);
     const html = await fs.readFile(full, "utf8");
 
     const title = extractTitle(html);
@@ -77,7 +83,7 @@ async function main() {
       title,
       tags,
       date,
-      href: `/reviews/${file}`,
+      href: `${urlPrefix}/${file}`,
       slug: toSlug(file),
       file,
     });
@@ -93,8 +99,14 @@ async function main() {
     items,
   };
 
-  await fs.writeFile(OUT_PATH, JSON.stringify(out, null, 2), "utf8");
-  console.log(`Wrote ${OUT_PATH} with ${items.length} items`);
+  await fs.writeFile(outPath, JSON.stringify(out, null, 2), "utf8");
+  console.log(`Wrote ${outPath} with ${items.length} items`);
+}
+
+async function main() {
+  for (const target of TARGETS) {
+    await generateIndex(target.dir, target.urlPrefix);
+  }
 }
 
 main().catch((err) => {

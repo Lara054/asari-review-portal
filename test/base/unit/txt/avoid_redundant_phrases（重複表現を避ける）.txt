@@ -1,0 +1,4 @@
+<<<SCRIPT_START>>>
+<title>base-unit-02-avoid-redundant-phrases</title>
+このキャラは本当に強いです。本当に強いキャラなので、とにかく強いということだけ覚えておいてください。
+<<<SCRIPT_END>>>
