@@ -1,0 +1,1124 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SHELL'S VALORANT 撮影指示書</title>
+  <style>
+    :root {
+      --bg:#0b0f14;
+      --panel:#121826;
+      --panel2:#0f1522;
+      --text:#e6edf3;
+      --muted:#9aa4b2;
+      --line:rgba(255,255,255,.08);
+      --ok:#2ea043;
+      --ng:#f85149;
+      --warn:#d29922;
+      --chip:rgba(255,255,255,.06);
+      --shadow:0 12px 40px rgba(0,0,0,.35);
+      --radius:14px;
+      --highlight:#58a6ff;
+      --highlight-bg:rgba(0,102,255,.08);
+      --highlight-border:rgba(0,102,255,.3);
+    }
+    html,body{height:100%;}
+    body {
+      margin:0;
+      background:var(--bg);
+      color:var(--text);
+      font-family: ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial;
+      line-height:1.45;
+    }
+    .wrap{max-width:1320px;margin:0 auto;padding:14px;}
+    .topbar {
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;
+      border:1px solid var(--line); border-radius:var(--radius); padding:12px;
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow:var(--shadow);
+      position:sticky; top:0; z-index:20;
+      backdrop-filter: blur(6px);
+    }
+    .title{font-weight:900;font-size:14px; letter-spacing:.01em;}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+    .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:rgba(255,255,255,.04);padding:6px 10px;border-radius:999px;color:var(--muted);font-size:12px;}
+    .dot{width:9px;height:9px;border-radius:99px;background:var(--muted);display:inline-block;}
+    .dot.ok{background:var(--ok);} .dot.ng{background:var(--ng);} .dot.warn{background:var(--warn);}
+    button {
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:10px 12px;
+      font-weight:900;
+      cursor:pointer;
+    }
+    button:hover{background:rgba(255,255,255,.09);}
+    button:disabled{opacity:.55;cursor:not-allowed;}
+    .ghost{background:transparent;}
+    .danger{border-color:rgba(248,81,73,.35);}
+    input[type="file"]{color:var(--muted);}
+    .layout{display:grid;grid-template-columns:360px 1fr;gap:12px;margin-top:12px;}
+    @media (max-width:1050px){.layout{grid-template-columns:1fr;} .topbar{position:static;}}
+    .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:12px;box-shadow:var(--shadow);}
+    .card h2{margin:0 0 10px 0;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+    label{font-size:12px;color:var(--muted);font-weight:900;display:flex;flex-direction:column;gap:6px;}
+    select,input[type="text"],textarea {
+      background:var(--panel2); color:var(--text); border:1px solid var(--line);
+      border-radius:12px; padding:10px 10px; outline:none; font-weight:800; box-sizing:border-box;
+    }
+    textarea {
+      font-family: ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+      font-size:12px; font-weight:700; line-height:1.35; resize:vertical; min-height:86px; width:100%;
+    }
+    .meta{display:grid;grid-template-columns:1fr;gap:10px;}
+    .hint{font-size:12px;color:var(--muted);}
+    .metaStatus{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-top:10px;}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;}
+    .list{display:flex;flex-direction:column;gap:8px;}
+    .listItem {
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+      border:1px solid var(--line); border-radius:12px; padding:10px;
+      background:rgba(255,255,255,.02);
+      cursor:grab;
+      user-select:none;
+    }
+    .listItem:active{cursor:grabbing;}
+    .listLeft{display:flex;flex-direction:column;gap:2px;min-width:0;}
+    .listTop{display:flex;gap:8px;align-items:center;}
+    .badge{font-size:11px;font-weight:900;background:var(--chip);border:1px solid var(--line);padding:3px 8px;border-radius:999px;color:var(--muted);}
+    .badge.ok{color:var(--ok);border-color:rgba(46,160,67,.35);}
+    .badge.ng{color:var(--ng);border-color:rgba(248,81,73,.35);}
+    .badge.warn{color:var(--warn);border-color:rgba(210,153,34,.35);}
+    .listTitle{font-weight:900;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px;}
+    .listSub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px;}
+    .listRight{display:flex;gap:6px;align-items:center;}
+    .iconbtn{padding:8px 10px;font-size:12px;border-radius:10px;}
+    .blocks{display:flex;flex-direction:column;gap:12px;}
+    .block {
+      background:rgba(255,255,255,.02);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:12px;
+      scroll-margin-top:90px;
+    }
+    .blockHead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+    .blockTitle{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+    .idx{font-weight:900;font-size:12px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--line);}
+    .dirty{font-size:12px;color:var(--warn);font-weight:900;}
+    .stamp{font-size:12px;color:var(--muted);}
+    .cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    @media (max-width:980px){.cols{grid-template-columns:1fr;}}
+    .locRow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+    .locRow input{flex:1;min-width:220px;}
+    .divider{height:1px;background:var(--line);margin:10px 0;}
+    .footerActions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;margin-top:12px;}
+    .big{padding:12px 14px;border-radius:14px;}
+    dialog {
+      border:none; border-radius:16px; padding:0;
+      background:var(--panel); color:var(--text);
+      width:min(900px, 92vw);
+      box-shadow:var(--shadow);
+    }
+    dialog::backdrop{background:rgba(0,0,0,.55);}
+    .modalHead{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--line);}
+    .modalBody{padding:12px;}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+    @media (max-width:900px){.grid2{grid-template-columns:1fr;}}
+    .calloutList{max-height:52vh;overflow:auto;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.02);}
+    .calloutItem{padding:10px;border-bottom:1px solid var(--line);cursor:pointer;font-weight:900;}
+    .calloutItem:hover{background:rgba(255,255,255,.06);}
+    .calloutItem:last-child{border-bottom:none;}
+    .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;font-size:12px;background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:8px;padding:2px 6px;color:var(--text);}
+  
+    .invalidBlock{border-color:rgba(248,81,73,.35)!important;}
+    .invalidInput{border-color:rgba(248,81,73,.35)!important;}
+    .mapFixBar{display:none;margin-top:10px;padding:10px;border:1px solid rgba(248,81,73,.25);border-radius:12px;background:rgba(248,81,73,.06);}
+    .mapFixBar .row{justify-content:space-between;}
+    .mapFixBar .msg{font-weight:900;font-size:12px;color:var(--text);}
+
+    /* 撮影場所を目立たせる */
+    .locationBox{
+      background:var(--highlight-bg);
+      border:2px solid var(--highlight-border);
+      border-radius:12px;
+      padding:12px;
+      margin-top:10px;
+    }
+    .locationBox label{
+      font-size:13px;
+      font-weight:900;
+      color:var(--highlight);
+    }
+    .locationBox input{
+      border-color:var(--highlight-border)!important;
+      background:rgba(0,0,0,.3);
+    }
+    .locationBox .locRow button{
+      background:var(--highlight-bg);
+      border-color:var(--highlight-border);
+      color:var(--highlight);
+      font-weight:900;
+    }
+    .locationBox .locRow button:hover{
+      background:rgba(0,102,255,.15);
+    }
+
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <div class="row">
+      <div class="title">SHELL'S VALORANT 撮影指示書</div>
+      <span class="pill"><span id="dot" class="dot"></span><span id="statusText">-</span></span>
+      <span class="pill">cards: <span id="cardCount">0</span></span>
+    </div>
+    <div class="row">
+      <input id="importFile" type="file" accept=".json,application/json" />
+      <button id="btnImport" type="button">読込</button>
+      <button id="btnValidate" type="button">検証</button>
+      <button id="btnExport" type="button">JSON出力</button>
+      <button id="btnCopy" type="button">コピー</button>
+      <button id="btnPaste" type="button" class="ghost">貼り付け読込</button>
+      <button id="btnClear" type="button" class="danger">セッション削除</button>
+    </div>
+  </div>
+
+  <div class="layout">
+    <div class="leftCol">
+      <div class="card">
+        <h2>Meta</h2>
+        <div class="meta">
+          <label>Title
+            <input id="metaTitle" type="text" placeholder="例：Haven_リロード判断" />
+          </label>
+
+          <label>Format
+            <input id="metaFormat" type="text" placeholder="short / long" />
+          </label>
+
+          <label>Map
+            <select id="metaMap"></select>
+          </label>
+
+          <div class="metaStatus">
+            <span class="pill">resolved: <span id="mapResolved" class="mono">-</span></span>
+            <span class="pill">created: <span id="metaCreatedAt" class="mono">-</span></span>
+          </div>
+          <div id="mapFixBar" class="mapFixBar">
+            <div class="row">
+              <div class="msg">撮影場所 不一致: <span id="mapFixCount" class="mono">0</span></div>
+              <div class="row">
+                <button id="btnFixClearInvalid" type="button" class="ghost">一括クリア</button>
+                <button id="btnFixJumpInvalid" type="button">先頭へ</button>
+              </div>
+            </div>
+          </div>
+
+</div>
+      </div>
+
+      <div class="card" style="margin-top:12px;">
+        <h2>Card List（ドラッグで順序変更）</h2>
+        <div id="cardList" class="list"></div>
+        <div class="footerActions">
+          <button id="btnAddLeft" type="button" class="big">カード追加</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px;">
+        <h2>Validation</h2>
+        <div class="hint" id="validationSummary">-</div>
+        <div class="divider"></div>
+        <div id="validationDetails" class="hint"></div>
+        <div class="divider"></div>
+</div>
+    </div>
+
+    <div class="rightCol">
+      <div class="card">
+        <h2>Cards（台本 / 前提 / 動き方 / 撮影場所）</h2>
+        <div id="blocks" class="blocks"></div>
+        <div class="footerActions">
+          <button id="btnAddBottom" type="button" class="big">カード追加</button>
+          <button id="btnSaveAll" type="button" class="big">全体保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<dialog id="calloutModal">
+  <div class="modalHead">
+    <div class="row">
+      <div style="font-weight:900;">撮影場所（callouts）を選択</div>
+      <span class="pill">map: <span id="modalMap" class="mono">-</span></span>
+      <span class="pill">count: <span id="modalCount" class="mono">0</span></span>
+    </div>
+    <div class="row">
+      <button id="btnModalClose" type="button" class="ghost">閉じる</button>
+    </div>
+  </div>
+  <div class="modalBody">
+    <div class="grid2">
+      <div>
+        <label>検索
+          <input id="calloutSearch" type="text" placeholder="例：A ロング / ガレージ / CT など" />
+        </label>
+</div>
+      <div>
+        <label>現在の入力（編集可）
+          <input id="calloutCurrent" type="text" />
+        </label>
+        <div class="row" style="margin-top:10px;">
+          <button id="btnModalApply" type="button">適用</button>
+          <button id="btnModalClear" type="button" class="ghost">クリア</button>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:12px;" class="calloutList" id="calloutList"></div>
+  </div>
+</dialog>
+
+<dialog id="pasteModal">
+  <div class="modalHead">
+    <div style="font-weight:900;">JSONを貼り付けて読込</div>
+    <button id="btnPasteClose" class="ghost" type="button">閉じる</button>
+  </div>
+  <div class="modalBody">
+    <label>JSON
+      <textarea id="pasteText" placeholder='{ "meta": {...}, "blocks": [ ... ] }'></textarea>
+    </label>
+    <div class="row" style="margin-top:10px;">
+      <button id="btnPasteLoad" type="button">読込</button>
+      <button id="btnPasteClear" type="button" class="ghost">クリア</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+const MAPS = [{"slug": "abyss", "ja": "アビス", "en": "Abyss"}, {"slug": "ascent", "ja": "アセント", "en": "Ascent"}, {"slug": "basic-training", "ja": "基本トレーニング", "en": "Basic Training"}, {"slug": "bind", "ja": "バインド", "en": "Bind"}, {"slug": "breeze", "ja": "ブリーズ", "en": "Breeze"}, {"slug": "corrode", "ja": "カロード", "en": "Corrode"}, {"slug": "district", "ja": "ディストリクト", "en": "District"}, {"slug": "drift", "ja": "ドリフト", "en": "Drift"}, {"slug": "fracture", "ja": "フラクチャー", "en": "Fracture"}, {"slug": "glitch", "ja": "グリッチ", "en": "Glitch"}, {"slug": "haven", "ja": "ヘイヴン", "en": "Haven"}, {"slug": "icebox", "ja": "アイスボックス", "en": "Icebox"}, {"slug": "kasbah", "ja": "カスバ", "en": "Kasbah"}, {"slug": "lotus", "ja": "ロータス", "en": "Lotus"}, {"slug": "pearl", "ja": "パール", "en": "Pearl"}, {"slug": "piazza", "ja": "ピアッツァ", "en": "Piazza"}, {"slug": "skirmish-a", "ja": "スカーミッシュ A", "en": "Skirmish A"}, {"slug": "skirmish-b", "ja": "スカーミッシュ B", "en": "Skirmish B"}, {"slug": "skirmish-c", "ja": "スカーミッシュ C", "en": "Skirmish C"}, {"slug": "split", "ja": "スプリット", "en": "Split"}, {"slug": "sunset", "ja": "サンセット", "en": "Sunset"}, {"slug": "the-range", "ja": "射撃場", "en": "The Range"}, {"slug": "the-range", "ja": "射撃場", "en": "The Range"}];
+const CALLOUTS_BY_SLUG = {"ascent": ["A ツリー", "A ロビー", "A メイン", "A ウィンドウ", "A サイト", "アタック側 スポーン", "B ロビー", "B メイン", "B ボートハウス", "中央 ボトム", "B サイト", "中央 キャットウォーク", "中央 小部屋", "ディフェンス側 スポーン", "A ガーデン", "中央 マーケット", "中央 コートヤード", "中央 リンク", "中央 ピザ", "A ラフター", "中央 トップ", "A ワイン"], "split": ["A バック", "A ロビー", "A メイン", "A ラフター", "A スロープ", "A スクリーン", "A 下水道", "A サイト", "A タワー", "アタック側 スポーン", "B 路地", "B バック", "B リンク", "B ガレージ", "B ラフター", "B サイト", "B 階段", "B タワー", "B ロビー", "ディフェンス側 スポーン", "中央 ボトム", "中央 メールボックス", "中央 トップ", "中央 ベント"], "fracture": ["アタック側 ブリッジ", "B ベンチ", "B アーケード", "B タワー", "B サイト", "B ジェネレーター", "B リンク", "B カンティーン", "A リンク", "ディフェンス側 スポーン", "B メイン", "B ツリー", "B トンネル", "A ホール", "A ドア", "A ロープ", "A メイン", "A サイト", "A ドロップ", "A パラボラ", "A ゲート", "アタック側 スポーン"], "bind": ["A 出口", "A リンク", "A ロビー", "A ショート", "A サイト", "A テレポーター", "アタック側 スポーン", "B 出口", "B ホール", "B リンク", "B ファウンテン", "B ロング", "B ショート", "B サイト", "B テレポーター", "B ウィンドウ", "A 浴場", "アタック側 ケイヴ", "A 小部屋", "ディフェンス側 スポーン", "B エルボー", "B ガーデン", "A ランプ", "A タワー"], "breeze": ["A ホール", "A ブリッジ", "ディフェンス側 スポーン", "ディフェンス側 アーチ", "中央 ウッドドア", "中央 ピラー", "中央 トップ", "中央 ネスト", "B ウィンドウ", "B メイン", "アタック側 スネーク", "B エルボー", "B サイト", "B トンネル", "A スイッチ", "中央 シュート", "B バック", "B ウォール", "A ロープ", "中央 キャノン", "A メタルドア", "中央 ボトム", "A ロビー", "A ショップ", "A サイト", "A ピラミッド", "アタック側 スポーン"], "district": ["アタック側 ボックス", "アタック側 ネスト", "アタック側 スポーン", "アタック側 階段", "アタック側 ウォール", "ディフェンス側 ボックス", "ディフェンス側 ネスト", "ディフェンス側 スポーン", "ディフェンス側 階段", "ディフェンス側 ウォール", "中央 ジェネレーター", "中央 ホースシュー", "中央 下水道"], "kasbah": ["ディフェンス側 スポーン", "ディフェンス側 アングルボックス", "ディフェンス側 リンク", "中央 ピット", "中央 タワー", "ディフェンス側 スロープ", "ディフェンス側 フラットボックス", "ディフェンス側 ネスト", "ディフェンス側 トンネル", "ディフェンス側 ウィンドウ", "アタック側 スポーン", "アタック側 アングルボックス", "アタック側 リンク", "アタック側 スロープ", "アタック側 フラットボックス", "アタック側 ネスト", "アタック側 トンネル", "アタック側 ウィンドウ"], "drift": ["アタック側 路地", "アタック側 ネスト", "アタック側 スポーン", "アタック側 タワー", "アタック側 ヤード", "ディフェンス側 路地", "ディフェンス側 ネスト", "ディフェンス側 スポーン", "ディフェンス側 タワー", "ディフェンス側 ヤード", "中央 ウォーター"], "abyss": ["A ブリッジ", "A リンク", "A ロビー", "A メイン", "A サイト", "アタック側 スポーン", "A タワー", "中央 ベンド", "B リンク", "B ロビー", "B メイン", "B ネスト", "中央 ボトム", "B サイト", "中央 キャットウォーク", "B デンジャー", "ディフェンス側 スポーン", "中央 ライブラリー", "A シークレット", "A セキュリティー", "中央 トップ", "B タワー", "A 換気通路"], "lotus": ["A トップ", "A ドロップ", "A サイト", "A 小屋", "A ツリー", "A 扉", "A メイン", "A がれき", "A ルート", "A ロビー", "C ロビー", "B ピラー", "B メイン", "C 扉", "B サイト", "A リンク", "B アッパー", "C 滝", "C リンク", "A 階段", "C マウンド", "C メイン", "C ベンド", "C サイト", "C ホール", "C 砂利道", "ディフェンス側 スポーン", "アタック側 スポーン"], "sunset": ["B タピオカ", "中央 タイル", "B マーケット", "B サイト", "B メイン", "B ロビー", "中央 ボトム", "中央 コートヤード", "A ロビー", "A メイン", "A リンク", "A サイト", "A エルボー", "A 路地", "ディフェンス側 スポーン", "中央 トップ", "アタック側 スポーン"], "pearl": ["B ホール", "中央 ドア", "中央 コネクター", "ディフェンス側 ウォーター", "ディフェンス側 スポーン", "A フラワー", "A シークレット", "A ダグアウト", "A サイト", "ディフェンス側 レコード", "中央 トップ", "B トンネル", "B タワー", "A メイン", "A レストラン", "B リンク", "A アート", "A リンク", "中央 プラザ", "中央 ショップ", "B クラブ", "B スロープ", "B メイン", "B サイト", "B スクリーン", "アタック側 スポーン"], "icebox": ["B ガレージ", "A ベルト", "A ネスト", "A パイプ", "A ラフター", "A スクリーン", "A サイト", "アタック側 スポーン", "B イエロー", "B バック", "B 小部屋", "B グリーン", "B ホール", "B 小屋", "B キッチン", "B オレンジ", "B サイト", "B 雪だるま", "B 堆雪場", "B チューブ", "ディフェンス側 スポーン", "中央 ブルー", "中央 ボイラー", "中央 パレット", "B フェンス"], "corrode": ["A クレーン", "A エルボー", "A リンク", "A ロビー", "A メイン", "A ポケット", "A サイト", "アタック側 スポーン", "A ヤード", "B アーチ", "B エルボー", "B リンク", "B ロビー", "B メイン", "中央 ボトム", "B サイト", "B タワー", "ディフェンス側 スポーン", "中央 階段", "中央 ウィンドウ", "中央 トップ"], "haven": ["A ガーデン", "A リンク", "A ロビー", "A ロング", "A 下水道", "A サイト", "アタック側 スポーン", "B バック", "B サイト", "C リンク", "C ロビー", "C ロング", "C ガレージ", "C ウィンドウ", "C サイト", "C 小部屋", "ディフェンス側 スポーン", "中央 ドア", "中央 コートヤード", "中央 ウィンドウ", "A タワー"]};
+
+const SESSION_KEY = "shooting_sheet_editor_best_v1";
+const $ = (id) => document.getElementById(id);
+
+const ENUM_FORMAT = new Set(["short","long"]);
+
+let state = {
+  meta: {
+    title: "",
+    format: "short",
+    map: "",
+    map_slug: "",
+    created_at: ""
+  },
+  blocks: []
+};
+
+let ui = {
+  perCardSavedAt: [],
+  perCardDirty: [],
+  perCardCollapsed: []
+};
+
+let modal = {
+  targetCardIndex: null
+};
+
+function nowISO(){ return new Date().toISOString(); }
+function setStatus(kind, text){
+  const dot = $("dot");
+  dot.className = "dot" + (kind ? (" " + kind) : "");
+  $("statusText").textContent = text;
+}
+
+function mapDisplay(m){ return (m.en || m.ja || m.slug); }
+
+function sanitizeText(s){ return (s ?? "").toString(); }
+
+function loadMapsSelect(){
+  const sel = $("metaMap");
+  sel.innerHTML = "";
+  // placeholder
+  const ph = document.createElement("option");
+  ph.value = "";
+  ph.textContent = "選択してください";
+  sel.appendChild(ph);
+
+  for (const m of MAPS) {
+    const opt = document.createElement("option");
+    opt.value = m.slug;
+    opt.textContent = `${mapDisplay(m)} (${m.slug})`;
+    sel.appendChild(opt);
+  }
+}
+
+function resolveMapInput(raw){
+  const v = sanitizeText(raw).trim();
+  if (!v) return { ok:false, slug:"", name:"" };
+
+  // 1) slug一致
+  const bySlug = MAPS.find(m => (m.slug || "").toLowerCase() === v.toLowerCase());
+  if (bySlug) return { ok:true, slug: bySlug.slug, name: mapDisplay(bySlug) };
+
+  // 2) name一致
+  const byName = MAPS.find(m => mapDisplay(m).toLowerCase() === v.toLowerCase());
+  if (byName) return { ok:true, slug: byName.slug, name: mapDisplay(byName) };
+
+  return { ok:false, slug:v, name:v };
+}
+
+function calloutsFor(slug){ return CALLOUTS_BY_SLUG[slug] || []; }
+
+function ensureDefaults(){
+  if (!state.meta.created_at) state.meta.created_at = nowISO();
+  if (!state.meta.map_slug) {
+    const haven = MAPS.find(m => m.slug === "haven");
+    state.meta.map_slug = haven ? "haven" : (MAPS[0]?.slug || "");
+  }
+  if (!state.meta.map) {
+    const m = MAPS.find(x => x.slug === state.meta.map_slug);
+    state.meta.map = m ? mapDisplay(m) : state.meta.map_slug;
+  }
+  if (!state.meta.format) state.meta.format = "short";
+}
+
+function syncMetaToUI(){
+  $("metaTitle").value = state.meta.title || "";
+  $("metaFormat").value = state.meta.format || "short";
+  $("metaMap").value = state.meta.map_slug || "";
+  $("metaCreatedAt").textContent = state.meta.created_at || "-";
+  updateResolvedLabel();
+}
+
+function normalizeFormat(){
+  const v = sanitizeText($("metaFormat").value).trim().toLowerCase();
+  const next = v || "short";
+  $("metaFormat").value = next;
+  return next;
+}
+
+function syncMetaFromUI(){
+  state.meta.title = sanitizeText($("metaTitle").value).trim();
+  state.meta.format = normalizeFormat();
+
+  const slug = sanitizeText($("metaMap").value).trim();
+  state.meta.map_slug = slug;
+
+  const m = MAPS.find(x => x.slug === slug);
+  state.meta.map = m ? mapDisplay(m) : "";
+
+  if (!state.meta.created_at) state.meta.created_at = nowISO();
+  updateResolvedLabel();
+}
+
+function updateResolvedLabel(){
+  const slug = sanitizeText(state.meta.map_slug).trim();
+  const m = MAPS.find(x => x.slug === slug);
+  if (m) {
+    $("mapResolved").textContent = `${mapDisplay(m)} (${m.slug})`;
+  } else {
+    $("mapResolved").textContent = slug ? `未選択/不正 (${slug})` : "-";
+  }
+}
+
+function newEmptyBlock(){
+  return { script:"", premise:"", movement:"", location:"" };
+}
+
+function ensureUIArrays(){
+  while (ui.perCardSavedAt.length < state.blocks.length) ui.perCardSavedAt.push(null);
+  while (ui.perCardDirty.length < state.blocks.length) ui.perCardDirty.push(false);
+  while (ui.perCardCollapsed.length < state.blocks.length) ui.perCardCollapsed.push(false);
+}
+
+function updateBlockFromUI(idx){
+  const base = `b${idx}_`;
+  state.blocks[idx] = {
+    script: sanitizeText($(base+"script").value),
+    premise: sanitizeText($(base+"premise").value),
+    movement: sanitizeText($(base+"movement").value),
+    location: sanitizeText($(base+"location").value),
+  };
+}
+
+function setDirty(idx, dirty=true){
+  ui.perCardDirty[idx] = dirty;
+  renderBlockHeader(idx);
+  renderCardList(); // 左のリストも反映
+  saveSession(true); // 自動復元用
+}
+
+function renderBlockHeader(idx){
+  const dirtyEl = document.getElementById(`b${idx}_dirty`);
+  const savedEl = document.getElementById(`b${idx}_saved`);
+  if (dirtyEl) dirtyEl.textContent = ui.perCardDirty[idx] ? "未保存" : "";
+  if (savedEl) savedEl.textContent = ui.perCardSavedAt[idx] ? `保存:${ui.perCardSavedAt[idx]}` : "";
+}
+
+function cardTitleFromBlock(b){
+  const first = sanitizeText(b.script).split(/\r?\n/).find(x => x.trim()) || "";
+  return first.trim().slice(0, 60) || "(空)";
+}
+
+function cardSubFromBlock(b){
+  const loc = sanitizeText(b.location).trim();
+  const p = sanitizeText(b.premise).trim();
+  const m = sanitizeText(b.movement).trim();
+  const bits = [];
+  if (loc) bits.push("場所: " + loc);
+  if (p) bits.push("前提: " + p.split(/\r?\n/)[0].slice(0, 28));
+  if (m) bits.push("動き: " + m.split(/\r?\n/)[0].slice(0, 28));
+  return bits.join(" / ") || "-";
+}
+
+function isLocationValid(loc){
+  const slug = sanitizeText(state.meta.map_slug).trim();
+  const callouts = calloutsFor(slug);
+  if (!loc.trim()) return false;
+  if (!callouts.length) return true; // callouts無い場合は緩める
+  return callouts.includes(loc.trim());
+}
+
+function computeInvalidLocationIndices(){
+  const slug = sanitizeText(state.meta.map_slug).trim();
+  const callouts = calloutsFor(slug);
+  const invalid = [];
+  for (let i=0;i<state.blocks.length;i++){
+    const loc = sanitizeText(state.blocks[i]?.location || "").trim();
+    if (!loc) continue; // 空はここでは対象外（Validationが扱う）
+    if (callouts.length && !callouts.includes(loc)) invalid.push(i);
+  }
+  return invalid;
+}
+
+function updateMapFixBar(){
+  const bar = $("mapFixBar");
+  const cnt = $("mapFixCount");
+  if (!bar || !cnt) return;
+  const invalid = computeInvalidLocationIndices();
+  cnt.textContent = String(invalid.length);
+  bar.style.display = invalid.length ? "block" : "none";
+}
+
+function clearInvalidLocations(){
+  const invalid = computeInvalidLocationIndices();
+  if (!invalid.length) return;
+  for (const idx of invalid){
+    state.blocks[idx].location = "";
+    ui.perCardDirty[idx] = true;
+  }
+  renderBlocks();
+  renderCardList();
+  saveSession(true);
+  setStatus("warn","一括クリア");
+  updateMapFixBar();
+}
+
+function jumpToFirstInvalid(){
+  const invalid = computeInvalidLocationIndices();
+  if (!invalid.length) return;
+  const idx = invalid[0];
+  const el = document.getElementById(`block_${idx}`);
+  if (el) el.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function renderCardList(){
+  ensureUIArrays();
+  const root = $("cardList");
+  root.innerHTML = "";
+  state.blocks.forEach((b, idx) => {
+    const li = document.createElement("div");
+    li.className = "listItem";
+    li.draggable = true;
+    li.dataset.idx = String(idx);
+
+    const title = cardTitleFromBlock(b);
+    const sub = cardSubFromBlock(b);
+const dirty = ui.perCardDirty[idx];
+
+    const invalidLoc = (() => { const loc = sanitizeText(b.location||"").trim(); return (loc && !isLocationValid(loc)); })();
+    const badgeKind = dirty ? "warn" : (invalidLoc ? "ng" : "");
+    const badgeText = dirty ? "EDIT" : (invalidLoc ? "!" : "");
+li.innerHTML = `
+      <div class="listLeft">
+        <div class="listTop">
+          <span class="badge ${badgeKind}">#${idx+1} ${badgeText}</span>
+          <div class="listTitle" title="${title.replace(/"/g,'&quot;')}">${title.replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
+        </div>
+        <div class="listSub" title="${sub.replace(/"/g,'&quot;')}">${sub.replace(/</g,"&lt;").replace(/>/g,"&gt;")}</div>
+      </div>
+      <div class="listRight">
+        <button class="iconbtn ghost" type="button" data-act="jump" data-idx="${idx}">開く</button>
+      </div>
+    `;
+    root.appendChild(li);
+  });
+
+  // jump handlers
+  root.querySelectorAll('button[data-act="jump"]').forEach(btn => {
+    btn.addEventListener("click", (ev) => {
+      const idx = Number(btn.dataset.idx);
+      const el = document.getElementById(`block_${idx}`);
+      if (el) el.scrollIntoView({behavior:"smooth", block:"start"});
+    });
+  });
+
+  // Drag reorder
+  let dragSrc = null;
+  root.querySelectorAll(".listItem").forEach(item => {
+    item.addEventListener("dragstart", (ev) => {
+      dragSrc = item;
+      ev.dataTransfer.setData("text/plain", item.dataset.idx || "");
+      ev.dataTransfer.effectAllowed = "move";
+    });
+    item.addEventListener("dragover", (ev) => {
+      ev.preventDefault();
+      ev.dataTransfer.dropEffect = "move";
+      item.style.outline = "2px solid rgba(255,255,255,.12)";
+      item.style.outlineOffset = "2px";
+    });
+    item.addEventListener("dragleave", () => {
+      item.style.outline = "";
+      item.style.outlineOffset = "";
+    });
+    item.addEventListener("drop", (ev) => {
+      ev.preventDefault();
+      item.style.outline = "";
+      item.style.outlineOffset = "";
+      const from = Number(ev.dataTransfer.getData("text/plain"));
+      const to = Number(item.dataset.idx);
+      if (Number.isNaN(from) || Number.isNaN(to) || from === to) return;
+      moveCard(from, to);
+    });
+  });
+}
+
+function moveCard(from, to){
+  const b = state.blocks.splice(from,1)[0];
+  state.blocks.splice(to,0,b);
+
+  const sa = ui.perCardSavedAt.splice(from,1)[0];
+  ui.perCardSavedAt.splice(to,0,sa);
+
+  const di = ui.perCardDirty.splice(from,1)[0];
+  ui.perCardDirty.splice(to,0,di);
+
+  const co = ui.perCardCollapsed.splice(from,1)[0];
+  ui.perCardCollapsed.splice(to,0,co);
+
+  renderBlocks();
+  renderCardList();
+  saveSession(true);
+  setStatus("warn","並び替え");
+}
+
+function renderBlocks(){
+  syncMetaFromUI();
+  ensureUIArrays();
+
+  // callouts datalist（各カード入力補助）
+  const slug = sanitizeText(state.meta.map_slug).trim();
+  const callouts = calloutsFor(slug);
+  let dl = document.getElementById("calloutDatalist");
+  if (!dl) {
+    dl = document.createElement("datalist");
+    dl.id = "calloutDatalist";
+    document.body.appendChild(dl);
+  }
+  dl.innerHTML = "";
+  for (const c of callouts) {
+    const opt = document.createElement("option");
+    opt.value = c;
+    dl.appendChild(opt);
+  }
+
+  const root = $("blocks");
+  root.innerHTML = "";
+
+  state.blocks.forEach((b, idx) => {
+    const el = document.createElement("div");
+    el.className = "block";
+    el.id = `block_${idx}`;
+
+    const collapsed = ui.perCardCollapsed[idx] === true;
+const collapseLabel = collapsed ? "展開" : "折りたたみ";
+
+    el.innerHTML = `
+      <div class="blockHead">
+        <div class="blockTitle">
+          <span class="idx">#${idx+1}</span>
+          <span id="b${idx}_dirty" class="dirty"></span>
+          <span id="b${idx}_saved" class="stamp"></span>
+          
+        </div>
+        <div class="row">
+          <button class="iconbtn" type="button" data-act="save" data-idx="${idx}">保存</button>
+          <button class="iconbtn ghost" type="button" data-act="dup" data-idx="${idx}">複製</button>
+          <button class="iconbtn ghost" type="button" data-act="toggle" data-idx="${idx}">${collapseLabel}</button>
+          <button class="iconbtn danger" type="button" data-act="del" data-idx="${idx}">削除</button>
+        </div>
+      </div>
+
+      <div class="content" style="display:${collapsed ? "none" : "block"}">
+        <label>台本
+          <textarea id="b${idx}_script" placeholder="このブロックの台本（そのまま）"></textarea>
+        </label>
+
+        <div class="cols" style="margin-top:10px;">
+          <label>前提
+            <textarea id="b${idx}_premise" placeholder="例：少人数戦/音でバレる前提など"></textarea>
+          </label>
+          <label>動き方
+            <textarea id="b${idx}_movement" placeholder="例：リロード音→敵が寄る→撃てずに落ちる など"></textarea>
+          </label>
+        </div>
+
+        <div class="locationBox">
+          <label>📍 撮影場所
+            <div class="locRow">
+              <input id="b${idx}_location" type="text" list="calloutDatalist" placeholder="例：A ロング" />
+              <button class="iconbtn" type="button" data-act="pick" data-idx="${idx}">📋 候補から選ぶ</button>
+            </div>
+          </label>
+        </div>
+</div>
+    `;
+    root.appendChild(el);
+
+    // 値反映
+    const sEl = document.getElementById(`b${idx}_script`);
+    if (sEl) sEl.value = b.script || "";
+    const pEl = document.getElementById(`b${idx}_premise`);
+    if (pEl) pEl.value = b.premise || "";
+    const mEl = document.getElementById(`b${idx}_movement`);
+    if (mEl) mEl.value = b.movement || "";
+    const lEl = document.getElementById(`b${idx}_location`);
+    if (lEl) lEl.value = b.location || "";
+
+    // 変更監視
+    const onChange = () => setDirty(idx, true);
+    if (sEl) sEl.addEventListener("input", onChange);
+    if (pEl) pEl.addEventListener("input", onChange);
+    if (mEl) mEl.addEventListener("input", onChange);
+    if (lEl) lEl.addEventListener("input", onChange);
+
+    renderBlockHeader(idx);
+  });
+
+  $("cardCount").textContent = String(state.blocks.length);
+}
+
+function validateState(showAlert=false){
+  syncMetaFromUI();
+  for (let i=0;i<state.blocks.length;i++) {
+    const base = document.getElementById(`b${i}_script`);
+    if (base) updateBlockFromUI(i);
+  }
+
+  const errs = [];
+  const metaTitle = sanitizeText(state.meta.title).trim();
+  if (!metaTitle) errs.push("meta.title が空です");
+  const fmt = sanitizeText(state.meta.format).trim();
+  if (!ENUM_FORMAT.has(fmt)) errs.push("meta.format は short/long のみ");
+  const slug = sanitizeText(state.meta.map_slug).trim();
+  if (!slug) errs.push("meta.map_slug が空です");
+  const mapKnown = MAPS.find(m => m.slug === slug);
+  if (!mapKnown) errs.push(`meta.map_slug が未知です（${slug}）`);
+  if (!Array.isArray(state.blocks) || state.blocks.length < 1) errs.push("blocks が1件以上必要です");
+
+  const callouts = calloutsFor(slug);
+  state.blocks.forEach((b, idx) => {
+    if (!sanitizeText(b.script).trim()) errs.push(`blocks[${idx+1}].script が空です`);
+    const loc = sanitizeText(b.location).trim();
+    if (!loc) errs.push(`blocks[${idx+1}].location が空です`);
+    else if (callouts.length && !callouts.includes(loc)) errs.push(`blocks[${idx+1}].location がcallouts外: "${loc}"`);
+  });
+
+  const summary = errs.length === 0 ? "OK" : `NG（${errs.length}件）`;
+  $("validationSummary").textContent = summary;
+  $("validationDetails").textContent = errs.length ? errs.join("\n") : "問題ありません。";
+
+  if (errs.length === 0) setStatus("ok", "検証OK");
+  else setStatus("ng", "検証NG");
+
+  renderCardList();
+  renderBlocks(); // LOCバッジ更新
+
+  if (showAlert && errs.length) alert(errs.join("\n"));
+  return errs;
+}
+
+function saveSession(isAuto=false){
+  syncMetaFromUI();
+  for (let i=0;i<state.blocks.length;i++) {
+    const base = document.getElementById(`b${i}_script`);
+    if (base) updateBlockFromUI(i);
+  }
+  const payload = JSON.stringify({ meta: state.meta, blocks: state.blocks, _ui: ui }, null, 2);
+  sessionStorage.setItem(SESSION_KEY, payload);
+  if (!isAuto) setStatus("ok", "保存");
+}
+
+function loadSession(){
+  const raw = sessionStorage.getItem(SESSION_KEY);
+  if (!raw) return false;
+  try {
+    const data = JSON.parse(raw);
+    if (data && data.meta && Array.isArray(data.blocks)) {
+      state.meta = data.meta;
+      state.blocks = data.blocks;
+      if (data._ui) ui = data._ui;
+      return true;
+    }
+  } catch {}
+  return false;
+}
+
+function exportJsonText(){
+  const errs = validateState(false);
+  if (errs.length) return null;
+  const out = {
+    meta: {
+      title: state.meta.title,
+      format: state.meta.format,
+      map: state.meta.map,
+      map_slug: state.meta.map_slug,
+      created_at: state.meta.created_at
+    },
+    blocks: state.blocks
+  };
+  return JSON.stringify(out, null, 2);
+}
+
+function downloadText(filename, text){
+  const blob = new Blob([text], {type: "application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function addCard(){
+  state.blocks.push(newEmptyBlock());
+  ui.perCardSavedAt.push(null);
+  ui.perCardDirty.push(true);
+  ui.perCardCollapsed.push(false);
+  renderBlocks();
+  renderCardList();
+  saveSession(true);
+  setStatus("warn","追加");
+  // scroll
+  setTimeout(() => {
+    const el = document.getElementById(`block_${state.blocks.length-1}`);
+    if (el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  }, 50);
+}
+
+function duplicateCard(idx){
+  const src = state.blocks[idx] || newEmptyBlock();
+  const copy = JSON.parse(JSON.stringify(src));
+  state.blocks.splice(idx+1, 0, copy);
+  ui.perCardSavedAt.splice(idx+1, 0, null);
+  ui.perCardDirty.splice(idx+1, 0, true);
+  ui.perCardCollapsed.splice(idx+1, 0, false);
+  renderBlocks();
+  renderCardList();
+  saveSession(true);
+  setStatus("warn","複製");
+}
+
+function deleteCard(idx){
+  const ok = confirm(`カード #${idx+1} を削除します。よろしいですか？`);
+  if (!ok) return;
+  state.blocks.splice(idx,1);
+  ui.perCardSavedAt.splice(idx,1);
+  ui.perCardDirty.splice(idx,1);
+  ui.perCardCollapsed.splice(idx,1);
+  renderBlocks();
+  renderCardList();
+  saveSession(true);
+  setStatus("warn","削除");
+}
+
+function saveCard(idx){
+  updateBlockFromUI(idx);
+  ui.perCardSavedAt[idx] = new Date().toLocaleString();
+  ui.perCardDirty[idx] = false;
+  saveSession(false);
+  renderBlockHeader(idx);
+  renderCardList();
+}
+
+function toggleCard(idx){
+  ui.perCardCollapsed[idx] = !ui.perCardCollapsed[idx];
+  renderBlocks();
+  saveSession(true);
+  setStatus("warn", ui.perCardCollapsed[idx] ? "折りたたみ" : "展開");
+}
+
+function openCalloutModal(idx){
+  syncMetaFromUI();
+  const slug = sanitizeText(state.meta.map_slug).trim();
+  const m = MAPS.find(x => x.slug === slug);
+  $("modalMap").textContent = m ? `${mapDisplay(m)} (${slug})` : `UNKNOWN (${slug})`;
+
+  const callouts = calloutsFor(slug);
+  $("modalCount").textContent = String(callouts.length);
+
+  modal.targetCardIndex = idx;
+  const current = sanitizeText(state.blocks[idx]?.location || "").trim();
+  $("calloutCurrent").value = current;
+  $("calloutSearch").value = "";
+
+  renderCalloutList(callouts);
+  $("calloutModal").showModal();
+  $("calloutSearch").focus();
+}
+
+function renderCalloutList(callouts){
+  const q = sanitizeText($("calloutSearch").value).trim().toLowerCase();
+  const list = $("calloutList");
+  list.innerHTML = "";
+  const filtered = q ? callouts.filter(x => x.toLowerCase().includes(q)) : callouts;
+  for (const c of filtered) {
+    const div = document.createElement("div");
+    div.className = "calloutItem";
+    div.textContent = c;
+    div.addEventListener("click", () => {
+      $("calloutCurrent").value = c;
+      applyCalloutToCard();
+    });
+    list.appendChild(div);
+  }
+}
+
+function applyCalloutToCard(){
+  const idx = modal.targetCardIndex;
+  if (idx === null || idx === undefined) return;
+  const val = sanitizeText($("calloutCurrent").value).trim();
+  // UI側に反映
+  const input = document.getElementById(`b${idx}_location`);
+  if (input) input.value = val;
+  setDirty(idx, true);
+  $("calloutModal").close();
+}
+
+function attachHandlers(){
+  // meta
+  $("metaTitle").addEventListener("input", () => saveSession(true));
+  $("metaFormat").addEventListener("change", () => {
+    syncMetaFromUI(); saveSession(true); setStatus("warn","format変更");
+  });
+  $("metaFormat").addEventListener("blur", () => {
+    syncMetaFromUI(); saveSession(true);
+  });
+  $("metaMap").addEventListener("change", () => {
+    syncMetaFromUI();
+    renderBlocks();
+    renderCardList();
+    saveSession(true);
+    setStatus("warn","map変更");
+  });
+// actions
+  $("btnImport").addEventListener("click", async () => {
+    const file = $("importFile").files?.[0];
+    if (!file) { setStatus("ng","未選択"); return; }
+    try {
+      const txt = await file.text();
+      importFromJsonText(txt);
+      setStatus("ok","読込");
+    } catch {
+      setStatus("ng","失敗");
+    }
+  });
+
+  $("btnValidate").addEventListener("click", () => validateState(true));
+
+  $("btnExport").addEventListener("click", () => {
+    const txt = exportJsonText();
+    if (!txt) { validateState(true); return; }
+    const safeTitle = (state.meta.title || "shooting_sheet").replace(/[^a-zA-Z0-9_\-]+/g,"_");
+    downloadText(`${safeTitle}.json`, txt);
+    setStatus("ok","出力");
+  });
+
+  $("btnCopy").addEventListener("click", async () => {
+    const txt = exportJsonText();
+    if (!txt) { validateState(true); return; }
+    try {
+      await navigator.clipboard.writeText(txt);
+      setStatus("ok","コピー");
+    } catch {
+      setStatus("ng","失敗");
+    }
+  });
+
+  $("btnPaste").addEventListener("click", () => {
+    $("pasteText").value = "";
+    $("pasteModal").showModal();
+    setTimeout(() => $("pasteText").focus(), 50);
+  });
+  $("btnPasteClose").addEventListener("click", () => $("pasteModal").close());
+  $("btnPasteClear").addEventListener("click", () => $("pasteText").value = "");
+  $("btnPasteLoad").addEventListener("click", () => {
+    const txt = sanitizeText($("pasteText").value);
+    importFromJsonText(txt);
+    $("pasteModal").close();
+    setStatus("ok","読込");
+  });
+
+  $("btnClear").addEventListener("click", () => {
+    const ok = confirm("セッションを削除します。よろしいですか？");
+    if (!ok) return;
+    sessionStorage.removeItem(SESSION_KEY);
+    state = { meta: { title:"", format:"short", map:"", map_slug:"", created_at:"" }, blocks: [] };
+    ui = { perCardSavedAt: [], perCardDirty: [], perCardCollapsed: [] };
+    ensureDefaults();
+    syncMetaToUI();
+    renderBlocks();
+    renderCardList();
+    $("validationSummary").textContent = "-";
+    $("validationDetails").textContent = "";
+    setStatus("warn","削除");
+  });
+
+  $("btnAddLeft").addEventListener("click", addCard);
+  $("btnAddBottom").addEventListener("click", addCard);
+
+  $("btnSaveAll").addEventListener("click", () => {
+    for (let i=0;i<state.blocks.length;i++) {
+      const base = document.getElementById(`b${i}_script`);
+      if (base) updateBlockFromUI(i);
+      ui.perCardSavedAt[i] = new Date().toLocaleString();
+      ui.perCardDirty[i] = false;
+    }
+    saveSession(false);
+    renderBlocks();
+    renderCardList();
+    setStatus("ok","保存");
+  });
+
+  // cards actions (event delegation)
+  $("blocks").addEventListener("click", (ev) => {
+    const btn = ev.target.closest("button[data-act]");
+    if (!btn) return;
+    const act = btn.dataset.act;
+    const idx = Number(btn.dataset.idx);
+    if (Number.isNaN(idx)) return;
+    if (act === "save") return saveCard(idx);
+    if (act === "dup") return duplicateCard(idx);
+    if (act === "del") return deleteCard(idx);
+    if (act === "toggle") return toggleCard(idx);
+    if (act === "pick") return openCalloutModal(idx);
+  });
+
+  // modal
+  $("btnModalClose").addEventListener("click", () => $("calloutModal").close());
+  $("calloutSearch").addEventListener("input", () => {
+    const slug = sanitizeText(state.meta.map_slug).trim();
+    renderCalloutList(calloutsFor(slug));
+  });
+  $("btnModalApply").addEventListener("click", applyCalloutToCard);
+  $("btnModalClear").addEventListener("click", () => $("calloutCurrent").value = "");
+
+  // Keyboard shortcuts
+  document.addEventListener("keydown", (ev) => {
+    const isMac = navigator.platform.toLowerCase().includes("mac");
+    const mod = isMac ? ev.metaKey : ev.ctrlKey;
+
+    if (mod && ev.key.toLowerCase() === "s") {
+      ev.preventDefault();
+      $("btnSaveAll").click();
+    }
+    if (mod && ev.key === "Enter") {
+      // active card save (nearest block)
+      const active = document.activeElement;
+      if (!active) return;
+      const block = active.closest?.(".block");
+      if (!block) return;
+      const id = block.id || "";
+      const m = id.match(/^block_(\d+)$/);
+      if (!m) return;
+      ev.preventDefault();
+      const idx = Number(m[1]);
+      if (!Number.isNaN(idx)) saveCard(idx);
+    }
+  });
+}
+
+function importFromJsonText(txt){
+  try {
+    const data = JSON.parse(txt);
+    if (!data || !data.meta || !Array.isArray(data.blocks)) {
+      alert("形式不正：meta/blocks が必要です");
+      return;
+    }
+    // meta
+    state.meta.title = sanitizeText(data.meta.title).trim();
+    state.meta.format = sanitizeText(data.meta.format).trim().toLowerCase() || "short";
+    // map resolve: allow meta.map_slug / meta.map / top-level map_slug / map
+    const rawMap = sanitizeText((data.meta.map_slug ?? data.meta.map ?? data.map_slug ?? data.map ?? "")).trim();
+    const resolved = resolveMapInput(rawMap); // slug/ja/en/表示名 いずれでも解決
+    if (resolved.ok) {
+      state.meta.map_slug = resolved.slug;
+      const known = MAPS.find(m => m.slug === resolved.slug);
+      state.meta.map = known ? mapDisplay(known) : resolved.name;
+    } else {
+      // 厳格化：未知マップは選択させ直す
+      state.meta.map_slug = "";
+      state.meta.map = "";
+      if (rawMap) alert("未知の map です。Map を選択してください: " + rawMap);
+    }
+    state.meta.created_at = sanitizeText(data.meta.created_at || "").trim() || nowISO();
+// blocks
+    state.blocks = data.blocks.map(b => ({
+      script: sanitizeText(b.script || ""),
+      premise: sanitizeText(b.premise || ""),
+      movement: sanitizeText(b.movement || ""),
+      location: sanitizeText(b.location || ""),
+    }));
+
+    // ui reset
+    ui.perCardSavedAt = new Array(state.blocks.length).fill(null);
+    ui.perCardDirty = new Array(state.blocks.length).fill(false);
+    ui.perCardCollapsed = new Array(state.blocks.length).fill(false);
+
+    ensureDefaults();
+    syncMetaToUI();
+    renderBlocks();
+    renderCardList();
+    saveSession(true);
+    validateState(false);
+  } catch (e) {
+    alert("JSONパースに失敗しました");
+  }
+}
+
+(function init(){
+  loadMapsSelect();
+  const restored = loadSession();
+  ensureDefaults();
+  syncMetaToUI();
+
+  if (!state.blocks.length) {
+    // 初期カード1枚
+    state.blocks = [newEmptyBlock()];
+    ui.perCardSavedAt = [null];
+    ui.perCardDirty = [false];
+    ui.perCardCollapsed = [false];
+  }
+
+  renderBlocks();
+  renderCardList();
+  attachHandlers();
+  validateState(false);
+
+  setStatus(restored ? "ok" : "", restored ? "復元" : "-");
+})();
+</script>
+</body>
+</html>

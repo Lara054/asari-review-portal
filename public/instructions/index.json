@@ -1,22 +1,14 @@
 {
-  "generatedAt": "2025-12-30T16:30:41.793Z",
-  "count": 2,
+  "generatedAt": "2025-12-31T01:32:15.586Z",
+  "count": 1,
   "items": [
     {
-      "title": "Asari Review – ブリムストーン解説レビュー",
+      "title": "SHELL'S VALORANT 撮影指示書",
       "tags": [],
-      "date": "2025-12-30T16:21:38.154Z",
-      "href": "/instructions/2025-10-26_brimstone_review.html",
-      "slug": "2025-10-26_brimstone_review",
-      "file": "2025-10-26_brimstone_review.html"
-    },
-    {
-      "title": "Asari Review – ソーヴァ解説レビュー",
-      "tags": [],
-      "date": "2025-12-30T16:21:38.154Z",
-      "href": "/instructions/2025-10-25_sova-review.html",
-      "slug": "2025-10-25_sova-review",
-      "file": "2025-10-25_sova-review.html"
+      "date": "2025-12-31T01:31:36.830Z",
+      "href": "/instructions/shooting_sheet_view.html",
+      "slug": "shooting_sheet_view",
+      "file": "shooting_sheet_view.html"
     }
   ]
 }
